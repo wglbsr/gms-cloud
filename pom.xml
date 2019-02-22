@@ -9,7 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 <modules>
-    <module>service-register</module>
-    <module>utils</module>
+    <module>service-region</module>
+    <module>service-user</module>
+    <module>base-register</module>
+    <module>base-register</module>
 </modules>
 </project>
