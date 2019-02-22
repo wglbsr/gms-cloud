@@ -2,7 +2,7 @@ server:
   port: 8888 #8181
 spring:
   application:
-    name: region-service
+    name: service-region
 eureka:
   client:
     serviceUrl:

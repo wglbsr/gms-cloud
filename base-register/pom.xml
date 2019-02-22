@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.dyny</groupId>
-    <artifactId>service-register</artifactId>
+    <artifactId>base-register</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>service-register</name>
+    <name>base-register</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

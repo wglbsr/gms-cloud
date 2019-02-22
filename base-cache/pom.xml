@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dyny</groupId>
-	<artifactId>cache-service</artifactId>
+	<artifactId>service-cache</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cache-service</name>
+	<name>service-cache</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

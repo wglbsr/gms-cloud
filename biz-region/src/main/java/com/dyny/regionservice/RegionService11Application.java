@@ -8,10 +8,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableDiscoveryClient
-public class RegionServiceApplication {
+public class RegionService11Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(RegionServiceApplication.class, args);
+        SpringApplication.run(RegionService11Application.class, args);
     }
 
 }

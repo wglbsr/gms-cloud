@@ -1,6 +1,7 @@
 package com.dyny.regionservice.controller;
 
 import com.dyny.utils.BaseController;
+import com.dyny.utils.Utils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegionController extends BaseController {
     @RequestMapping("/test")
     public String get() {
-        return "region-service";
+        if (Utils.String.isNum("123123")) {
+
+        }
+
+        return "service-region-";
     }
 }
