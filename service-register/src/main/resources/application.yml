@@ -1,0 +1,10 @@
+server:
+  port: 9443
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:9443/eureka
+    register-with-eureka: false
+    fetch-registry: false
