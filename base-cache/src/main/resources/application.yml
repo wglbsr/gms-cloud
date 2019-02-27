@@ -1,0 +1,12 @@
+server:
+  port: 7998 #8181
+spring:
+  application:
+    name: base-cache
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9443/eureka  #注册 中心已经开启认证
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}

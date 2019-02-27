@@ -1,13 +1,12 @@
 package com.dyny.gateway.config;
 
-import com.dyny.gateway.api.UserApi;
+import com.alibaba.fastjson.JSONObject;
+import com.dyny.utils.BaseController;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,35 +35,33 @@ public class ApiFilter extends ZuulFilter {
     public boolean shouldFilter() {
         return true;
     }
-    @Autowired
-    private UserApi userApi;
+
     @Override
-    public Object run() throws ZuulException {
+    public Object run() {
         RequestContext requestContext = RequestContext.getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
         String uri = request.getRequestURI();
         String token = request.getHeader("TOKEN");
-        //校验token
-//        if (StringUtils.isEmpty(token)) {
-//            logger.info("token为空，禁止访问!");
-//            ctx.setSendZuulResponse(false);
-//            ctx.setResponseStatusCode(401);
-//            return null;
-//        } else {
-
-
-//        }
-
-        //添加Basic Auth认证信息
-        requestContext.addZuulRequestHeader("Authorization", "Basic " + getBase64Credentials("app01", "*****"));
+        String loginUrl = "/service-user/user/login";
+        String loginPageUrl = "/service-user/user/sso";
+        logger.info("uri:" + uri);
+        //登录操作则直接放行
+        if (loginUrl.equals(uri) || loginPageUrl.equals(uri)) {
+            return null;
+        }
+        //        校验token
+        if (StringUtils.isEmpty(token)) {
+            logger.info("token为空，禁止访问!");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(BaseController.DATA_KEY, loginPageUrl);
+            jsonObject.put(BaseController.RESULT_KEY, false);
+            jsonObject.put(BaseController.ERROR_MSG_KEY, "请先登录!");
+            jsonObject.put(BaseController.STATUS_KEY, 401);
+            requestContext.setResponseBody(jsonObject.toJSONString());
+            return null;
+        }
 
         return null;
     }
 
-    private String getBase64Credentials(String username, String password) {
-        String plainCreds = username + ":" + password;
-        byte[] plainCredsBytes = plainCreds.getBytes();
-        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-        return new String(base64CredsBytes);
-    }
 }

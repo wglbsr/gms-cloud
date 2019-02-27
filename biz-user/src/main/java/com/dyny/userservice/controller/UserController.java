@@ -1,10 +1,11 @@
 package com.dyny.userservice.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dyny.userservice.api.RegionService;
+import com.dyny.userservice.api.RegionApi;
 import com.dyny.utils.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,20 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController extends BaseController {
     @Autowired
-    RegionService regionService;
+    RegionApi regionApi;
 
     @RequestMapping("/test")
     public String test() {
-        return "user-service," + regionService.testRegion();
+        return "user-service," + regionApi.testRegion();
     }
 
 
     @RequestMapping("/login")
-    public String login(String username, String password) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("username", username);
         jsonObject.put("age", 18);
         jsonObject.put("gender", 1);
         return getSuccessResult(jsonObject);
     }
+
 }

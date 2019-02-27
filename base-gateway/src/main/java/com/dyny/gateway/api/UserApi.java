@@ -13,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface UserApi {
 
     @RequestMapping("/user/login")
-    String testRegion();
+    String login(String username,String password);
 }
