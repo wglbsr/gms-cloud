@@ -1,6 +1,6 @@
 package com.dyny.gateway;
 
-import com.dyny.gateway.config.ApiFilter;
+import com.dyny.gateway.filter.ApiFilter;
 import com.netflix.zuul.ZuulFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

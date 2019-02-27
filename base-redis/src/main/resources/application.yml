@@ -1,0 +1,17 @@
+server:
+  port: 8886 #8181
+spring:
+  application:
+    name: base-redis
+  redis:
+    host: 39.108.127.174
+    port: 6379
+    database: 0
+    password: Dyny0763Redis
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9443/eureka  #注册 中心已经开启认证
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}

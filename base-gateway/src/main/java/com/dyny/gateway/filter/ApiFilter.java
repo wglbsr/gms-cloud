@@ -1,4 +1,4 @@
-package com.dyny.gateway.config;
+package com.dyny.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dyny.utils.BaseController;
@@ -61,7 +61,6 @@ public class ApiFilter extends ZuulFilter {
             requestContext.setResponseBody(jsonObject.toJSONString());
             return null;
         }
-
         return null;
     }
 
