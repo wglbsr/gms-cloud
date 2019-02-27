@@ -14,5 +14,7 @@
     <module>base-register</module>
     <module>base-utils</module>
     <module>base-cache</module>
+    <module>base-oauth2</module>
+    <module>base-cache</module>
 </modules>
 </project>

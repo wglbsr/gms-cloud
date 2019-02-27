@@ -1,0 +1,32 @@
+server:
+  port: 8000
+  hostname: localhost
+spring:
+  application:
+    name: base-gateway
+  security:
+    user:
+      name: user
+      password: 123456
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9443/eureka  #注册 中心已经开启认证
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+zuul:
+  routes:
+    base-auth2:
+      path: /user/**
+      serverId: service-user
+#security:
+#  oauth2:
+#    client:
+#      access-token-uri: http://localhost:7999/base-oauth2/token #令牌端点
+#      user-authorization-uri: http://localhost:7999/base-oauth2/authorize #授权端点
+#      client-id: zuul_server #OAuth2客户端ID
+#      client-secret: secret #OAuth2客户端密钥
+#    resource:
+#      jwt:
+#        key-value: springcloud123 #使用对称加密方式，默认算法为HS256
