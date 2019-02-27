@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0.0
  */
 @RestController
-@RequestMapping("/redis")
+@RequestMapping(value = "/redis", produces = {"application/json;charset=UTF-8"})
 public class RedisController extends BaseController {
     @Autowired
     private CacheDao cacheDao;
