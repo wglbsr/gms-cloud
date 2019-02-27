@@ -1,8 +1,8 @@
 server:
-  port: 7998 #8181
+  port: 8887 #8181
 spring:
   application:
-    name: base-cache
+    name: service-generator
 eureka:
   client:
     serviceUrl:

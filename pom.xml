@@ -13,7 +13,6 @@
     <module>biz-user</module>
     <module>base-register</module>
     <module>base-utils</module>
-    <module>base-cache</module>
-    <module>base-cache</module>
+    <module>biz-generator</module>
 </modules>
 </project>

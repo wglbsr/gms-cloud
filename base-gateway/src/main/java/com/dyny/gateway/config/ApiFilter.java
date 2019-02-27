@@ -55,8 +55,9 @@ public class ApiFilter extends ZuulFilter {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(BaseController.DATA_KEY, loginPageUrl);
             jsonObject.put(BaseController.RESULT_KEY, false);
-            jsonObject.put(BaseController.ERROR_MSG_KEY, "请先登录!");
+            jsonObject.put(BaseController.ERROR_MSG_KEY, "need login!");
             jsonObject.put(BaseController.STATUS_KEY, 401);
+            requestContext.getResponse().setContentType("text/html;charset=UTF-8");
             requestContext.setResponseBody(jsonObject.toJSONString());
             return null;
         }
