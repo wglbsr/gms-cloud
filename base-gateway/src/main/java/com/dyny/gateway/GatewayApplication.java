@@ -20,8 +20,8 @@ public class GatewayApplication   {
         SpringApplication.run(GatewayApplication.class, args);
     }
 
-    @Bean
-    public ZuulFilter getFilter() {
-        return new ApiFilter();
-    }
+//    @Bean
+//    public ZuulFilter getFilter() {
+//        return new ApiFilter();
+//    }
 }

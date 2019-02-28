@@ -28,6 +28,7 @@
         <module>biz-generator</module>
         <module>base-gateway</module>
         <module>base-redis</module>
+        <module>base-auth</module>
     </modules>
     <dependencies>
         <dependency>
@@ -67,6 +68,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -109,11 +115,11 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.dyny</groupId>
-                <artifactId>base-register</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.dyny</groupId>-->
+                <!--<artifactId>base-register</artifactId>-->
+                <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

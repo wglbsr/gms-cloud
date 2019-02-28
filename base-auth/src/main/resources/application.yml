@@ -26,7 +26,11 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8000/eureka  #注册 中心已经开启认证
+      defaultZone: http://localhost:8000/eureka
   instance:
     prefer-ip-address: true
     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://uaa/user
