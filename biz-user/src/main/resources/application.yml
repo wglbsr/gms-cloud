@@ -1,12 +1,12 @@
 server:
-  port: 8889 #8181
+  port: 8100 #8181
 spring:
   application:
     name: service-user
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:9443/eureka  #注册 中心已经开启认证
+      defaultZone: http://localhost:8000/eureka  #注册 中心已经开启认证
   instance:
     prefer-ip-address: true
     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
