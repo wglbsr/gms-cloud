@@ -4,7 +4,8 @@ server:
     uri-encoding: UTF-8
 spring:
   application:
-    name: base-auth
+    name: uaa
+  #    name: base-auth
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:

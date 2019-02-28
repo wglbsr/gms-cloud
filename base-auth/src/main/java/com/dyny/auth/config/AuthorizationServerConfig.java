@@ -1,5 +1,6 @@
 package com.dyny.auth.config;
 
+import com.dyny.auth.error.MssWebResponseExceptionTranslator;
 import com.dyny.auth.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -7,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -15,20 +16,16 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
 
-/**
- * @Auther: wglbs
- * @Date: 2019-02-28 22:36
- * @Description:
- * @Version 1.0.0
- */
-@EnableAuthorizationServer
+
 @Configuration
-public class AuthSecurityConfigurator extends AuthorizationServerConfigurerAdapter {
+@EnableAuthorizationServer
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -60,12 +57,17 @@ public class AuthSecurityConfigurator extends AuthorizationServerConfigurerAdapt
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
+    @Bean
+    public WebResponseExceptionTranslator<OAuth2Exception> webResponseExceptionTranslator(){
+        return new MssWebResponseExceptionTranslator();
+    }
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(redisTokenStore())
                 .userDetailsService(userDetailsService)
                 .authenticationManager(authenticationManager);
         endpoints.tokenServices(defaultTokenServices());
+        endpoints.exceptionTranslator(webResponseExceptionTranslator());//认证异常翻译
     }
 
     /**
