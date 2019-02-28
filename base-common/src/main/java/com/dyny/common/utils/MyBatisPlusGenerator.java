@@ -1,4 +1,4 @@
-package com.dyny.utils;
+package com.dyny.common.utils;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;

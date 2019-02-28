@@ -1,4 +1,4 @@
-package com.dyny.enums;
+package com.dyny.common.enums;
 
 /**
  * @project: lms

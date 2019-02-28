@@ -1,7 +1,7 @@
 package com.dyny.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dyny.utils.BaseController;
+import com.dyny.common.utils.BaseController;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.lang3.StringUtils;
@@ -42,8 +42,9 @@ public class ApiFilter extends ZuulFilter {
         HttpServletRequest request = requestContext.getRequest();
         String uri = request.getRequestURI();
         String token = request.getHeader("TOKEN");
-        String loginUrl = "/service-user/user/login";
-        String loginPageUrl = "/service-user/user/sso";
+        String loginUrl = "/auth/login";
+        String loginPageUrl = "/auth/sso";
+        String logout = "/auth/logout";
         logger.info("uri:" + uri);
         //登录操作则直接放行
         if (loginUrl.equals(uri) || loginPageUrl.equals(uri)) {
@@ -53,15 +54,16 @@ public class ApiFilter extends ZuulFilter {
         if (StringUtils.isEmpty(token)) {
             logger.info("token为空，禁止访问!");
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(BaseController.DATA_KEY, loginPageUrl);
-            jsonObject.put(BaseController.RESULT_KEY, false);
-            jsonObject.put(BaseController.ERROR_MSG_KEY, "need login!");
-            jsonObject.put(BaseController.STATUS_KEY, 401);
+            jsonObject.put(BaseController.KEY_DATA, loginPageUrl);
+            jsonObject.put(BaseController.KEY_RESULT, false);
+            jsonObject.put(BaseController.KEY_ERROR_MSG, "need login!");
+            jsonObject.put(BaseController.KEY_STATUS, 401);
             requestContext.getResponse().setContentType("text/html;charset=UTF-8");
             requestContext.setResponseBody(jsonObject.toJSONString());
             return null;
         }
         return null;
     }
+
 
 }

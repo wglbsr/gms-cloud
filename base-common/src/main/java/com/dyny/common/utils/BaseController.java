@@ -1,8 +1,8 @@
-package com.dyny.utils;
+package com.dyny.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.dyny.enums.ErrorMsgEnum;
+import com.dyny.common.enums.ErrorMsgEnum;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -23,15 +23,18 @@ import java.util.List;
  **/
 public class BaseController {
     protected JSONObject result;
-    public static final String DATA_KEY = "data";
-    public static final String PAGE_SIZE_KEY = "pageSize";
-    public static final String PAGE_NUM_KEY = "pageNum";
-    public static final String TOTAL_PAGE_NUM_KEY = "totalPageNum";
-    public static final String TOTAL_NUM_KEY = "totalNum";
-    public static final String ERROR_MSG_KEY = "errorMsg";
-    public static final String STATUS_KEY = "status";
-    public static final String RESULT_KEY = "result";
-    public static final String TOKEN_KEY = "token";
+    public static final String KEY_EXPIRE_TIME = "expireTime";
+    public static final String KEY_REDIRECT_URI = "redirectUrl";
+    public static final String KEY_USER_INFO = "userInfo";
+    public static final String KEY_DATA = "data";
+    public static final String KEY_PAGE_SIZE = "pageSize";
+    public static final String KEY_PAGE_NUM = "pageNum";
+    public static final String KEY_TOTAL_PAGE_NUM = "totalPageNum";
+    public static final String KEY_TOTAL_NUM = "totalNum";
+    public static final String KEY_ERROR_MSG = "errorMsg";
+    public static final String KEY_STATUS = "status";
+    public static final String KEY_RESULT = "result";
+    public static final String KEY_TOKEN = "token";
     public static final String DEFAULT_ERROR_MSG = "内部错误!";
     public static final int DEFAULT_SUCCESS_STATUS = 200;
     public static final int NEED_LOGIN = 401;
@@ -102,20 +105,20 @@ public class BaseController {
     private String getResult(boolean successFlag, Object data, String errorMessage, int status, long pageNum, long pageSize, long totalNum) {
         this.result = new JSONObject();
         if (successFlag) {
-            this.result.put(STATUS_KEY, status);
-            this.result.put(DATA_KEY, data);
-            this.result.put(PAGE_SIZE_KEY, pageSize);
-            this.result.put(PAGE_NUM_KEY, pageNum);
+            this.result.put(KEY_STATUS, status);
+            this.result.put(KEY_DATA, data);
+            this.result.put(KEY_PAGE_SIZE, pageSize);
+            this.result.put(KEY_PAGE_NUM, pageNum);
             long totalPageNum = pageSize > 0 ? (totalNum / pageSize + (totalNum % pageSize > 0 ? 1 : 0)) : 0;
-            this.result.put(TOTAL_PAGE_NUM_KEY, totalPageNum);
-            this.result.put(TOTAL_NUM_KEY, totalNum);
+            this.result.put(KEY_TOTAL_PAGE_NUM, totalPageNum);
+            this.result.put(KEY_TOTAL_NUM, totalNum);
         } else {
-            this.result.put(DATA_KEY, null);
-            this.result.put(PAGE_SIZE_KEY, pageSize);
-            this.result.put(PAGE_NUM_KEY, pageNum);
-            this.result.put(ERROR_MSG_KEY, StringUtils.isEmpty(errorMessage) ? DEFAULT_ERROR_MSG : errorMessage);
+            this.result.put(KEY_DATA, null);
+            this.result.put(KEY_PAGE_SIZE, pageSize);
+            this.result.put(KEY_PAGE_NUM, pageNum);
+            this.result.put(KEY_ERROR_MSG, StringUtils.isEmpty(errorMessage) ? DEFAULT_ERROR_MSG : errorMessage);
         }
-        this.result.put(RESULT_KEY, successFlag);
+        this.result.put(KEY_RESULT, successFlag);
         return JSONObject.toJSONString(this.result, SerializerFeature.WriteMapNullValue);
     }
 
@@ -128,10 +131,38 @@ public class BaseController {
 
     public String tokenAndUser(String token, Object user) {
         this.result = new JSONObject();
-        this.result.put(TOKEN_KEY, token);
+        this.result.put(KEY_TOKEN, token);
         this.result.put("userInfo", user);
-        this.result.put(RESULT_KEY, true);
+        this.result.put(KEY_RESULT, true);
         return JSONObject.toJSONString(this.result, SerializerFeature.WriteMapNullValue);
+    }
+
+    public JSONObject getJsonData(String jsonStr) {
+        if (StringUtils.isEmpty(jsonStr)) {
+            return null;
+        }
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        if (jsonObject == null) {
+            return null;
+        }
+        Boolean result = jsonObject.getObject(KEY_RESULT, Boolean.class);
+        if (!result) {
+            return null;
+        }
+        return jsonObject.getJSONObject(KEY_DATA);
+    }
+
+    public String getStrData(String jsonStr) {
+        return getJsonData(jsonStr).toJSONString();
+    }
+
+    public <T> T getData(String jsonStr, Class<T> t) {
+        String data = getStrData(jsonStr);
+        if (!StringUtils.isEmpty(data)) {
+            return JSONObject.parseObject(data, t);
+        } else {
+            return null;
+        }
     }
 
     /**

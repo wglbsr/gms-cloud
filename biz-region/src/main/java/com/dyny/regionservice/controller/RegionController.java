@@ -1,7 +1,7 @@
 package com.dyny.regionservice.controller;
 
-import com.dyny.utils.BaseController;
-import com.dyny.utils.Utils;
+import com.dyny.common.utils.BaseController;
+import com.dyny.common.utils.Utils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
