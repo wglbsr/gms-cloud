@@ -1,12 +1,10 @@
 package com.dyny.gateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -25,36 +23,31 @@ public class SecurityConfigurator extends ResourceServerConfigurerAdapter {
     @Autowired
     private OAuth2WebSecurityExpressionHandler expressionHandler;
 
+    //白名单
     private static final String[] AUTH_WHITELIST = {
-            "/**/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
             "/configuration/ui",
             "/configuration/security",
-            "/swagger-ui.html",
-            "swagger-resources/configuration/ui",
-            "/doc.html",
             "/webjars/**"
     };
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/v2/api-docs","/uaa/**").permitAll();
-
+        http.authorizeRequests().antMatchers("/base-auth/**", "/oauth/token").permitAll();
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
-        for (String au:AUTH_WHITELIST
-        ) {
+        for (String au : AUTH_WHITELIST) {
             http.authorizeRequests().antMatchers(au).permitAll();
         }
         http.authorizeRequests().anyRequest().authenticated();
-        registry.anyRequest()
-                .access("@permissionService.hasPermission(request,authentication)");
+        registry.anyRequest().access("@permissionService.hasPermission(request,authentication)");
+
     }
+
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources.expressionHandler(expressionHandler);
     }
+
     @Bean
     public OAuth2WebSecurityExpressionHandler oAuth2WebSecurityExpressionHandler(ApplicationContext applicationContext) {
         OAuth2WebSecurityExpressionHandler expressionHandler = new OAuth2WebSecurityExpressionHandler();

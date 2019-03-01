@@ -16,8 +16,6 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class DataSourceConfigurator {
-
-
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();

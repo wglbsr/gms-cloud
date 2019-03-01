@@ -9,8 +9,7 @@ spring:
     database: 1
     password: Dyny0763Redis
   application:
-    name: uaa
-  #    name: base-auth
+    name: base-auth
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -41,4 +40,5 @@ management:
 security:
   oauth2:
     resource:
-      user-info-uri: http://uaa/user
+      #      user-info-uri:
+      user-info-uri: http://base-auth/user

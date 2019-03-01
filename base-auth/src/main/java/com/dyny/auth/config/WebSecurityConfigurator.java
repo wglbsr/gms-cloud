@@ -1,6 +1,6 @@
 package com.dyny.auth.config;
 
-import com.dyny.auth.service.UserDetailsServiceImpl;
+import com.dyny.auth.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,17 +16,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @Author wanggl(lane)
- * @Description //TODO 
+ * @Description //TODO
  * @Date 08:49 2019-03-01
- * @Param 
- * @return 
+ * @Param
+ * @return
  **/
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfigurator extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,15 +38,16 @@ public class WebSecurityConfigurator extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.formLogin().permitAll().and()
                 .authorizeRequests()
                 .anyRequest().fullyAuthenticated()
                 .antMatchers("/oauth/token").permitAll()

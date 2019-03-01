@@ -19,14 +19,14 @@ zuul:
   routes:
     #拦截所有请求
     #      api: /**
-    uaa:
-      path: /uaa/**
+    base-auth:
+      path: /base-auth/**
       strip-prefix: true
       sensitiveHeaders:
-      serviceId: auth2.0-center
+      serviceId: base-auth
 security:
   oauth2:
     resource:
-      user-info-uri:  http://uaa/user
+      user-info-uri:  http://base-auth/user
       prefer-token-info: false
-      loadBalanced: true
+#      loadBalanced: true
