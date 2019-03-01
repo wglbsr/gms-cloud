@@ -8,14 +8,14 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 /**
  * @Author wanggl(lane)
- * @Description //TODO 
+ * @Description 使用阿里巴巴的druid数据库连接池
  * @Date 08:48 2019-03-01
  * @Param 
  * @return 
  **/
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
+public class ResourceServerConfigurator extends ResourceServerConfigurerAdapter{
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.

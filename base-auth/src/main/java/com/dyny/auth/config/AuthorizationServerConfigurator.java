@@ -22,10 +22,16 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 
 import javax.sql.DataSource;
 
-
+/**
+ * @Author wanggl(lane)
+ * @Description //TODO
+ * @Date 15:06 2019-03-01
+ * @Param
+ * @return
+ **/
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfigurator extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
