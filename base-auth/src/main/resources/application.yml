@@ -37,8 +37,3 @@ management:
     web:
       exposure:
         include: \*
-security:
-  oauth2:
-    resource:
-      #      user-info-uri:
-      user-info-uri: http://base-auth/user

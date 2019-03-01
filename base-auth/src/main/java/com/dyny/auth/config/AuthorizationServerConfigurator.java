@@ -41,12 +41,6 @@ public class AuthorizationServerConfigurator extends AuthorizationServerConfigur
         return new RedisTokenStore(redisConnectionFactory);
     }
 
-    //token存储数据库
-//    @Bean
-//    public JdbcTokenStore jdbcTokenStore(){
-//        return new JdbcTokenStore(dataSource);
-//    }
-
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(clientDetails());
@@ -57,10 +51,6 @@ public class AuthorizationServerConfigurator extends AuthorizationServerConfigur
         return new JdbcClientDetailsService(dataSource);
     }
 
-//    @Bean
-//    public WebResponseExceptionTranslator<OAuth2Exception> webResponseExceptionTranslator() {
-//        return new MssWebResponseExceptionTranslator();
-//    }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
