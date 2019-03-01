@@ -15,10 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Created by Mr.Yangxiufeng on 2017/12/27.
- * Time:16:42
- * ProjectName:Mirco-Service-Skeleton
- */
+ * @Author wanggl(lane)
+ * @Description //TODO 
+ * @Date 08:49 2019-03-01
+ * @Param 
+ * @return 
+ **/
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

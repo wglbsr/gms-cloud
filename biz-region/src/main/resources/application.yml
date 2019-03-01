@@ -3,10 +3,12 @@ server:
 spring:
   application:
     name: service-region
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8000/eureka  #注册 中心已经开启认证
-  instance:
-    prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+management:
+  endpoints:
+    web:
+      exposure:
+        include: \*

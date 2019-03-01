@@ -1,4 +1,4 @@
-package com.dyny.auth;
+package com.dyny.common.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

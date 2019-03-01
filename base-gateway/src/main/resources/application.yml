@@ -5,22 +5,25 @@ server:
 spring:
   application:
     name: base-gateway
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8000/eureka  #注册 中心已经开启认证
-  instance:
-    prefer-ip-address: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 zuul:
   routes:
-#拦截所有请求
-#      api: /**
-      uaa:
-        path: /uaa/**
-        strip-prefix: true
-        sensitiveHeaders:
-        serviceId: auth2.0-center
+    #拦截所有请求
+    #      api: /**
+    uaa:
+      path: /uaa/**
+      strip-prefix: true
+      sensitiveHeaders:
+      serviceId: auth2.0-center
 security:
   oauth2:
     resource:
