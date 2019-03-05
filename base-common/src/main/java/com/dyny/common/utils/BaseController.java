@@ -38,6 +38,7 @@ public class BaseController {
     public static final String DEFAULT_ERROR_MSG = "内部错误!";
     public static final int DEFAULT_SUCCESS_STATUS = 200;
     public static final int NEED_LOGIN = 401;
+    public static final int TIME_OUT_TOKEN_MIN = 60 * 24;
 
     /**
      * 返回成功信息
@@ -113,6 +114,7 @@ public class BaseController {
             this.result.put(KEY_TOTAL_PAGE_NUM, totalPageNum);
             this.result.put(KEY_TOTAL_NUM, totalNum);
         } else {
+            this.result.put(KEY_STATUS, status);
             this.result.put(KEY_DATA, null);
             this.result.put(KEY_PAGE_SIZE, pageSize);
             this.result.put(KEY_PAGE_NUM, pageNum);

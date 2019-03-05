@@ -3,3 +3,7 @@
 
 参考
 https://github.com/babylikebird/Micro-Service-Skeleton.git
+
+
+启动nacos
+sh startup.sh -m standalone

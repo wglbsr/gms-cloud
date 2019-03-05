@@ -24,7 +24,12 @@ public class MyBatisPlusGenerator {
         Map<String, String> table = new HashMap<>();
 
         //直接在这里添加表名和前缀即可,key为表名,value为前缀
-        table.put("rel_user_region", "");
+        table.put("sys_user", "sys_");
+        table.put("sys_auth", "sys_");
+        table.put("sys_role", "sys_");
+        table.put("rel_user_role", "");
+        table.put("rel_role_auth", "");
+        table.put("sys_log_login", "sys_");
 
         MyBatisPlusGenerator myBatisPlusGenerator = new MyBatisPlusGenerator();
         myBatisPlusGenerator.generateCode(table);
@@ -36,7 +41,7 @@ public class MyBatisPlusGenerator {
         GlobalConfig config = new GlobalConfig();
         config.setActiveRecord(true) // 是否支持AR模式
                 .setAuthor("wanggl") // 作者
-                .setOutputDir("/Users/lane/IdeaProjects/gmsv2/server/src/main/java") // 生成路径
+                .setOutputDir("/Users/lane/IdeaProjects/gms-cloud/biz-user/src/main/java") // 生成路径
                 .setFileOverride(true)  // 文件覆盖
                 .setIdType(IdType.AUTO) // 主键策略
                 .setServiceName("%sService")  // 设置生成的service接口的名字
@@ -45,21 +50,21 @@ public class MyBatisPlusGenerator {
 
         //2. 数据源配置
         DataSourceConfig dsConfig = new DataSourceConfig();
-        dsConfig.setDbType(DbType.SQL_SERVER)  // 设置数据库类型
-                .setDriverName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-                .setUrl("jdbc:sqlserver://47.107.72.98:1433;DatabaseName=dyny")
-                .setUsername("sa")
-                .setPassword("dyny0763");
+        dsConfig.setDbType(DbType.MYSQL)  // 设置数据库类型
+                .setDriverName("com.mysql.jdbc.Driver")
+                .setUrl("jdbc:mysql://120.79.91.131:3306/gms_cloud?useUnicode=true&useSSL=false&characterEncoding=utf8")
+                .setUsername("nacos_admin")
+                .setPassword("nacos_admin");
 
         //4. 包名策略配置
         PackageConfig pkConfig = new PackageConfig();
-        pkConfig.setParent("com.dyny.gms.server")
+        pkConfig.setParent("com.dyny.userservice")
                 .setMapper("db.dao")//dao
                 .setService("service")//servcie
                 .setServiceImpl("service.impl")//
                 .setController("controller")//controller
                 .setXml("db.xml")
-                .setEntity("db.entity");//mapper.xml
+                .setEntity("db.entity");//dao.xml
 
 
         Iterator<String> keySet = table.keySet().iterator();
@@ -81,8 +86,8 @@ public class MyBatisPlusGenerator {
                     .setTablePrefix(prefix)
                     .setInclude(tableName)// 目标表
                     .setRestControllerStyle(true)
-                    .setSuperControllerClass("com.dyny.gms.server.controller.commonController.BaseController")
-                    .setSuperMapperClass("com.dyny.gms.exclude.CommonMapper");//默认为BaseMapper
+                    .setSuperControllerClass("com.dyny.common.utils.BaseController")
+                    .setSuperMapperClass("com.dyny.common.utils.CommonMapper");//默认为BaseMapper
             //6. 执行
             ag.setStrategy(stConfig);
             ag.execute();
