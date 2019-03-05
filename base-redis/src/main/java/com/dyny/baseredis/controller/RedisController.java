@@ -27,6 +27,11 @@ public class RedisController extends BaseController {
         return getSuccessResult(cacheDao.get(key));
     }
 
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("key") String key) {
+        return getSuccessResult(cacheDao.delete(key));
+    }
+
     @RequestMapping("/set")
     public String set(@RequestParam("key") String key, @RequestParam("value") String value,
                       @RequestParam(value = "timeout", required = false, defaultValue = "0") int timeoutMin) {

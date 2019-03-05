@@ -1,6 +1,12 @@
 server:
   port: 8100 #8181
 spring:
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    #开发时关闭缓存,不然没法看到实时页面
+    cache: false
+  # enabled: true
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -25,10 +31,10 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-  mvc:
-    view:
-      suffix: .html
-      prefix: classpath:/templates/
+#  mvc:
+#    view:
+#      suffix: .html
+#      prefix: /templates/
 management:
   endpoints:
     web:

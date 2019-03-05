@@ -22,6 +22,11 @@ import java.util.List;
  * @modify 15:2 2019-1-07
  **/
 public class BaseController {
+
+    public static final String URL_LOGIN = "/service-user/sso/login";
+    public static final String URL_LOGIN_PAGE = "/service-user/sso/loginPage";
+    public static final String URL_LOGOUT = "/service-user/sso/logout";
+
     protected JSONObject result;
     public static final String KEY_EXPIRE_TIME = "expireTime";
     public static final String KEY_REDIRECT_URI = "redirectUrl";
@@ -34,7 +39,7 @@ public class BaseController {
     public static final String KEY_ERROR_MSG = "errorMsg";
     public static final String KEY_STATUS = "status";
     public static final String KEY_RESULT = "result";
-    public static final String KEY_TOKEN = "token";
+    public static final String KEY_TOKEN = "auth_token";
     public static final String DEFAULT_ERROR_MSG = "内部错误!";
     public static final int DEFAULT_SUCCESS_STATUS = 200;
     public static final int NEED_LOGIN = 401;
@@ -126,7 +131,7 @@ public class BaseController {
 
     public String getToken(String token) {
         this.result = new JSONObject();
-        this.result.put("token", token);
+        this.result.put(KEY_TOKEN, token);
         return JSONObject.toJSONString(this.result, SerializerFeature.WriteMapNullValue);
     }
 

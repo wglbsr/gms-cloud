@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RedisApi {
 
     @RequestMapping("/redis/get")
-    public String get(@RequestParam("key") String key);
+    String get(@RequestParam("key") String key);
 
     @RequestMapping("/redis/set")
-    public String set(@RequestParam("key") String key, @RequestParam("value") String value,
-                      @RequestParam(value = "timeout", required = false, defaultValue = "0") int timeoutMin);
+    String set(@RequestParam("key") String key, @RequestParam("value") String value,
+               @RequestParam(value = "timeout", required = false, defaultValue = "0") int timeoutMin);
 
     @RequestMapping("/redis/refresh")
-    public String refresh(@RequestParam("key") String key,
-                          @RequestParam("timeout") int timeoutMin);
+    String refresh(@RequestParam("key") String key,
+                   @RequestParam("timeout") int timeoutMin);
+
+    @RequestMapping("/redis/delete")
+    String delete(@RequestParam("key") String key);
 }

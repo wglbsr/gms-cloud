@@ -6,7 +6,9 @@ import com.dyny.userservice.api.RedisApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.util.Base64Utils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 //@RestController
 @RequestMapping("/sso")
+@Controller
 @RefreshScope
 public class SsoController extends BaseController {
 
@@ -42,7 +45,7 @@ public class SsoController extends BaseController {
         JSONObject resultObject = JSONObject.parseObject(resultStr);
         JSONObject userInfo = resultObject.getJSONObject(BaseController.KEY_DATA);
         if (userInfo != null) {
-            String token = generateToken(username);
+            String token = generateToken(username, password);
             resultObject.put(BaseController.KEY_TOKEN, token);
             redisApi.set(token, userInfo.toJSONString(), tokenTimeoutMin);
         }
@@ -50,13 +53,14 @@ public class SsoController extends BaseController {
     }
 
 
-    @RequestMapping("/loginPage")
-    public String loginPage(@RequestParam("url") String url) {
+    @GetMapping("/loginPage")
+    public String loginPage(@RequestParam("url") String url, ModelMap modelMap) {
+        modelMap.put("redirectUrl", url);
         return "index";
     }
 
-    private String generateToken(String username) {
-        String temp = username + System.currentTimeMillis();
-        return Base64Utils.encodeToString(temp.getBytes());
+    private String generateToken(String username, String password) {
+        String temp = username + System.currentTimeMillis() + password;
+        return MD5(temp);
     }
 }
