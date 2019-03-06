@@ -1,11 +1,13 @@
 package com.dyny.userservice.service;
 
-import com.dyny.userservice.db.entity.Auth;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dyny.userservice.db.entity.Auth;
+
+import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author wanggl
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AuthService extends IService<Auth> {
 
+    List<Auth> selectByUserId(int userId);
 }

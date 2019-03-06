@@ -12,14 +12,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DruidDataSource {
-    //性能检测插件,生产环境禁用
-//    @Bean
-//    public PerformanceInterceptor performanceInterceptor() {
-//        PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();
-//        performanceInterceptor.setMaxTime(5000);
-//        performanceInterceptor.setFormat(true);
-//        return performanceInterceptor;
-//    }
 
     @Bean
     public PaginationInterceptor paginationInterceptor() {

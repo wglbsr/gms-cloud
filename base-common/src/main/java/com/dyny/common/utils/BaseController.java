@@ -26,12 +26,14 @@ public class BaseController {
     public static final String URL_LOGIN = "/service-user/sso/login";
     public static final String URL_LOGIN_PAGE = "/service-user/sso/loginPage";
     public static final String URL_LOGOUT = "/service-user/sso/logout";
+    public static final String URL_TOKEN_CHECK = "/service-user/sso/check";
 
     protected JSONObject result;
     public static final String KEY_EXPIRE_TIME = "expireTime";
     public static final String KEY_REDIRECT_URI = "redirectUrl";
     public static final String KEY_USER_INFO = "userInfo";
     public static final String KEY_DATA = "data";
+    public static final String KEY_KEY_WORD = "keyWord";
     public static final String KEY_PAGE_SIZE = "pageSize";
     public static final String KEY_PAGE_NUM = "pageNum";
     public static final String KEY_TOTAL_PAGE_NUM = "totalPageNum";

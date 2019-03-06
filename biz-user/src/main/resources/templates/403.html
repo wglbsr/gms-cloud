@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Random Login Form</title>
+    <style>
+        /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+        @import url(https://fonts.googleapis.com/css?family=Exo:100,200,400);
+        @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #e16663;
+            color: #fff;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        .body {
+            position: absolute;
+            width: auto;
+            height: auto;
+            -webkit-filter: blur(5px);
+            z-index: 0;
+        }
+
+        .grad {
+            position: absolute;
+            width: auto;
+            height: auto;
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.65))); /* Chrome,Safari4+ */
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .login {
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px;
+            width: 260px;
+            padding: 10px;
+            z-index: 2;
+        }
+
+        .login input[type=text] {
+            width: 250px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 4px;
+        }
+
+        .login input[type=password] {
+            width: 250px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 4px;
+            margin-top: 10px;
+        }
+
+        .login input[type=button] {
+            width: 260px;
+            height: 35px;
+            background: #fff;
+            border: 1px solid #fff;
+            cursor: pointer;
+            border-radius: 2px;
+            color: #ee694a;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 6px;
+            margin-top: 10px;
+        }
+
+        .login input[type=button]:hover {
+            opacity: 0.8;
+        }
+
+        .login input[type=button]:active {
+            opacity: 0.6;
+        }
+
+        .login input[type=text]:focus {
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .login input[type=password]:focus {
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .login input[type=button]:focus {
+            outline: none;
+        }
+
+        ::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        ::-moz-input-placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="login" id="loginDiv">
+    <div style="font-size: 35px;font-family:'Exo', sans-serif; ">403,禁止访问!</div>
+</div>
+
+</body>
+
+</html>

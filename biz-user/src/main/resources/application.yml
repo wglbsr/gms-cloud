@@ -10,7 +10,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://120.79.91.131:3306/gms_cloud
+      url: jdbc:mysql://120.79.91.131:3306/gms_cloud?characterEncoding=utf8&useSSL=true
       username: nacos_admin
       password: nacos_admin
       initial-size: 1
@@ -24,7 +24,7 @@ spring:
       test-on-borrow: false
       test-on-return: false
       filters: stat,wall,slf4j
-      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=15000
   application:
     name: service-user
   cloud:

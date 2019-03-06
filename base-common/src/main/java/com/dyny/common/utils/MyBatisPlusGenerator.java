@@ -59,12 +59,12 @@ public class MyBatisPlusGenerator {
         //4. 包名策略配置
         PackageConfig pkConfig = new PackageConfig();
         pkConfig.setParent("com.dyny.userservice")
-                .setMapper("db.dao")//dao
-                .setService("service")//servcie
-                .setServiceImpl("service.impl")//
-                .setController("controller")//controller
-                .setXml("db.xml")
-                .setEntity("db.entity");//dao.xml
+//                .setMapper("db.dao")//dao
+//                .setService("service")//servcie
+//                .setServiceImpl("service.impl")//
+//                .setController("controller")//controller
+                .setXml("db.xml");
+//                .setEntity("db.entity");//dao.xml
 
 
         Iterator<String> keySet = table.keySet().iterator();

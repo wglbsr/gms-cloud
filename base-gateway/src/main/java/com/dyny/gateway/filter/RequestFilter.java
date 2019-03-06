@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @RefreshScope
 public class RequestFilter extends ZuulFilter {
-    //MTIzMTU1MTc2NTkzOTA5NA==
     private static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
 
     @Override
@@ -53,12 +52,16 @@ public class RequestFilter extends ZuulFilter {
         if (BaseController.URL_LOGIN.equals(uri) || BaseController.URL_LOGIN_PAGE.equals(uri)) {
             return null;
         }
+
         String token = request.getHeader(BaseController.KEY_TOKEN);
         //校验token
         if (tokenCheck(token)) {
             //登出
             if (BaseController.URL_LOGOUT.equals(uri)) {
                 this.logout(requestContext, token);
+            } else if (BaseController.URL_TOKEN_CHECK.equals(uri)) {
+                BaseController baseController = new BaseController();
+                requestContext.setResponseBody(baseController.getSuccessResult(1));
             } else {
                 requestContext.setSendZuulResponse(true);
                 requestContext.setResponseStatusCode(200);
