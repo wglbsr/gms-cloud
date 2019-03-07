@@ -76,7 +76,7 @@ public class RequestFilter extends ZuulFilter {
 
     @Autowired
     RedisApi redisApi;
-    @Value("${tokenTimeoutMin:1440}")
+    @Value("${tokenTimeoutMin:" + BaseController.TIME_OUT_TOKEN_MIN + "}")
     private int tokenTimeoutMin;
 
     private boolean tokenCheck(String token) {

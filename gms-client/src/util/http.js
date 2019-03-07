@@ -8,7 +8,7 @@ require("../mock");
 let HOST = 'https://www.yn-iot.cn';
 //开发环境
 if (process.env.NODE_ENV !== 'production') {
-    HOST = 'http://localhost:8010/service-user';
+    HOST = 'http://localhost:8010';
 }
 
 axios.defaults.baseURL = HOST;

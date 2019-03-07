@@ -83,7 +83,7 @@
                 this.query();
             },
             queryRole(tempRoleList) {
-                this.$http.post("/role/selectByUserId", qs.stringify({userId: this.userId})).then(res => {
+                this.$http.post("/service-user/role/selectByUserId", qs.stringify({userId: this.userId})).then(res => {
                     if (res.data.result && res.data.data) {
                         this.userRoleList = res.data.data;
                         for (let key in tempRoleList) {
@@ -103,7 +103,7 @@
             },
             query() {
                 let params = {pageNum: this.pageNum, pageSize: this.pageSize, keyWord: this.keyWord};
-                this.$http.post("/role/select", qs.stringify(params)).then(res => {
+                this.$http.post("/service-user/role/select", qs.stringify(params)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.pageNum = res.data.pageNum;
                         this.pageSize = res.data.pageSize;
@@ -123,7 +123,7 @@
             addOrDel(del, id) {
                 let params = {roleId: id, userId: this.userId};
                 let operation = del ? "unRelate" : "relate";
-                this.$http.post("/relUserRole/" + operation, qs.stringify(params)).then(res => {
+                this.$http.post("/service-user/relUserRole/" + operation, qs.stringify(params)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.$message.success("操作成功!");
                         this.query();

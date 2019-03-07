@@ -61,13 +61,6 @@
         mounted() {
         },
         methods: {
-            relateWeChat() {
-                this.$http.post("/WeChat/auth2", this.weChatConfig).then(res => {
-                    if (res.data.result && res.data.data) {
-                        window.location = res.data.data;
-                    }
-                });
-            },
             changePsw() {
                 if (!this.passwordObj.newPassword || !this.passwordObj.newPassword1) {
                     this.$message.error("请输入正确的密码!");
@@ -82,7 +75,7 @@
                     this.$message.error("密码长度不能小于" + size + "位!");
                     return;
                 }
-                this.$http.post("/user/changePsw", qs.stringify(this.passwordObj)).then(res => {
+                this.$http.post("/service-user/user/changePsw", qs.stringify(this.passwordObj)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.$message.success("修改成功!");
                         this.passwordObj = {

@@ -12,5 +12,5 @@ import com.dyny.userservice.db.entity.User;
  * @since 2019-03-06
  */
 public interface UserService extends IService<User> {
-
+    boolean changePassword(String oldPassword, String newPassword, int userId);
 }

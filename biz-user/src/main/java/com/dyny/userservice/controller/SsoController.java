@@ -35,7 +35,7 @@ public class SsoController extends BaseController {
 
     @Autowired
     RedisApi redisApi;
-    @Value("${tokenTimeoutMin:1440}")
+    @Value("${tokenTimeoutMin:" + TIME_OUT_TOKEN_MIN + "}")
     private int tokenTimeoutMin;
 
     @RequestMapping("/login")
@@ -72,6 +72,7 @@ public class SsoController extends BaseController {
     public String logout() {
         return "403";
     }
+
     private boolean checkUrl(String url) {
         if (StringUtils.isNotEmpty(url)) {
             System.out.println("111");

@@ -105,7 +105,7 @@
             },
             query() {
                 let params = {pageNum: this.pageNum, pageSize: this.pageSize, keyWord: this.keyWord};
-                this.$http.post("/admin/allUser", qs.stringify(params)).then(res => {
+                this.$http.post("/service-user/admin/allUser", qs.stringify(params)).then(res => {
                     this.userList = res.data.data;
                     this.pageNum = res.data.pageNum;
                     this.pageSize = res.data.pageSize;

@@ -74,8 +74,9 @@
                 }
             },
             signOut() {
-                this.$http.post("http://localhost:8010/service-user/sso/logout").then(res => {
-                    if (res.result && res.data) {
+                this.$http.post("/service-user/sso/logout").then(res => {
+                    console.log(res);
+                    if (res.data.result && res.data.data) {
                         this.$store.dispatch("signOut").then(() => {
                             this.$router.push({path: "/"});
                             location.reload(true);
