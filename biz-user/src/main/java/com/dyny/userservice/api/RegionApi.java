@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Description:
  * @Version 1.0.0
  */
-@FeignClient("service-region")
+@FeignClient(name="service-region")
 public interface RegionApi {
 
     @RequestMapping("/region/test")

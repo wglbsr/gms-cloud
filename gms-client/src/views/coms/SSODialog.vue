@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible.sync="dialogVisible" width="390px" style="z-index: 20099" title="登陆" :show-close="false">
+    <el-dialog :visible.sync="visible" :close-on-click-modal="false" :modal-append-to-body="false" width="390px" title="登陆" :show-close="false">
         <iframe ref="ssoIframe" style="width: 350px;height: 240px"
                 src="http://localhost:8010/service-user/sso/loginPage?url=www.baidu.com">
         </iframe>
@@ -10,11 +10,13 @@
     export default {
         data() {
             return {
+                visible: true,
                 isCollapse: false,
             };
         },
         props: ['dialogVisible'],
         created: function () {
+            this.visible = this.dialogVisible;
             let that = this;
             if (window.addEventListener) {
                 window.addEventListener("message", that.messageHandler, false);
@@ -28,7 +30,7 @@
             messageHandler(e) {
                 let that = this;
                 let token = e.data;
-                console.log('sso token:'+token);
+                console.log('sso token:' + token);
                 that.$emit('afterLogin', token);
             },
         }

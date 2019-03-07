@@ -4,44 +4,41 @@
             <el-tab-pane label="修改密码">
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="原密码:">
-                        <el-input v-model="passwordObj.oldPassword" type="password"></el-input>
+                        <el-input v-model="passwordObj.oldPassword" type="password" size="mini"></el-input>
                     </el-form-item>
                     <el-form-item label="新密码:">
-                        <el-input v-model="passwordObj.newPassword" type="password"></el-input>
+                        <el-input v-model="passwordObj.newPassword" type="password" size="mini"></el-input>
                     </el-form-item>
                     <el-form-item label="确认密码:">
-                        <el-input v-model="passwordObj.newPassword1" type="password"></el-input>
+                        <el-input v-model="passwordObj.newPassword1" type="password" size="mini"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="changePsw">更新</el-button>
+                        <el-button type="primary" @click="changePsw" size="mini">修改</el-button>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane label="通知管理">
-                <el-row type="flex" justify="center">
-                    <el-col :span="2">文章推送</el-col>
-                    <el-col :span="1">
-                        <el-switch></el-switch>
-                    </el-col>
-                    <el-col :span="2" :offset="4">支付推送</el-col>
-                    <el-col :span="1">
-                        <el-switch></el-switch>
-                    </el-col>
-                    <el-col :span="2" :offset="4">订单推送</el-col>
-                    <el-col :span="1">
-                        <el-switch></el-switch>
-                    </el-col>
-                    <el-col :span="2" :offset="4">物流推送</el-col>
-                    <el-col :span="1">
-                        <el-switch></el-switch>
-                    </el-col>
-                </el-row>
+            <el-tab-pane label="个人信息">
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="头像:">
+                        <el-input v-model="userInfo.avatar" type="text" size="mini"></el-input>
+                    </el-form-item>
+                    <el-form-item label="名称:">
+                        <el-input v-model="userInfo.nickname" type="text" size="mini"></el-input>
+                    </el-form-item>
+                    <el-form-item label="备注:">
+                        <el-input v-model="userInfo.description" type="text" size="mini"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="changePsw" size="mini">修改</el-button>
+                    </el-form-item>
+                </el-form>
             </el-tab-pane>
         </el-tabs>
     </el-card>
 </template>
 <script>
     import qs from 'qs'
+    import store from "../../store";
 
     export default {
         name: "Profile",
@@ -52,6 +49,7 @@
                     newPassword1: "",
                     oldPassword: ""
                 },
+                userInfo: {},
                 phone: "",
                 form: {},
                 radio: "",
@@ -59,8 +57,16 @@
             };
         },
         mounted() {
+            this.userInfo = store.state.userInfo;
         },
         methods: {
+            // getUserInfo() {
+            //     this.$http.post("/service-user/user/userInfo").then(res => {
+            //         if (res.data.result && res.data.data) {
+            //             this.userInfo = res.data.data;
+            //         }
+            //     });
+            // },
             changePsw() {
                 if (!this.passwordObj.newPassword || !this.passwordObj.newPassword1) {
                     this.$message.error("请输入正确的密码!");

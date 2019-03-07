@@ -57,6 +57,4 @@ public class AdminController extends BaseControllerT<User> {
             return super.getSuccessResult(userService.list(userQueryWrapper));
         }
     }
-
-
 }

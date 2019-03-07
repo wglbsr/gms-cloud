@@ -29,7 +29,6 @@
             afterLogin: function (e) {
                 let token = e;
                 if (token && /^[0-9a-z]{32}$/.test(token)) {
-                    console.log("sign in token:" + token);
                     this.$store.commit("setToken", token);
                     this.dialogVisible = false;
                     this.$router.push({path: "/dashboard"});

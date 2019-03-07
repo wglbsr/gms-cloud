@@ -15,16 +15,16 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BizBaseControllerT<T> extends BaseControllerT<T> {
     @Autowired
-    protected HttpServletRequest request;
+    HttpServletRequest request;
     @Autowired
     protected RedisApi redisApi;
 
     protected <UserT> UserT getUser(Class<UserT> UserT) {
-        String userInfoStr = redisApi.get(getToken());
-        UserT userT = JSONObject.parseObject(userInfoStr, UserT);
+        String resultStr = redisApi.get(getToken());
+        JSONObject resultJson = JSONObject.parseObject(resultStr);
+        UserT userT = JSONObject.parseObject(resultJson.getString(KEY_DATA), UserT);
         return userT;
     }
-
 
     protected String getToken() {
         String token = request.getHeader(KEY_TOKEN);

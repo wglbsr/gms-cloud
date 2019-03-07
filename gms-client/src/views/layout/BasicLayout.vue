@@ -28,7 +28,7 @@
                 <i @click="isCollapse=!isCollapse" class="el-icon-menu sidebarToggle"></i>
                 <div class="float-right">
                     <el-dropdown trigger="click" @command="handleCommand" class="header-action">
-                        <span>Admin<i class="el-icon-arrow-down el-icon--right"></i></span>
+                        <span>{{userInfo.nickname}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="Profile"><i class="el-icon-setting"></i> 个人设定</el-dropdown-item>
                             <el-dropdown-item command="SignOut"><i class="el-icon-refresh"></i> 安全退出</el-dropdown-item>
@@ -55,14 +55,24 @@
         name: "App",
         data() {
             return {
+                userInfo: {},
                 dialogVisible: false,
                 isCollapse: false,
             };
         },
         mounted: function () {
+            this.getUserInfo();
         },
         components: {SSODialog},
         methods: {
+            getUserInfo() {
+                this.$http.post("/service-user/user/userInfo").then(res => {
+                    if (res.data.result && res.data.data) {
+                        this.userInfo = res.data.data;
+                        this.$store.commit("setUserInfo", this.userInfo);
+                    }
+                });
+            },
             handleCommand(command) {
                 switch (command) {
                     case "Profile":

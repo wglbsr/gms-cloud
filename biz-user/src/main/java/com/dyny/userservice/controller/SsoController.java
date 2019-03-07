@@ -36,6 +36,7 @@ public class SsoController extends BaseController {
 
     @RequestMapping("/login")
     @ResponseBody
+//    @HystrixCommand(fallbackMethod = "fallback")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
         User user = userService.login(username, password);
         if (user != null) {
@@ -43,12 +44,13 @@ public class SsoController extends BaseController {
             redisApi.set(token, JSONObject.toJSONString(user), tokenTimeoutMin);
             return getLoginResult(token, user);
         } else {
-            return getErrorMsg("找不到用户!");
+            return getErrorMsg("用户名或密码错误!!");
         }
     }
 
 
     @RequestMapping("/loginPage")
+//    @HystrixCommand(fallbackMethod = "fallback")
     public String loginPage(@RequestParam("url") String url, ModelMap modelMap) {
         if (checkUrl(url) && !"testurl".equals(url)) {
             modelMap.put("redirectUrl", url);
@@ -59,25 +61,27 @@ public class SsoController extends BaseController {
 
 
     /**
+     * @return java.lang.String
      * @Author wanggl(lane)
      * @Description //TODO 没有实际作用,在网关中已经处理
      * @Date 10:05 2019-03-07
      * @Param []
-     * @return java.lang.String
      **/
     @RequestMapping("/check")
+//    @HystrixCommand(fallbackMethod = "fallback")
     public String check() {
         return "403";
     }
 
     /**
+     * @return java.lang.String
      * @Author wanggl(lane)
      * @Description //TODO 没有实际作用,在网关中已经处理
      * @Date 10:06 2019-03-07
      * @Param []
-     * @return java.lang.String
      **/
     @RequestMapping("/logout")
+//    @HystrixCommand(fallbackMethod = "fallback")
     public String logout() {
         return "403";
     }
@@ -94,4 +98,5 @@ public class SsoController extends BaseController {
         String temp = username + System.currentTimeMillis() + password;
         return MD5(temp);
     }
+
 }

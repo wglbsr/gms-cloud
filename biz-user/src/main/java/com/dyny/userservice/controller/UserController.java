@@ -7,9 +7,11 @@ import com.dyny.userservice.db.entity.User;
 import com.dyny.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author wanggl
  * @since 2019-03-06
  */
-@RequestMapping(value = UserController.USER_URI, produces = "text/plain;charset=UTF-8")
+@RestController
+@RefreshScope
+@RequestMapping(value = UserController.USER_URI, produces = {"application/json;charset=UTF-8"})
 public class UserController extends BizBaseControllerT<User> {
     public final static String USER_URI = "/user";
     @Autowired
@@ -43,6 +47,12 @@ public class UserController extends BizBaseControllerT<User> {
         return super.getSuccessResult(result);
     }
 
+
+    @RequestMapping("/userInfo")
+    public String getUserInfo() {
+        User user = getUser(User.class);
+        return super.getSuccessResult(userService.getById(user.getId()));
+    }
 
     //1.密码修改
     @RequestMapping("/changePsw")

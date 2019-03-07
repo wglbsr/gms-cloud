@@ -44,6 +44,8 @@ const subTree = (parentNode, allMenus) => {
 
 const store = new Vuex.Store({
     state: {
+        userInfo: null,
+
         token: null,
         // 菜单列表
         menus: [],
@@ -114,7 +116,6 @@ const store = new Vuex.Store({
     },
     mutations: {
         setToken(state, newToken) {
-            console.log("setToken:" + newToken);
             localStorage.setItem("auth_token", newToken);
             state.token = newToken;
         },

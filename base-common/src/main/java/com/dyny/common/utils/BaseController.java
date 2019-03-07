@@ -132,11 +132,10 @@ public class BaseController {
     }
 
 
-
     public String getLoginResult(String token, Object user) {
         this.result = new JSONObject();
         this.result.put(KEY_TOKEN, token);
-        this.result.put("userInfo", user);
+        this.result.put(KEY_DATA, user);
         this.result.put(KEY_RESULT, true);
         return JSONObject.toJSONString(this.result, SerializerFeature.WriteMapNullValue);
     }
@@ -198,6 +197,7 @@ public class BaseController {
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                 headers, HttpStatus.CREATED);
     }
+
 
 
 
