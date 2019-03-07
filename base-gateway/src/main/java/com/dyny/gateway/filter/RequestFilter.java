@@ -55,7 +55,7 @@ public class RequestFilter extends ZuulFilter {
         String token = null;
         if (BaseController.URL_FILE_UPLOAD.equals(uri) || BaseController.URL_FILE_DOWNLOAD.equals(uri)) {
             //这里应该直接从request中获取token,无法从头部获取token
-            token = request.getParameter("token");
+            token = request.getParameter(BaseController.KEY_TOKEN);
         } else {
             token = request.getHeader(BaseController.KEY_TOKEN);
         }
