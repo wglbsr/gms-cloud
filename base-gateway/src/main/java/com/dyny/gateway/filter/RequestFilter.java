@@ -52,13 +52,14 @@ public class RequestFilter extends ZuulFilter {
         if (BaseController.URL_LOGIN.equals(uri) || BaseController.URL_LOGIN_PAGE.equals(uri)) {
             return null;
         }
-
+        String token = null;
         if (BaseController.URL_FILE_UPLOAD.equals(uri) || BaseController.URL_FILE_DOWNLOAD.equals(uri)) {
             //这里应该直接从request中获取token,无法从头部获取token
-            return null;
+            token = request.getParameter("token");
+        } else {
+            token = request.getHeader(BaseController.KEY_TOKEN);
         }
 
-        String token = request.getHeader(BaseController.KEY_TOKEN);
 
         //校验token
         if (tokenCheck(token)) {
