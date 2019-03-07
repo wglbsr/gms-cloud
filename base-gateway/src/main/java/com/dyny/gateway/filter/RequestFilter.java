@@ -48,12 +48,18 @@ public class RequestFilter extends ZuulFilter {
         HttpServletRequest request = requestContext.getRequest();
         String uri = request.getRequestURI();
         logger.info("uri:" + uri);
-        //登录操作则直接放行
+        //登录或者文件上传操作则直接放行
         if (BaseController.URL_LOGIN.equals(uri) || BaseController.URL_LOGIN_PAGE.equals(uri)) {
             return null;
         }
 
+        if (BaseController.URL_FILE_UPLOAD.equals(uri) || BaseController.URL_FILE_DOWNLOAD.equals(uri)) {
+            //这里应该直接从request中获取token,无法从头部获取token
+            return null;
+        }
+
         String token = request.getHeader(BaseController.KEY_TOKEN);
+
         //校验token
         if (tokenCheck(token)) {
             //登出
@@ -66,6 +72,7 @@ public class RequestFilter extends ZuulFilter {
                 requestContext.setSendZuulResponse(true);
                 requestContext.setResponseStatusCode(200);
             }
+
         } else {
             logger.info("token不合法，禁止访问!");
             BaseController baseController = new BaseController();

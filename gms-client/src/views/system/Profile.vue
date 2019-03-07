@@ -20,7 +20,15 @@
             <el-tab-pane label="个人信息">
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="头像:">
-                        <el-input v-model="userInfo.avatar" type="text" size="mini"></el-input>
+                        <el-upload
+                                class="avatar-uploader"
+                                action="http://localhost:8010/base-mongodb/file/upload"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload">
+                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
                     </el-form-item>
                     <el-form-item label="名称:">
                         <el-input v-model="userInfo.nickname" type="text" size="mini"></el-input>
@@ -36,6 +44,34 @@
         </el-tabs>
     </el-card>
 </template>
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+</style>
 <script>
     import qs from 'qs'
     import store from "../../store";
@@ -49,6 +85,7 @@
                     newPassword1: "",
                     oldPassword: ""
                 },
+                imageUrl: '',
                 userInfo: {},
                 phone: "",
                 form: {},
@@ -60,6 +97,12 @@
             this.userInfo = store.state.userInfo;
         },
         methods: {
+            handleAvatarSuccess(res, file) {
+
+            },
+            beforeAvatarUpload(file) {
+
+            },
             // getUserInfo() {
             //     this.$http.post("/service-user/user/userInfo").then(res => {
             //         if (res.data.result && res.data.data) {
