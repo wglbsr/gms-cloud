@@ -131,14 +131,9 @@ public class BaseController {
         return JSONObject.toJSONString(this.result, SerializerFeature.WriteMapNullValue);
     }
 
-    public String getToken(String token) {
-        this.result = new JSONObject();
-        this.result.put(KEY_TOKEN, token);
-        return JSONObject.toJSONString(this.result, SerializerFeature.WriteMapNullValue);
-    }
 
 
-    public String tokenAndUser(String token, Object user) {
+    public String getLoginResult(String token, Object user) {
         this.result = new JSONObject();
         this.result.put(KEY_TOKEN, token);
         this.result.put("userInfo", user);

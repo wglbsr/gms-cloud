@@ -1,6 +1,7 @@
 package com.dyny.userservice.service.impl;
 
 import com.alibaba.nacos.client.config.utils.MD5;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dyny.userservice.db.dao.UserMapper;
 import com.dyny.userservice.db.entity.User;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
  * <p>
  * 服务实现类
  * </p>
+ *
  * @author wanggl
  * @since 2019-03-06
  */
@@ -27,5 +29,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } else {
             return false;
         }
+    }
+
+    @Override
+    public User login(String username, String password) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("username", username).eq("password", MD5.getInstance().getMD5String(password));
+
+        return getOne(userQueryWrapper);
     }
 }

@@ -3,6 +3,8 @@ package com.dyny.userservice.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.dyny.common.utils.BaseController;
 import com.dyny.userservice.api.RedisApi;
+import com.dyny.userservice.db.entity.User;
+import com.dyny.userservice.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,19 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Version 1.0.0
  */
 //@RestController
-@RequestMapping("/sso")
+@RequestMapping(value = "/sso", produces = {"application/json;charset=UTF-8"})
 @Controller
 @RefreshScope
 public class SsoController extends BaseController {
 
-    private String loginService(String username, String password) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", username);
-        jsonObject.put("age", 18);
-        jsonObject.put("gender", 1);
-        return getSuccessResult(jsonObject);
-    }
-
+    @Autowired
+    UserService userService;
     @Autowired
     RedisApi redisApi;
     @Value("${tokenTimeoutMin:" + TIME_OUT_TOKEN_MIN + "}")
@@ -41,15 +37,14 @@ public class SsoController extends BaseController {
     @RequestMapping("/login")
     @ResponseBody
     public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        String resultStr = loginService(username, password);
-        JSONObject resultObject = JSONObject.parseObject(resultStr);
-        JSONObject userInfo = resultObject.getJSONObject(BaseController.KEY_DATA);
-        if (userInfo != null) {
+        User user = userService.login(username, password);
+        if (user != null) {
             String token = generateToken(username, password);
-            resultObject.put(BaseController.KEY_TOKEN, token);
-            redisApi.set(token, userInfo.toJSONString(), tokenTimeoutMin);
+            redisApi.set(token, JSONObject.toJSONString(user), tokenTimeoutMin);
+            return getLoginResult(token, user);
+        } else {
+            return getErrorMsg("找不到用户!");
         }
-        return resultObject.toJSONString();
     }
 
 
@@ -63,11 +58,25 @@ public class SsoController extends BaseController {
     }
 
 
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 没有实际作用,在网关中已经处理
+     * @Date 10:05 2019-03-07
+     * @Param []
+     * @return java.lang.String
+     **/
     @RequestMapping("/check")
     public String check() {
         return "403";
     }
 
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 没有实际作用,在网关中已经处理
+     * @Date 10:06 2019-03-07
+     * @Param []
+     * @return java.lang.String
+     **/
     @RequestMapping("/logout")
     public String logout() {
         return "403";
