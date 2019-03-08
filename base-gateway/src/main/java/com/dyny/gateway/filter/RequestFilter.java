@@ -68,7 +68,9 @@ public class RequestFilter extends ZuulFilter {
                 this.logout(requestContext, token);
             } else if (BaseController.URL_TOKEN_CHECK.equals(uri)) {
                 BaseController baseController = new BaseController();
+                requestContext.setSendZuulResponse(false);
                 requestContext.setResponseBody(baseController.getSuccessResult(1));
+                requestContext.getResponse().setContentType("application/json;charset=UTF-8");
             } else {
                 requestContext.setSendZuulResponse(true);
                 requestContext.setResponseStatusCode(200);
@@ -77,10 +79,13 @@ public class RequestFilter extends ZuulFilter {
         } else {
             logger.info("token不合法，禁止访问!");
             BaseController baseController = new BaseController();
+            requestContext.setSendZuulResponse(false);
             requestContext.setResponseBody(baseController.getErrorMsg("need login!", BaseController.NEED_LOGIN));
+            requestContext.getResponse().setContentType("application/json;charset=UTF-8");
         }
         return null;
     }
+
 
     @Autowired
     RedisApi redisApi;

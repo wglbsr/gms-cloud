@@ -20,15 +20,16 @@
             <el-tab-pane label="个人信息">
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="头像:">
-                        <el-upload
-                                class="avatar-uploader"
-                                action="http://localhost:8010/base-mongodb/file/upload"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess"
-                                :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
+                        <!--<el-upload-->
+                        <!--class="avatar-uploader"-->
+                        <!--action="http://localhost:8010/base-mongodb/file/upload"-->
+                        <!--:show-file-list="false"-->
+                        <!--:on-success="handleAvatarSuccess"-->
+                        <!--:before-upload="beforeAvatarUpload">-->
+                        <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+                        <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                        <!--</el-upload>-->
+                        <img style="height: 80px;width: 80px;" :src="host+userInfo.avatar+'&auth_token='+token">
                     </el-form-item>
                     <el-form-item label="名称:">
                         <el-input v-model="userInfo.nickname" type="text" size="mini"></el-input>
@@ -90,11 +91,15 @@
                 phone: "",
                 form: {},
                 radio: "",
-                test: true
+                token: "",
+                test: true,
+                host:window.HOST,
             };
         },
         mounted() {
             this.userInfo = store.state.userInfo;
+            this.token = store.state.token;
+
         },
         methods: {
             handleAvatarSuccess(res, file) {
@@ -103,13 +108,13 @@
             beforeAvatarUpload(file) {
 
             },
-            // getUserInfo() {
-            //     this.$http.post("/service-user/user/userInfo").then(res => {
-            //         if (res.data.result && res.data.data) {
-            //             this.userInfo = res.data.data;
-            //         }
-            //     });
-            // },
+            changeUserInfo() {
+                this.$http.post("/service-user/user/userInfo").then(res => {
+                    if (res.data.result && res.data.data) {
+                        this.userInfo = res.data.data;
+                    }
+                });
+            },
             changePsw() {
                 if (!this.passwordObj.newPassword || !this.passwordObj.newPassword1) {
                     this.$message.error("请输入正确的密码!");
