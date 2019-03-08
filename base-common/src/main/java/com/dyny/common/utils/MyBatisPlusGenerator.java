@@ -41,7 +41,7 @@ public class MyBatisPlusGenerator {
         GlobalConfig config = new GlobalConfig();
         config.setActiveRecord(true) // 是否支持AR模式
                 .setAuthor("wanggl") // 作者
-                .setOutputDir("/Users/lane/IdeaProjects/gms-cloud/biz-user/src/main/java") // 生成路径
+                .setOutputDir("/Users/lane/IdeaProjects/gms-cloud/mid-user/src/main/java") // 生成路径
                 .setFileOverride(true)  // 文件覆盖
                 .setIdType(IdType.AUTO) // 主键策略
                 .setServiceName("%sService")  // 设置生成的service接口的名字

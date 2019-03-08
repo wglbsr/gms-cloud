@@ -109,7 +109,7 @@
 
             },
             changeUserInfo() {
-                this.$http.post("/service-user/user/userInfo").then(res => {
+                this.$http.post("/mid-user/user/userInfo").then(res => {
                     if (res.data.result && res.data.data) {
                         this.userInfo = res.data.data;
                     }
@@ -129,7 +129,7 @@
                     this.$message.error("密码长度不能小于" + size + "位!");
                     return;
                 }
-                this.$http.post("/service-user/user/changePsw", qs.stringify(this.passwordObj)).then(res => {
+                this.$http.post("/mid-user/user/changePsw", qs.stringify(this.passwordObj)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.$message.success("修改成功!");
                         this.passwordObj = {

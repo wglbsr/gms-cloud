@@ -1,13 +1,8 @@
 server:
-  port: 8015 #8181
+  port: 8350 #8181
 spring:
-  redis:
-    host: 39.108.127.174
-    port: 6379
-    database: 1
-    password: Dyny0763Redis
   application:
-    name: base-redis
+    name: mid-connector
   cloud:
     nacos:
       discovery:
@@ -17,3 +12,6 @@ management:
     web:
       exposure:
         include: \*
+feign:
+  hystrix:
+    enabled: true

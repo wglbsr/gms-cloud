@@ -23,10 +23,10 @@ import java.util.List;
  **/
 public class BaseController {
 
-    public static final String URL_LOGIN = "/service-user/sso/login";
-    public static final String URL_LOGIN_PAGE = "/service-user/sso/loginPage";
-    public static final String URL_LOGOUT = "/service-user/sso/logout";
-    public static final String URL_TOKEN_CHECK = "/service-user/sso/check";
+    public static final String URL_LOGIN = "/mid-user/sso/login";
+    public static final String URL_LOGIN_PAGE = "/mid-user/sso/loginPage";
+    public static final String URL_LOGOUT = "/mid-user/sso/logout";
+    public static final String URL_TOKEN_CHECK = "/mid-user/sso/check";
     public static final String URL_FILE_UPLOAD = "/base-mongodb/file/upload";
     public static final String URL_FILE_DOWNLOAD = "/base-mongodb/file/download";
 

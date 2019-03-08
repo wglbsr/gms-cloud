@@ -94,7 +94,7 @@
             },
             query() {
                 let params = {pageNum: this.pageNum, pageSize: this.pageSize, keyWord: this.keyWord};
-                this.$http.post("/service-user/auth/select", qs.stringify(params)).then(res => {
+                this.$http.post("/mid-user/auth/select", qs.stringify(params)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.authList = res.data.data;
                         this.pageNum = res.data.pageNum;
@@ -113,7 +113,7 @@
             },
             insert() {
                 let that = this;
-                that.$http.post("/service-user/auth/create", that.authObj).then(res => {
+                that.$http.post("/mid-user/auth/create", that.authObj).then(res => {
                     if (res.data.result && res.data.data) {
                         this.$message.success("创建成功!");
                         this.query();
@@ -123,7 +123,7 @@
             },
             update() {
                 let that = this;
-                that.$http.post("/service-user/auth/update", that.authObj).then(res => {
+                that.$http.post("/mid-user/auth/update", that.authObj).then(res => {
                     if (res.data.result && res.data.data) {
                         this.$message.success("修改成功!");
                         this.query();
@@ -148,7 +148,7 @@
             },
             activate(activate, id) {
                 let params = {activate: activate, id: id};
-                this.$http.post("/service-user/auth/activate", qs.stringify(params)).then(res => {
+                this.$http.post("/mid-user/auth/activate", qs.stringify(params)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.$message.success("操作成功!");
                         this.query();

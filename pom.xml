@@ -21,12 +21,13 @@
     </properties>
 
     <modules>
-        <module>biz-region</module>
-        <module>biz-user</module>
+        <module>mid-region</module>
+        <module>mid-user</module>
         <module>base-common</module>
         <module>base-gateway</module>
         <module>base-redis</module>
         <module>base-mongodb</module>
+        <module>mid-connector</module>
     </modules>
     <dependencies>
         <dependency>

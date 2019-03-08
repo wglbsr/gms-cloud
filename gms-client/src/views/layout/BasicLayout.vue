@@ -66,7 +66,7 @@
         components: {SSODialog},
         methods: {
             getUserInfo() {
-                this.$http.post("/service-user/user/userInfo").then(res => {
+                this.$http.post("/mid-user/user/userInfo").then(res => {
                     if (res.data.result && res.data.data) {
                         this.userInfo = res.data.data;
                         this.$store.commit("setUserInfo", this.userInfo);
@@ -84,7 +84,7 @@
                 }
             },
             signOut() {
-                this.$http.post("/service-user/sso/logout").then(res => {
+                this.$http.post("/mid-user/sso/logout").then(res => {
                     console.log(res);
                     if (res.data.result && res.data.data) {
                         this.$store.dispatch("signOut").then(() => {

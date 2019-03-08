@@ -1,7 +1,7 @@
 <template>
     <el-dialog :visible.sync="visible" :close-on-click-modal="false" :modal-append-to-body="false" width="390px" title="登陆" :show-close="false">
         <iframe ref="ssoIframe" style="width: 350px;height: 240px"
-                src="http://localhost:8010/service-user/sso/loginPage?url=www.baidu.com">
+                src="http://localhost:8010/mid-user/sso/loginPage?url=www.baidu.com">
         </iframe>
     </el-dialog>
 </template>
