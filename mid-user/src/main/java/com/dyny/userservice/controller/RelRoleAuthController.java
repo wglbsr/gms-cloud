@@ -2,6 +2,7 @@ package com.dyny.userservice.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dyny.common.utils.BaseController;
 import com.dyny.common.utils.BaseControllerT;
 import com.dyny.userservice.db.entity.RelRoleAuth;
 import com.dyny.userservice.service.RelRoleAuthService;
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
  * @since 2019-03-06
  */
 @RestController
-@RequestMapping(value = "/relRoleAuth", produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/relRoleAuth", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class RelRoleAuthController extends BaseControllerT<RelRoleAuth> {
     @Autowired
     private RelRoleAuthService relRoleAuthService;

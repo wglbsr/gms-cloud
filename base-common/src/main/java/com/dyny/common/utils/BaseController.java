@@ -29,7 +29,7 @@ public class BaseController {
     public static final String URL_TOKEN_CHECK = "/mid-user/sso/check";
     public static final String URL_FILE_UPLOAD = "/base-mongodb/file/upload";
     public static final String URL_FILE_DOWNLOAD = "/base-mongodb/file/download";
-
+    public static final String ENCODE_CHARSET_UTF8 = "application/json;charset=UTF-8";
     protected JSONObject result;
     public static final String KEY_EXPIRE_TIME = "expireTime";
     public static final String KEY_REDIRECT_URI = "redirectUrl";

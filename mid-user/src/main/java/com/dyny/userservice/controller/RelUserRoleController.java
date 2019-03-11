@@ -2,6 +2,7 @@ package com.dyny.userservice.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dyny.common.utils.BaseController;
 import com.dyny.common.utils.BaseControllerT;
 import com.dyny.userservice.db.entity.RelUserRole;
 import com.dyny.userservice.service.RelUserRoleService;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-03-06
  */
 @RestController
-@RequestMapping(value = "/relUserRole", produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/relUserRole", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class RelUserRoleController extends BaseControllerT<RelUserRole> {
     @Autowired
     private RelUserRoleService relUserRoleService;

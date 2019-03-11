@@ -2,6 +2,7 @@ package com.dyny.userservice.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dyny.common.utils.BaseController;
 import com.dyny.common.utils.BaseControllerT;
 import com.dyny.userservice.db.entity.User;
 import com.dyny.userservice.service.UserService;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  * @Version 1.0.0
  */
-@RequestMapping(value = "/admin", produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/admin", produces = {BaseController.ENCODE_CHARSET_UTF8})
 @RestController
 public class AdminController extends BaseControllerT<User> {
     @Autowired

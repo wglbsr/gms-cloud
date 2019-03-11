@@ -2,6 +2,7 @@ package com.dyny.userservice.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dyny.common.utils.BaseController;
 import com.dyny.common.utils.BaseControllerT;
 import com.dyny.userservice.db.entity.Auth;
 import com.dyny.userservice.db.entity.RelRoleAuth;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
  * @create: 2018-11-22 18:40
  **/
 @RestController
-@RequestMapping(value = "/auth", produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/auth", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class AuthController extends BaseControllerT<Auth> {
     @Autowired
     private AuthService authService;

@@ -29,7 +29,10 @@
                         <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
                         <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
                         <!--</el-upload>-->
-                        <img style="height: 80px;width: 80px;" :src="host+userInfo.avatar+'&auth_token='+token">
+                        <!--<img style="height: 80px;width: 80px;" :src="host+userInfo.avatar+'?auth_token='+token"-->
+                        <!--@click="showUploadDialog">-->
+                        <avatar-uploader :avatar-url="userInfo.avatar"
+                                         @avatarUploaded="avatarUploaded"></avatar-uploader>
                     </el-form-item>
                     <el-form-item label="名称:">
                         <el-input v-model="userInfo.nickname" type="text" size="mini"></el-input>
@@ -38,7 +41,7 @@
                         <el-input v-model="userInfo.description" type="text" size="mini"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="changePsw" size="mini">修改</el-button>
+                        <el-button type="primary" @click="changeUserInfo" size="mini">修改</el-button>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
@@ -46,36 +49,12 @@
     </el-card>
 </template>
 <style>
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
 
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
-    }
 </style>
 <script>
     import qs from 'qs'
-    import store from "../../store";
+    import UploadDialog from "../coms/UploadDialog"
+    import AvatarUploader from "../coms/AvatarUploader"
 
     export default {
         name: "Profile",
@@ -93,23 +72,37 @@
                 radio: "",
                 token: "",
                 test: true,
-                host:window.HOST,
+                uploadDialogVisible: false,
+                host: window.HOST,
             };
         },
+        components: {UploadDialog, AvatarUploader},
         mounted() {
-            this.userInfo = store.state.userInfo;
-            this.token = store.state.token;
-
+            this.token = localStorage.getItem("auth_token");
+            this.getUserInfo();
         },
         methods: {
-            handleAvatarSuccess(res, file) {
+            avatarUploaded(fileId) {
+                console.log(fileId);
+                if (!!fileId) {
+                    this.$http.post("/mid-user/user/changeAvatar", qs.stringify({fileId: fileId})).then(res => {
+                        if (res.data.result && res.data.data) {
+                            this.userInfo.avatar = res.data.data;
+                        }
+                    });
+                }
 
             },
-            beforeAvatarUpload(file) {
-
+            getUserInfo() {
+                this.$http.post("/mid-user/user/userInfo").then(res => {
+                    if (res.data.result && res.data.data) {
+                        this.userInfo = res.data.data;
+                        console.log(this.userInfo.avatar);
+                    }
+                });
             },
             changeUserInfo() {
-                this.$http.post("/mid-user/user/userInfo").then(res => {
+                this.$http.post("/mid-user/user/changeInfo", this.userInfo).then(res => {
                     if (res.data.result && res.data.data) {
                         this.userInfo = res.data.data;
                     }

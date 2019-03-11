@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Version 1.0.0
  */
 //@RestController
-@RequestMapping(value = "/sso", produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/sso", produces = {BaseController.ENCODE_CHARSET_UTF8})
 @Controller
 @RefreshScope
 public class SsoController extends BaseController {

@@ -3,6 +3,7 @@ package com.dyny.userservice.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dyny.common.utils.BaseController;
 import com.dyny.userservice.common.BizBaseControllerT;
 import com.dyny.userservice.db.entity.Role;
 import com.dyny.userservice.db.entity.User;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
  * @since 2019-03-06
  */
 @RestController
-@RequestMapping(value = "/role", produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/role", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class RoleController extends BizBaseControllerT<Role> {
     @Autowired
     private RoleService roleService;

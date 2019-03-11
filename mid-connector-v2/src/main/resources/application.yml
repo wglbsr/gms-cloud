@@ -2,7 +2,7 @@ server:
   port: 8350 #8181
 spring:
   application:
-    name: mid-connector
+    name: mid-connector-v2
   cloud:
     nacos:
       discovery:

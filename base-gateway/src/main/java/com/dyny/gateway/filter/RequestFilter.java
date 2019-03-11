@@ -53,7 +53,7 @@ public class RequestFilter extends ZuulFilter {
             return null;
         }
         String token = null;
-        if (BaseController.URL_FILE_UPLOAD.equals(uri) || BaseController.URL_FILE_DOWNLOAD.equals(uri)) {
+        if (uri.contains(BaseController.URL_FILE_DOWNLOAD)) {//这里的下载链接判断不够严谨，可以使用先行零宽断言正则
             //这里应该直接从request中获取token,无法从头部获取token
             token = request.getParameter(BaseController.KEY_TOKEN);
         } else {
@@ -70,7 +70,7 @@ public class RequestFilter extends ZuulFilter {
                 BaseController baseController = new BaseController();
                 requestContext.setSendZuulResponse(false);
                 requestContext.setResponseBody(baseController.getSuccessResult(1));
-                requestContext.getResponse().setContentType("application/json;charset=UTF-8");
+                requestContext.getResponse().setContentType(BaseController.ENCODE_CHARSET_UTF8);
             } else {
                 requestContext.setSendZuulResponse(true);
                 requestContext.setResponseStatusCode(200);
@@ -81,7 +81,7 @@ public class RequestFilter extends ZuulFilter {
             BaseController baseController = new BaseController();
             requestContext.setSendZuulResponse(false);
             requestContext.setResponseBody(baseController.getErrorMsg("need login!", BaseController.NEED_LOGIN));
-            requestContext.getResponse().setContentType("application/json;charset=UTF-8");
+            requestContext.getResponse().setContentType(BaseController.ENCODE_CHARSET_UTF8);
         }
         return null;
     }

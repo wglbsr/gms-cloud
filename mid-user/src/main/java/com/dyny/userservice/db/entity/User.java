@@ -1,15 +1,16 @@
 package com.dyny.userservice.db.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wanggl
@@ -38,6 +39,16 @@ public class User extends Model<User> {
     private String avatar;
 
     private String nickname;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
 
 
     public Integer getId() {
@@ -120,15 +131,15 @@ public class User extends Model<User> {
     @Override
     public String toString() {
         return "User{" +
-        "id=" + id +
-        ", username=" + username +
-        ", password=" + password +
-        ", createTime=" + createTime +
-        ", modifyTime=" + modifyTime +
-        ", level=" + level +
-        ", locked=" + locked +
-        ", avatar=" + avatar +
-        ", nickname=" + nickname +
-        "}";
+                "id=" + id +
+                ", username=" + username +
+                ", password=" + password +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
+                ", level=" + level +
+                ", locked=" + locked +
+                ", avatar=" + avatar +
+                ", nickname=" + nickname +
+                "}";
     }
 }
