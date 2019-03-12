@@ -39,10 +39,6 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="190">
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-button type="text" size="mini" @click="openRelateRoleDialog(scope.row.id)">角色关联-->
-                        <!--</el-button>-->
-                    <!--</template>-->
                     <template slot-scope="scope">
                         <el-button type="text" size="mini" @click="openRelateSystemDialog(scope.row.id)">系统关联
                         </el-button>
@@ -59,7 +55,7 @@
                            :total="totalNum">
             </el-pagination>
         </el-card>
-        <role-dialog ref="relateRoleDialog" @close="query"></role-dialog>
+        <role-dialog ref="relateSystemDialog" @close="query"></role-dialog>
         <el-dialog>
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="用户名:">
@@ -93,8 +89,7 @@
 </style>
 <script>
     import qs from 'qs';
-    import RoleDialog from "../coms/RoleDialog"
-
+    import RelateSystemDialog from "../coms/RelateSystemDialog"
     export default {
         name: "user",
         data() {
@@ -120,7 +115,7 @@
             };
         },
         components: {
-            RoleDialog
+            RelateSystemDialog
         },
         mounted() {
             this.query();
@@ -144,7 +139,7 @@
                 });
             },
             openRelateSystemDialog(userId) {
-                this.$refs.relateRoleDialog.showDialog(userId);
+                this.$refs.relateSystemDialog.showDialog(userId);
             },
             onSelectionChange(rows) {
                 this.selectedRows = rows.map(item => item.userId);

@@ -9,12 +9,16 @@
                                                @change="customerChange"></customer-selector>
                         </el-form-item>
                         <el-form-item label="管理辖区:">
-                            <region-cascader :region-ids=""></region-cascader>
+                            <region-cascader :region-ids="" @change="regionChange"></region-cascader>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="relateGms(true)" size="mini">确定关联</el-button>
-                            <el-button type="primary" @click="relateGms(false)" size="mini">取消关联</el-button>
-                            <el-button type="primary" @click="changeGmsInfo" size="mini">修改</el-button>
+                            <el-button v-if="!gmsUserExist" type="primary" @click="operateGms('create')" size="mini">
+                                确定关联
+                            </el-button>
+                            <el-button v-if="gmsUserExist" type="primary" @click="operateGms('delete')" size="mini">取消关联
+                            </el-button>
+                            <el-button v-if="gmsUserExist" type="primary" @click="operateGms('change')" size="mini">修改
+                            </el-button>
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
@@ -36,6 +40,7 @@
     export default {
         data() {
             return {
+                gmsUserExist: false,
                 customerOptions: [],
                 gmsUser: {regionId: 0, customerId: 0},
                 keyWord: "",
@@ -52,12 +57,24 @@
 
         },
         methods: {
-            relateGms(relate) {
-
+            regionChange(regionIds) {
             },
-            changeGmsInfo() {
-
+            operateGms(operation) {
+                this.$http.post("/mid-user/gmsUser/" + operation, qs.stringify(this.gmsUser)).then(res => {
+                    if (res.result && res.data) {
+                        this.getGmsUser();
+                    }
+                });
             },
+            getGmsUser() {
+                this.$http.post("/mid-user/gmsUser/select", qs.stringify({userId: this.userId})).then(res => {
+                    if (res.result && res.data) {
+                        this.gmsUserExist = true;
+                    } else {
+                        this.gmsUserExist = false;
+                    }
+                });
+            }
             customerChange(customerId) {
                 this.gmsUser.customerId = customerId;
             },
@@ -69,19 +86,10 @@
             },
             showDialog(userId) {
                 this.userId = userId;
+                this.gmsUser.userId = userId;
                 this.dialogVisible = true;
                 this.query();
             },
-            addOrDel(del, id) {
-                let params = {roleId: id, userId: this.userId};
-                let operation = del ? "unRelate" : "relate";
-                this.$http.post("/mid-user/relUserRole/" + operation, qs.stringify(params)).then(res => {
-                    if (res.data.result && res.data.data) {
-                        this.$message.success("操作成功!");
-                        this.query();
-                    }
-                });
-            }
         }
     };
 </script>

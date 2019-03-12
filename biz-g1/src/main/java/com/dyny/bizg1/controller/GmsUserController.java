@@ -27,7 +27,7 @@ public class GmsUserController extends BaseControllerT<GmsUser> {
     private GmsUserService gmsUserService;
 
     @RequestMapping("/create")
-    public String createUser(@RequestParam int userId,
+    public String createUser(@RequestParam("userId") int userId,
                              @RequestParam("regionId") int regionId,
                              @RequestParam("customerId") int customerId) {
         GmsUser user = new GmsUser();
@@ -38,6 +38,16 @@ public class GmsUserController extends BaseControllerT<GmsUser> {
         return getSuccessResult(gmsUserService.save(user));
     }
 
+
+    @RequestMapping("/change")
+    public String changeInfo(@RequestParam("userId") int userId,
+                             @RequestParam("regionId") int regionId,
+                             @RequestParam("customerId") int customerId) {
+        GmsUser user = gmsUserService.getById(userId);
+        user.setCustomerId(customerId);
+        user.setRegionId(regionId);
+        return getSuccessResult(gmsUserService.updateById(user));
+    }
 
     @RequestMapping("/delete")
     public String delete(@RequestParam int userId) {
