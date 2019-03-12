@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * @Author wanggl(lane)
- * @Description //TODO
+ * @Description //TODO  代码生成工具
  * @Date 下午4:33 2018/12/4
  **/
 public class MyBatisPlusGenerator {
@@ -24,12 +24,7 @@ public class MyBatisPlusGenerator {
         Map<String, String> table = new HashMap<>();
 
         //直接在这里添加表名和前缀即可,key为表名,value为前缀
-        table.put("sys_user", "sys_");
-        table.put("sys_auth", "sys_");
-        table.put("sys_role", "sys_");
-        table.put("rel_user_role", "");
-        table.put("rel_role_auth", "");
-        table.put("sys_log_login", "sys_");
+        table.put("gms_customer", "gms_");
 
         MyBatisPlusGenerator myBatisPlusGenerator = new MyBatisPlusGenerator();
         myBatisPlusGenerator.generateCode(table);
@@ -41,7 +36,7 @@ public class MyBatisPlusGenerator {
         GlobalConfig config = new GlobalConfig();
         config.setActiveRecord(true) // 是否支持AR模式
                 .setAuthor("wanggl") // 作者
-                .setOutputDir("/Users/lane/IdeaProjects/gms-cloud/mid-user/src/main/java") // 生成路径
+                .setOutputDir("/Users/lane/IdeaProjects/gms-cloud/biz-g1/src/main/java") // 生成路径
                 .setFileOverride(true)  // 文件覆盖
                 .setIdType(IdType.AUTO) // 主键策略
                 .setServiceName("%sService")  // 设置生成的service接口的名字
@@ -58,13 +53,13 @@ public class MyBatisPlusGenerator {
 
         //4. 包名策略配置
         PackageConfig pkConfig = new PackageConfig();
-        pkConfig.setParent("com.dyny.userservice")
-//                .setMapper("db.dao")//dao
-//                .setService("service")//servcie
-//                .setServiceImpl("service.impl")//
-//                .setController("controller")//controller
-                .setXml("db.xml");
-//                .setEntity("db.entity");//dao.xml
+        pkConfig.setParent("com.dyny.bizg1")
+                .setMapper("db.dao")//dao
+                .setService("service")//servcie
+                .setServiceImpl("service.impl")//
+                .setController("controller")//controller
+                .setXml("db.xml")
+                .setEntity("db.entity");//dao.xml
 
 
         Iterator<String> keySet = table.keySet().iterator();

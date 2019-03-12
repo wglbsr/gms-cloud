@@ -18,6 +18,6 @@ import java.util.List;
  */
 @Mapper
 public interface RoleMapper extends CommonMapper<Role> {
-    @Select("select * from sys_role where id in (select role_id from rel_user_role where user_id =#{userId})")
+    @Select("select * from sys_role where id in (select role_id from sys_rel_user_role where user_id =#{userId})")
     List<Role> selectRoleByUserId(@Param("userId") int userId);
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  * 前端控制器
@@ -50,7 +52,22 @@ public class UserController extends BizBaseControllerT<User> {
         } else {
             return getErrorMsg("修改失败");
         }
+    }
 
+    @RequestMapping("/create")
+    public String create(@RequestParam("username") String username,
+                         @RequestParam("password") String password,
+                         @RequestParam("level") int level) {
+        User user = new User();
+        user.setPassword(MD5(password));
+        LocalDateTime now = LocalDateTime.now();
+        user.setCreateTime(now);
+        user.setModifyTime(now);
+        user.setLocked(false);
+        user.setNickname(username);
+        user.setUsername(username);
+        user.setLevel(level);
+        return super.getSuccessResult(userService.save(user) ? user.getId() : null);
     }
 
 
@@ -61,7 +78,7 @@ public class UserController extends BizBaseControllerT<User> {
     }
 
     @Autowired
-    MongodbApi mongodbApi;
+    private MongodbApi mongodbApi;
 
     @RequestMapping("/changeAvatar")
     public String changeAvatar(@RequestParam("fileId") String fileId) {
@@ -70,7 +87,7 @@ public class UserController extends BizBaseControllerT<User> {
         String oriAvatar = user.getAvatar();
         String oriFileId = null;
         if (StringUtils.isNotEmpty(oriAvatar)) {
-            oriFileId = oriAvatar.substring(oriAvatar.lastIndexOf("/")+1);
+            oriFileId = oriAvatar.substring(oriAvatar.lastIndexOf("/") + 1);
         }
         String newAvatarUrl = URL_FILE_DOWNLOAD + "/" + fileId;
         user.setAvatar(newAvatarUrl);

@@ -20,17 +20,6 @@
             <el-tab-pane label="个人信息">
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="头像:">
-                        <!--<el-upload-->
-                        <!--class="avatar-uploader"-->
-                        <!--action="http://localhost:8010/base-mongodb/file/upload"-->
-                        <!--:show-file-list="false"-->
-                        <!--:on-success="handleAvatarSuccess"-->
-                        <!--:before-upload="beforeAvatarUpload">-->
-                        <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-                        <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-                        <!--</el-upload>-->
-                        <!--<img style="height: 80px;width: 80px;" :src="host+userInfo.avatar+'?auth_token='+token"-->
-                        <!--@click="showUploadDialog">-->
                         <avatar-uploader :avatar-url="userInfo.avatar"
                                          @avatarUploaded="avatarUploaded"></avatar-uploader>
                     </el-form-item>

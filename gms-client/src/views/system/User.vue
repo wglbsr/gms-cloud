@@ -10,7 +10,6 @@
                         <el-button type="primary" icon="el-icon-search" @click="query" size="mini">查询</el-button>
                     </el-col>
                 </el-row>
-
             </div>
             <el-table max-height="650" :data="userList" style="width: 100%" stripe highlight-current-row
                       v-loading="$store.state.loading" @selection-change="onSelectionChange">
@@ -24,8 +23,8 @@
                 </el-table-column>
                 <el-table-column label="状态" width="120">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.activated==1" :type="'success'">已启用</el-tag>
-                        <el-tag v-else :type="'danger'">已禁用</el-tag>
+                        <el-tag v-if="scope.row.locked==1" :type="'danger'">已锁定</el-tag>
+                        <el-tag v-else :type="'success'">正常</el-tag>
                     </template>
                 </el-table-column>
                 <!--<el-table-column prop="gender" label="性别" width="100"></el-table-column>-->
@@ -40,11 +39,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="190">
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-button type="text" size="mini" @click="openRelateRoleDialog(scope.row.id)">角色关联-->
+                        <!--</el-button>-->
+                    <!--</template>-->
                     <template slot-scope="scope">
-                        <el-button v-if="(scope.row.laundry)" type="text" size="mini"
-                                   @click="openRelateLaundryDialog(scope.row.id)">关联洗衣店
-                        </el-button>
-                        <el-button type="text" size="mini" @click="openRelateRoleDialog(scope.row.id)">角色关联
+                        <el-button type="text" size="mini" @click="openRelateSystemDialog(scope.row.id)">系统关联
                         </el-button>
                     </template>
                 </el-table-column>
@@ -60,7 +60,30 @@
             </el-pagination>
         </el-card>
         <role-dialog ref="relateRoleDialog" @close="query"></role-dialog>
+        <el-dialog>
+            <el-form ref="form" :model="form" label-width="80px">
+                <el-form-item label="用户名:">
+                    <el-input v-model="userInfo.username" type="text" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="密码:">
+                    <el-input v-model="userInfo.password" type="text" size="mini"></el-input>
+                </el-form-item>
+                <el-select v-model="timeout" placeholder="级别" @change="resetTimeout" :disabled="!autoRefresh"
+                           size="mini"
+                           style="width:100px;">
+                    <el-option
+                            v-for="item in levelOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-form-item>
+                    <el-button type="primary" @click="changeUserInfo" size="mini">创建</el-button>
+                </el-form-item>
+            </el-form>
 
+        </el-dialog>
     </div>
 </template>
 <style>
@@ -76,6 +99,14 @@
         name: "user",
         data() {
             return {
+                levelOptions: [
+                    {value: 10, label: "10"},
+                    {value: 20, label: "20"},
+                    {value: 30, label: "30"},
+                    {value: 40, label: "40"},
+                    {value: 50, label: "50"},
+                    {value: 60, label: "60"},
+                    {value: 90, label: "90"}],
                 state: null,
                 dateRange: null,
                 selectedRows: [],
@@ -112,7 +143,7 @@
                     this.totalNum = res.data.totalNum;
                 });
             },
-            openRelateRoleDialog(userId) {
+            openRelateSystemDialog(userId) {
                 this.$refs.relateRoleDialog.showDialog(userId);
             },
             onSelectionChange(rows) {

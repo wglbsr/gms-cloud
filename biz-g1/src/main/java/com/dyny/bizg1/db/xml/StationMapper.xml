@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyny.bizg1.db.dao.StationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dyny.bizg1.db.entity.Station">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="latitude" property="latitude" />
+        <result column="longitude" property="longitude" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="region_id" property="regionId" />
+        <result column="address" property="address" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, latitude, longitude, name, description, region_id, address, type
+    </sql>
+
+</mapper>

@@ -19,7 +19,7 @@ import java.util.List;
  * @Author wanggl
  * @Description 通用方法
  * @create 10:55 2018-8-15
- * @modify 15:2 2019-1-07
+ * @modify 15:2 2019-3-12
  **/
 public class BaseController {
 
@@ -64,6 +64,10 @@ public class BaseController {
             totalNum = pageSize;
         }
         return this.getResult(true, data, "", pageNum, pageSize, totalNum);
+    }
+
+    public String getSuccessResult() {
+        return this.getSuccessResult(1);
     }
 
     public String getJsonStr(Object data) {

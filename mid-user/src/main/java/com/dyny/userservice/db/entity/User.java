@@ -40,6 +40,37 @@ public class User extends Model<User> {
 
     private String nickname;
 
+    private String description;
+
+    private String phone;
+    private String email;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    private LocalDateTime lastLogin;
+
     public String getDescription() {
         return description;
     }
@@ -48,7 +79,6 @@ public class User extends Model<User> {
         this.description = description;
     }
 
-    private String description;
 
 
     public Integer getId() {
