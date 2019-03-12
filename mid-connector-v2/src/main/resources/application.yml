@@ -4,6 +4,7 @@ spring:
   application:
     name: mid-connector-v2
   cloud:
+    nacos
     nacos:
       discovery:
         server-addr: 127.0.0.1:7990

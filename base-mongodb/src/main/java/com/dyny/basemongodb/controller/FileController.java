@@ -7,6 +7,9 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -32,6 +35,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/file", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class FileController extends BaseController {
+    Log log = LogFactory.getLog(FileController.class);
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -42,9 +46,12 @@ public class FileController extends BaseController {
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE)
     public String upload(@RequestParam(value = "file") MultipartFile file) {
         String fullName = file.getOriginalFilename();
+        if (StringUtils.isEmpty(fullName)) {
+            return getErrorMsg("找不到文件名!");
+        }
         String suffix = fullName.substring(fullName.lastIndexOf("."));
         DBObject dbObject = new BasicDBObject();
-        ((BasicDBObject) dbObject).put("createdDate", new Date());
+        dbObject.put("createdDate", new Date());
         String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
         InputStream inputStream = null;
         try {
@@ -53,8 +60,8 @@ public class FileController extends BaseController {
             String fileId = objectId.toString();
             return getSuccessResult(fileId);
         } catch (IOException e) {
+            return getErrorMsg("上传失败!");
         }
-        return getErrorMsg("上传失败!");
     }
 
 
