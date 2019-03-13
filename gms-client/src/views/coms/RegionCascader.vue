@@ -28,16 +28,16 @@
         mounted: function () {
             console.log(this.regionId);
             this.regionObjectList = region.children;
-            this.getRegionIds(this.regionId);
+            this.getRegionIds("120101004");
         },
         methods: {
             beforeDestroy: function () {
 
             },
             getRegionIds(regionId) {
-                if (!regionId) {
-                    return;
-                }
+                // if (!regionId) {
+                //     return;
+                // }
                 regionId = regionId + "";
                 let lengthArray = [2, 4, 6, 9];
                 let regionIdArray = [];

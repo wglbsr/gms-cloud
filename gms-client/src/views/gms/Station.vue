@@ -10,7 +10,6 @@
                            @click="showModifyDialog(false)">新增
                 </el-button>
             </el-button-group>
-
         </div>
         <el-table :data="stationList" style="width: 100%"
                   stripe highlight-current-row
@@ -170,7 +169,6 @@
                         }
                     });
                 }
-
             },
             addOrModify(modify) {
                 let operation = modify ? "modify" : "create";
