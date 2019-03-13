@@ -1,15 +1,16 @@
 package com.dyny.bizg1.db.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wanggl
@@ -34,6 +35,16 @@ public class Station extends Model<Station> {
     private String description;
 
     private Integer regionId;
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    private Integer customerId;
 
     private String address;
 
@@ -120,15 +131,15 @@ public class Station extends Model<Station> {
     @Override
     public String toString() {
         return "Station{" +
-        "id=" + id +
-        ", code=" + code +
-        ", latitude=" + latitude +
-        ", longitude=" + longitude +
-        ", name=" + name +
-        ", description=" + description +
-        ", regionId=" + regionId +
-        ", address=" + address +
-        ", type=" + type +
-        "}";
+                "id=" + id +
+                ", code=" + code +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name=" + name +
+                ", description=" + description +
+                ", regionId=" + regionId +
+                ", address=" + address +
+                ", type=" + type +
+                "}";
     }
 }

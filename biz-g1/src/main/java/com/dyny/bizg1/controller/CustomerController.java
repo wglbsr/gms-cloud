@@ -1,14 +1,15 @@
 package com.dyny.bizg1.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.dyny.bizg1.service.CustomerService;
 import com.dyny.common.utils.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author wanggl
@@ -18,5 +19,12 @@ import com.dyny.common.utils.BaseController;
 @RequestMapping("/customer")
 public class CustomerController extends BaseController {
 
+    @Autowired
+    private CustomerService customerService;
+
+    @RequestMapping("/selectAll")
+    public String selectAll() {
+        return getSuccessResult(customerService.list());
+    }
 }
 

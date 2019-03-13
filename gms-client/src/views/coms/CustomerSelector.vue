@@ -1,5 +1,6 @@
 <template>
-    <el-select size="mini" v-model="customerId" placeholder="请选择客户" class="customer-select" @change="selectedCustomer">
+    <el-select size="mini" v-model="customerIdCom" placeholder="请选择客户" class="customer-select"
+               @change="selectedCustomer">
         <el-option
                 v-for="item in customerListData"
                 :key="item.id"
@@ -16,18 +17,20 @@
         name: 'CustomerSelector',
         data() {
             return {
+                customerIdCom: "",
                 customerListData: [],
             }
         },
         props: ['customerId'],
         mounted: function () {
+            this.customerIdCom = this.customerId;
             this.getAllCustomer();
         },
         methods: {
             getAllCustomer: function () {
                 this.$http.post("/biz-g1/customer/selectAll").then(res => {
-                    if (res.body.result && res.body.data) {
-                        this.customerListData = res.body.data;
+                    if (res.data.result && res.data.data) {
+                        this.customerListData = res.data.data;
                         this.customerListData.push({
                             id: 0,
                             code: "0",
@@ -35,7 +38,6 @@
                         });
                     }
                 }).catch(function (res) {
-                    this.$message.error("未知错误,请稍后重试!");
                 });
             },
             selectedCustomer: function (value) {
@@ -47,6 +49,6 @@
 
 <style scoped>
     .customer-select {
-
+        width: 100%;
     }
 </style>

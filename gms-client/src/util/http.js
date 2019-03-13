@@ -2,7 +2,6 @@ import axios from "axios";
 import {Notification} from "element-ui";
 import store from "../store";
 
-require("../mock");
 
 
 let HOST = 'https://www.yn-iot.cn';

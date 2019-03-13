@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  * @since 2019-03-12
  */
 @RestController
-@RequestMapping(value = "/user", produces = {BaseController.ENCODE_CHARSET_UTF8})
+@RequestMapping(value = "/gmsUser", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class GmsUserController extends BaseControllerT<GmsUser> {
     @Autowired
     private GmsUserService gmsUserService;

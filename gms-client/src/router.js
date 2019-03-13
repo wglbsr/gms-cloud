@@ -46,11 +46,23 @@ export const asyncRouter = [
             },
             {
                 path: "/system/auth",
-                name: "role",
+                name: "auth",
                 component: () => import("@/views/system/Auth.vue")
             }
         ]
+    },
+    {
+        path: "/gms",
+        component: BasicLayout,
+        children: [
+            {
+                path: "/gms/station",
+                name: "station",
+                component: () => import("@/views/gms/Station.vue")
+            }
+        ]
     }
+
 ];
 
 const router = new Router({routes: constantRouter});
