@@ -59,6 +59,11 @@ export const asyncRouter = [
                 path: "/gms/station",
                 name: "station",
                 component: () => import("@/views/gms/Station.vue")
+            },
+            {
+                path: "/gms/generator",
+                name: "generator",
+                component: () => import("@/views/gms/Generator.vue")
             }
         ]
     }

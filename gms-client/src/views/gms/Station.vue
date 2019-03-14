@@ -16,14 +16,14 @@
                   v-loading="$store.state.loading">
             <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column prop="code" label="编号"></el-table-column>
-            <el-table-column prop="longitude" label="纬度"></el-table-column>
-            <el-table-column prop="latitude" label="经度"></el-table-column>
+            <el-table-column prop="longitude" label="经度"></el-table-column>
+            <el-table-column prop="latitude" label="纬度"></el-table-column>
             <el-table-column prop="description" label="备注"></el-table-column>
             <el-table-column prop="customerId" label="客户编号"></el-table-column>
             <el-table-column prop="regionId" label="地区"></el-table-column>
             <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="danger" @click="delete(scope.row.id)">
+                    <el-button size="mini" type="danger" @click="deleteStation(scope.row.id)">
                         删除
                     </el-button>
                     <el-button size="mini" type="primary" @click="showModifyDialog(true,scope.row.id)">
@@ -55,15 +55,15 @@
                 </el-form-item>
                 <el-form-item label="所属客户:">
                     <customer-selector :customer-id="targetObject.customerId"
-                                       @change="regionChange"></customer-selector>
+                                       @change="customerChange"></customer-selector>
                 </el-form-item>
                 <el-form-item label="详细地址:">
                     <el-input type="text" size="mini" v-model="targetObject.address"></el-input>
                 </el-form-item>
-                <el-form-item label="维度:">
+                <el-form-item label="经度:">
                     <el-input type="text" size="mini" v-model="targetObject.longitude"></el-input>
                 </el-form-item>
-                <el-form-item label="经度:">
+                <el-form-item label="纬度:">
                     <el-input type="text" size="mini" v-model="targetObject.latitude"></el-input>
                 </el-form-item>
                 <el-form-item label="备注:">
@@ -116,7 +116,7 @@
             customerChange(val) {
                 this.targetObject.customerId = val;
             },
-            delete(id) {
+            deleteStation(id) {
                 this.$confirm('此操作将不可撤销, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -127,6 +127,7 @@
                             this.$message.success("操作成功!");
                             this.dialogVisible = false;
                         }
+                        this.query();
                     });
                 }).catch(() => {
                     this.$message({
@@ -151,7 +152,7 @@
             },
             query() {
                 let params = {pageNum: this.pageNum, pageSize: this.pageSize, keyWord: this.keyWord};
-                this.$http.post("/mid-region/station/select", qs.stringify(params)).then(res => {
+                this.$http.post("/biz-g1/station/select", qs.stringify(params)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.stationList = res.data.data;
                         this.pageNum = res.data.pageNum;
@@ -177,6 +178,7 @@
                         this.$message.success("操作成功!");
                         this.dialogVisible = false;
                     }
+                    this.query();
                 });
             },
             handleSizeChange(size) {
