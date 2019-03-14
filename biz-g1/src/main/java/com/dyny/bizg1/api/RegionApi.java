@@ -1,4 +1,4 @@
-package com.dyny.userservice.api;
+package com.dyny.bizg1.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

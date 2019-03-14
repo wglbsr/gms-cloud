@@ -1,4 +1,4 @@
-package com.dyny.regionservice;
+package com.dyny.midregion;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

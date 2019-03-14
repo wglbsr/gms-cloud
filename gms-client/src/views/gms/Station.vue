@@ -151,7 +151,7 @@
             },
             query() {
                 let params = {pageNum: this.pageNum, pageSize: this.pageSize, keyWord: this.keyWord};
-                this.$http.post("/biz-g1/station/select", qs.stringify(params)).then(res => {
+                this.$http.post("/mid-region/station/select", qs.stringify(params)).then(res => {
                     if (res.data.result && res.data.data) {
                         this.stationList = res.data.data;
                         this.pageNum = res.data.pageNum;
