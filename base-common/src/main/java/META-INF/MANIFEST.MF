@@ -1,0 +1,70 @@
+Manifest-Version: 1.0
+Class-Path: jackson-core-asl-1.9.13.jar jackson-module-parameter-names
+ -2.9.8.jar spring-boot-starter-jdbc-2.1.3.RELEASE.jar spring-boot-sta
+ rter-logging-2.1.3.RELEASE.jar jackson-module-afterburner-2.9.8.jar f
+ astjson-1.2.56.jar jersey-apache-client4-1.19.1.jar jackson-mapper-lg
+ pl-1.9.6.jar snakeyaml-1.23.jar feign-core-10.1.0.jar spring-boot-sta
+ rter-actuator-2.1.3.RELEASE.jar spring-cloud-starter-netflix-zuul-2.1
+ .0.RELEASE.jar rxnetty-contexts-0.4.9.jar nacos-common-0.3.0.jar jack
+ son-core-lgpl-1.9.6.jar spring-security-crypto-5.1.4.RELEASE.jar spri
+ ng-cloud-alibaba-nacos-discovery-0.2.0.RELEASE.jar log4j-to-slf4j-2.1
+ 1.2.jar hystrix-javanica-1.5.18.jar tomcat-embed-el-9.0.16.jar spring
+ -boot-2.1.3.RELEASE.jar spring-cloud-starter-netflix-hystrix-dashboar
+ d-2.1.0.RELEASE.jar google-http-client-1.19.0.jar classmate-1.4.0.jar
+  rxnetty-0.4.9.jar spring-beans-5.1.5.RELEASE.jar spring-boot-starter
+ -web-2.1.3.RELEASE.jar velocity-engine-core-2.0.jar spring-aop-5.1.5.
+ RELEASE.jar ribbon-httpclient-2.3.0.jar mybatis-plus-generator-3.0.6.
+ jar spring-cloud-netflix-ribbon-2.1.0.RELEASE.jar feign-hystrix-10.1.
+ 0.jar jsr311-api-1.1.1.jar spring-cloud-starter-openfeign-2.1.0.RELEA
+ SE.jar jsoup-1.11.3.jar spring-boot-starter-json-2.1.3.RELEASE.jar sl
+ f4j-api-1.7.25.jar spring-tx-5.1.5.RELEASE.jar spring-boot-configurat
+ ion-processor-2.1.3.RELEASE.jar log4j-api-2.11.2.jar mybatis-3.4.6.ja
+ r commons-codec-1.11.jar jackson-core-2.9.8.jar jersey-client-1.19.1.
+ jar jsr305-1.3.9.jar commons-io-2.6.jar commons-lang-2.6.jar spring-c
+ loud-openfeign-core-2.1.0.RELEASE.jar zuul-core-1.3.1.jar commons-fil
+ eupload-1.3.3.jar feign-form-3.5.0.jar spring-boot-starter-aop-2.1.3.
+ RELEASE.jar spring-cloud-netflix-zuul-2.1.0.RELEASE.jar spring-boot-a
+ ctuator-autoconfigure-2.1.3.RELEASE.jar jquery-2.1.1.jar spring-expre
+ ssion-5.1.5.RELEASE.jar mybatis-spring-boot-autoconfigure-1.3.2.jar s
+ pring-cloud-netflix-archaius-2.1.0.RELEASE.jar rxjava-1.3.8.jar react
+ ive-streams-1.0.2.jar commons-configuration-1.8.jar spring-boot-start
+ er-2.1.3.RELEASE.jar spring-boot-starter-tomcat-2.1.3.RELEASE.jar mic
+ rometer-core-1.1.3.jar hystrix-metrics-event-stream-1.5.18.jar ribbon
+ -2.3.0.jar feign-slf4j-10.1.0.jar mybatis-plus-boot-starter-3.0.5.jar
+  d3js-3.4.11.jar nacos-client-0.3.0.jar spring-jcl-5.1.5.RELEASE.jar 
+ netflix-commons-util-0.3.0.jar spring-cloud-commons-2.1.0.RELEASE.jar
+  jackson-datatype-jsr310-2.9.8.jar spring-cloud-starter-netflix-archa
+ ius-2.1.0.RELEASE.jar mybatis-spring-1.3.2.jar spring-cloud-starter-n
+ etflix-ribbon-2.1.0.RELEASE.jar HikariCP-3.2.0.jar hystrix-core-1.5.1
+ 8.jar bcpkix-jdk15on-1.60.jar mybatis-plus-extension-3.0.6.jar spring
+ -boot-starter-freemarker-2.1.3.RELEASE.jar ribbon-loadbalancer-2.3.0.
+ jar nacos-api-0.3.0.jar jackson-databind-2.9.8.jar httpcore-4.4.11.ja
+ r aspectjweaver-1.9.2.jar spring-cloud-starter-2.1.0.RELEASE.jar Late
+ ncyUtils-2.0.3.jar logback-classic-1.2.3.jar spring-cloud-starter-net
+ flix-hystrix-2.1.0.RELEASE.jar ribbon-core-2.3.0.jar feign-form-sprin
+ g-3.5.0.jar archaius-core-0.7.6.jar spring-cloud-netflix-hystrix-2.1.
+ 0.RELEASE.jar jboss-logging-3.3.2.Final.jar hystrix-serialization-1.5
+ .18.jar HdrHistogram-2.1.9.jar hibernate-validator-6.0.14.Final.jar f
+ reemarker-2.3.28.jar mybatis-plus-3.0.5.jar jackson-datatype-jdk8-2.9
+ .8.jar logback-core-1.2.3.jar spring-core-5.1.5.RELEASE.jar druid-1.1
+ .10.jar spring-cloud-starter-alibaba-nacos-config-0.2.0.RELEASE.jar m
+ ybatis-plus-annotation-3.0.6.jar spring-boot-actuator-2.1.3.RELEASE.j
+ ar asm-5.0.4.jar servo-core-0.12.21.jar jackson-annotations-2.9.0.jar
+  httpclient-4.5.7.jar validation-api-2.0.1.Final.jar commons-lang3-3.
+ 8.1.jar spring-cloud-netflix-hystrix-dashboard-2.1.0.RELEASE.jar spri
+ ng-web-5.1.5.RELEASE.jar mybatis-plus-core-3.0.6.jar netflix-statisti
+ cs-0.1.1.jar tomcat-embed-websocket-9.0.16.jar ribbon-transport-2.3.0
+ .jar tomcat-embed-core-9.0.16.jar commons-collections-3.2.2.jar mybat
+ is-spring-boot-starter-1.3.2.jar bcprov-jdk15on-1.60.jar spring-boot-
+ autoconfigure-2.1.3.RELEASE.jar druid-spring-boot-starter-1.1.10.jar 
+ jersey-core-1.19.1.jar rxjava-reactive-streams-1.2.1.jar guava-15.0.j
+ ar spring-cloud-context-2.1.0.RELEASE.jar javax.inject-1.jar spring-j
+ dbc-5.1.5.RELEASE.jar jul-to-slf4j-1.7.25.jar jsqlparser-1.2.jar spri
+ ng-context-support-5.1.5.RELEASE.jar spring-cloud-starter-alibaba-nac
+ os-discovery-0.2.0.RELEASE.jar spring-cloud-alibaba-nacos-config-0.2.
+ 0.RELEASE.jar spring-security-rsa-1.0.7.RELEASE.jar spring-context-5.
+ 1.5.RELEASE.jar spring-webmvc-5.1.5.RELEASE.jar jackson-mapper-asl-1.
+ 9.13.jar javax.annotation-api-1.3.2.jar rxnetty-servo-0.4.9.jar mysql
+ -connector-java-5.1.47.jar spring-boot-devtools-2.1.3.RELEASE.jar
+Main-Class: com.dyny.midregion.utils.RegionDataCatcher
+

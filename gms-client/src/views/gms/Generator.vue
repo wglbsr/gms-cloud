@@ -11,32 +11,30 @@
         <el-table :data="dataList" style="width: 100%"
                   stripe highlight-current-row
                   v-loading="$store.state.loading">
-            <!--<el-table-column-->
-            <!--type="selection"-->
-            <!--width="30">-->
-            <!--</el-table-column>-->
+            <!--<el-row :gutter="20">-->
+            <!--<el-checkbox v-model="machNameColumnShow">基站名称</el-checkbox>-->
+            <!--<el-checkbox v-model="offlineTypeColumnShow">离线原因</el-checkbox>-->
+            <!--<el-checkbox v-model="lankPerColumnShow">剩余油量</el-checkbox>-->
+            <!--<el-checkbox v-model="stCurrentColumnShow">输出电流</el-checkbox>-->
+            <!--<el-checkbox v-model="sysModeColumnShow">当前模式</el-checkbox>-->
+            <!--<el-checkbox v-model="startVoColumnShow">启动电压</el-checkbox>-->
+            <!--<el-checkbox v-model="outputVoltageColumnShow">输出电压</el-checkbox>-->
+            <!--<el-checkbox v-model="alVoltageColumnShow">电池电压</el-checkbox>-->
+            <!--<el-checkbox v-model="activatedColumnShow">已激活</el-checkbox>-->
+            <!--<el-checkbox v-model="loadModeTimeColumnShow">带载</el-checkbox>-->
+            <!--<el-checkbox v-model="temperatureColumnShow">电机温度</el-checkbox>-->
+            <!--<el-checkbox v-model="maintainTimeColumnShow">保养时间</el-checkbox>-->
+            <!--<el-checkbox v-model="stStateColumnShow">在线</el-checkbox>-->
+            <!--<el-checkbox v-model="cityElectricityColumnShow">市电</el-checkbox>-->
+            <!--<el-checkbox v-model="machTypeColumnShow">电流</el-checkbox>-->
+            <!--</el-col>-->
             <el-table-column type="expand">
                 <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                        <el-form-item label="扩展1">
+                        <el-form-item label="离线原因">
                             <span>{{ props.row.ext1 }}</span>
                         </el-form-item>
-                        <el-form-item label="扩展2">
-                            <span>{{ props.row.ext2 }}</span>
-                        </el-form-item>
-                        <el-form-item label="扩展2">
-                            <span>{{ props.row.ext2 }}</span>
-                        </el-form-item>
-                        <el-form-item label="扩展2">
-                            <span>{{ props.row.ext2 }}</span>
-                        </el-form-item>
-                        <el-form-item label="扩展2">
-                            <span>{{ props.row.ext2 }}</span>
-                        </el-form-item>
-                        <el-form-item label="扩展2">
-                            <span>{{ props.row.ext2 }}</span>
-                        </el-form-item>
-                        <el-form-item label="扩展2">
+                        <el-form-item label="当前模式">
                             <span>{{ props.row.ext2 }}</span>
                         </el-form-item>
                     </el-form>
@@ -74,10 +72,12 @@
     .demo-table-expand {
         font-size: 0;
     }
+
     .demo-table-expand label {
         width: 90px;
         color: #99a9bf;
     }
+
     .demo-table-expand .el-form-item {
         margin-right: 0;
         margin-bottom: 0;

@@ -17,7 +17,7 @@ public class RegionServiceApplicationTests {
     RegionService regionService;
 
     @Test
-    public void contextLoads() throws IOException, InterruptedException {
+    public void contextLoads() throws IOException {
         RegionDataCatcher regionDataCatcher = new RegionDataCatcher();
         regionDataCatcher.start(regionService);
     }

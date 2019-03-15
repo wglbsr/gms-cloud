@@ -1,18 +1,15 @@
 package com.dyny.midregion.utils;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.dyny.common.utils.Utils;
 import com.dyny.midregion.db.entity.Region;
 import com.dyny.midregion.service.RegionService;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Auther: lane
@@ -22,37 +19,24 @@ import java.io.IOException;
  */
 public class RegionDataCatcher {
     private static final String BASE_URL = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2018/";
-    private static final String START_URL = "index.html";
-    private static final String KEY_ID = "id";
-    private static final String KEY_PARENT_ID = "parent_id";
-    private static final String KEY_LEVEL = "level";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_CHILDREN = "children";
     private static final int[] DIVISORS = {1, 2, 2, 2, 3};
-    private static final String SAVE_LEVEL = "2";
-    //    private static final String FILE_PATH = "/opt";
-    private static boolean CONTINUE_FLAG = false;
-    private static final String FILE_PATH = "/Users/lane/Desktop";
-    private static String RECORD = "41.html";
-
+    private static final String SAVE_LEVEL = "234";
     private static String[] ELE_LIST = {"tr.provincetr td a", "tr.citytr td a", "tr.countytr td a", "tr.towntr td a", "tr.villagetr td"};
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    //"11,12,13,14,15,21,22,23,31,32,33,34,35,36,37,41,42,43,44,45,46,50,51,52,53,54,61,62,63,64,65";
+    //已完成{44,11}
+    public static void main(String[] args) throws IOException {
         RegionDataCatcher dataCatcher = new RegionDataCatcher();
         dataCatcher.start(null);
     }
 
+
     public void start(RegionService regionService) throws IOException {
-        JSONObject jsonObject = new JSONObject();
-        int maxLevel = 3;
-        int startLevel = 0;
-        get(START_URL, startLevel, maxLevel, jsonObject, regionService);
-//        get("11/01/06/110106004.html", startLevel, maxLevel, jsonObject,regionService);
-        try {
-            Utils.File.fileWrite(FILE_PATH + File.separator + "region" + maxLevel + ".json", jsonObject.toJSONString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int maxLevel = 4;
+        int startLevel = 1;
+        String startUrl = "11.html";
+        get(startUrl, startLevel, maxLevel, regionService);
+//        get("44.html", startLevel, maxLevel, regionService);
     }
 
     private Document getHtmlContent(String url) throws InterruptedException {
@@ -62,89 +46,56 @@ public class RegionDataCatcher {
             document = Jsoup.connect(BASE_URL + url)
                     .header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0")
                     .header("Connection", "close")
-                    .timeout(15000).get();
+                    .timeout(30000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return document;
     }
 
-    //level      id       parentId        name
-    //省        0 href      固定          0 text
-    //市        0 text    parent_url     1 text
-    //区        0 text    parent_url     1 text
-    //镇、街道   0 text   parent_url     1 text
-    //村委       0 text   parent_url     2 text
-    private void get(String url, int level, int maxLevel, JSONObject regionJsonObj, RegionService regionService) throws IOException {
-        CONTINUE_FLAG = url.equals(RECORD);
+    //regionService用于保存操作
+    private void get(String url, int level, int maxLevel, RegionService regionService) {
         Document document = null;
         try {
             document = getHtmlContent(url);
         } catch (InterruptedException e) {
-            RECORD = url;
-            Utils.File.fileWrite(FILE_PATH + File.separator + "lastUrl" + maxLevel + ".txt", url);
             e.printStackTrace();
         }
-        if (document == null) {
-            return;
-        }
-
-        if (!CONTINUE_FLAG) {
+        if (document == null || regionService == null) {
             return;
         }
         String parentId = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
-        // findStrByRegEx(url, REGION_ID_REG_EXP_FIRST);//url.substring(0, url.lastIndexOf("."));//
         Elements elements = document.select(ELE_LIST[level]);
-        JSONArray jsonArray = new JSONArray();
         int divisor = DIVISORS[level];
+        List<Region> regionList = new ArrayList<>();
         for (int i = 0; i < elements.size(); i += divisor) {
             Element idElement = elements.get(i);
             Element nameElement = elements.get(i + divisor - 1);
-            int thisLevel = level;
-            JSONObject jsonObject = new JSONObject();
-            String id;
+            int thisLevel = level;//级别
+            String id;//id
+            String name = nameElement.text(); //地区名称
+            parentId = parentId.matches("[0-9]+") ? parentId : "0";//父级id
             if (level == 0) {
                 String tempUrl = idElement.attr("href");
                 id = tempUrl.substring(0, tempUrl.lastIndexOf("."));
             } else {
                 id = idElement.text();
             }
-            String name = nameElement.text();
-            jsonObject.put(KEY_PARENT_ID, StringUtils.isEmpty(parentId) ? 0 : parentId);//**
-            jsonObject.put(KEY_NAME, name);
-            jsonObject.put(KEY_ID, id);
-            jsonObject.put(KEY_LEVEL, thisLevel);
-            if (SAVE_LEVEL.contains(level + "") && regionService != null) {
+            if (SAVE_LEVEL.contains(("" + thisLevel))) {
                 Region region = new Region();
                 region.setId(Long.valueOf(id));
                 region.setParentId(Long.valueOf(parentId));
                 region.setLevel(thisLevel);
                 region.setName(name);
-                regionService.saveOrUpdate(region);
+                regionList.add(region);
+                System.out.println("[" + id + "]");
             }
-            System.out.println(id);
             if (thisLevel < maxLevel) {
                 String nextUrl = (url.lastIndexOf("/") >= 0 ? url.substring(0, url.lastIndexOf("/")) + "/" : "") + idElement.attr("href");
                 thisLevel++;
-                get(nextUrl, thisLevel, maxLevel, jsonObject, regionService);
+                get(nextUrl, thisLevel, maxLevel, regionService);
             }
-            jsonArray.add(jsonObject);
         }
-        regionJsonObj.put(KEY_CHILDREN, jsonArray);
+        System.out.println("保存结果:" + regionService.saveOrUpdateBatch(regionList));
     }
-
-
-//
-//    public static String findStrByRegEx(String content, String regEx) {
-//        if (content == null || content.equals("")) {
-//            return null;
-//        }
-//        Pattern p = Pattern.compile(regEx);
-//        Matcher m = p.matcher(content);
-//        if (m.find()) {
-//            return m.group();
-//        }
-//        return null;
-//    }
-
 }

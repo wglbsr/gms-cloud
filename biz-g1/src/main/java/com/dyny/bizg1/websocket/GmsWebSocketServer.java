@@ -26,10 +26,9 @@ public class GmsWebSocketServer {
 
     @OnOpen
     public void onOpen(@PathParam("deviceId") String deviceId, Session session) {
-
         this.session = session;
         webSockets.add(this);
-        logger.info("deviceId[" + deviceId + "]的连接,当前连接数:" + webSockets.size());
+        logger.info("deviceId[" + deviceId + "],当前连接数:" + webSockets.size());
     }
 
     @OnClose
@@ -61,5 +60,11 @@ public class GmsWebSocketServer {
         logger.error(error.getMessage());
     }
 
+
+    public boolean sendMessage() {
+        webSockets.iterator();
+
+        return false;
+    }
 
 }
