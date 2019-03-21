@@ -20,7 +20,7 @@ require("moment/locale/zh-cn");
 Vue.config.productionTip = false;
 Vue.use(require("vue-moment"), {moment});
 Vue.use(ElementUI);
-
+Vue.use('//at.alicdn.com/t/font_825173_c8zu2vuwunt.css')
 Vue.prototype.$http = axios;
 Vue.prototype._ = _;
 Vue.filter('date-filter', function (value) {

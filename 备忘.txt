@@ -7,3 +7,7 @@ https://github.com/babylikebird/Micro-Service-Skeleton.git
 
 启动nacos
 sh startup.sh -m standalone
+
+
+手动安装t-io的依赖
+mvn install:install-file -Dfile=/Users/lane/Desktop/tio-websocket-common-3.2.7.v20190222-RELEASE.jar -DgroupId=org.t-io -DartifactId=tio-websocket-common -Dversion=3.2.7.v20190222-RELEASE -Dpackaging=jar -DgeneratePom=true -DcreateChecksum=trueJavaEE

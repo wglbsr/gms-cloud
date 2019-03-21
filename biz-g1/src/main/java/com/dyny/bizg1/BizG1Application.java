@@ -9,6 +9,8 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.io.IOException;
+
 @EnableTransactionManagement
 @SpringBootApplication
 @EnableFeignClients
@@ -18,8 +20,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.dyny.bizg1.db.dao")
 public class BizG1Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SpringApplication.run(BizG1Application.class, args);
+
     }
 
 }

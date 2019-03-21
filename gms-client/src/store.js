@@ -249,6 +249,16 @@ const store = new Vuex.Store({
                         lft: 7,
                         rgt: 8,
                         depth: 2,
+                    },
+                    {
+                        menuId: 34,
+                        menuName: "油机详情",
+                        menuCode: "generatorStatus",
+                        link: "/gms/generatorStatus",
+                        icon: "el-icon-menu",
+                        lft: 7,
+                        rgt: 8,
+                        depth: 2,
                     }
                 ]
             };

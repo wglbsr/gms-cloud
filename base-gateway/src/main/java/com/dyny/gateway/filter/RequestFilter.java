@@ -48,11 +48,13 @@ public class RequestFilter extends ZuulFilter {
         HttpServletRequest request = requestContext.getRequest();
         String uri = request.getRequestURI();
         logger.info("uri:" + uri);
-        //登录或者文件上传操作则直接放行
+        //登录或者文件上传操作则直接放行,这里存在安全隐患,上传文件应该需要判断手否有token
         if (BaseController.URL_LOGIN.equals(uri) || BaseController.URL_LOGIN_PAGE.equals(uri)) {
+            requestContext.setSendZuulResponse(true);
+            requestContext.setResponseStatusCode(200);
             return null;
         }
-        String token = null;
+        String token;
         if (uri.contains(BaseController.URL_FILE_DOWNLOAD)) {//这里的下载链接判断不够严谨，可以使用先行零宽断言正则
             //这里应该直接从request中获取token,无法从头部获取token
             token = request.getParameter(BaseController.KEY_TOKEN);
