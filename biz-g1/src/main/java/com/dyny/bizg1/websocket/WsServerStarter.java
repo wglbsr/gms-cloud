@@ -8,8 +8,6 @@ import org.tio.server.TioServer;
 import org.tio.utils.Threads;
 import org.tio.utils.thread.pool.SynThreadPoolExecutor;
 import org.tio.websocket.common.WsTioUuid;
-import org.tio.websocket.server.WsServerAioHandler;
-import org.tio.websocket.server.WsServerAioListener;
 import org.tio.websocket.server.WsServerConfig;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
@@ -28,41 +26,14 @@ public class WsServerStarter {
 
     private IWsMsgHandler wsMsgHandler;
 
-    private WsServerAioHandler wsServerAioHandler;
+    private GmsAioHandler gmsAioHandler;
 
-    private WsServerAioListener wsServerAioListener;
+    private GmsAioListener gmsAioListener;
 
     private ServerGroupContext serverGroupContext;
 
     private TioServer tioServer;
 
-    /**
-     * @return the wsServerConfig
-     */
-    public WsServerConfig getWsServerConfig() {
-        return wsServerConfig;
-    }
-
-    /**
-     * @return the wsMsgHandler
-     */
-    public IWsMsgHandler getWsMsgHandler() {
-        return wsMsgHandler;
-    }
-
-    /**
-     * @return the wsServerAioHandler
-     */
-    public WsServerAioHandler getWsServerAioHandler() {
-        return wsServerAioHandler;
-    }
-
-    /**
-     * @return the wsServerAioListener
-     */
-    public WsServerAioListener getWsServerAioListener() {
-        return wsServerAioListener;
-    }
 
     /**
      * @return the serverGroupContext
@@ -98,9 +69,9 @@ public class WsServerStarter {
         }
         this.wsServerConfig = wsServerConfig;
         this.wsMsgHandler = wsMsgHandler;
-        wsServerAioHandler = new WsServerAioHandler(wsServerConfig, wsMsgHandler);
-        wsServerAioListener = new WsServerAioListener();
-        serverGroupContext = new ServerGroupContext("Tio Websocket Server", wsServerAioHandler, wsServerAioListener, tioExecutor, groupExecutor);
+        gmsAioHandler = new GmsAioHandler(wsServerConfig, wsMsgHandler);
+        gmsAioListener = new GmsAioListener();
+        serverGroupContext = new ServerGroupContext("Tio Websocket Server", gmsAioHandler, gmsAioListener, tioExecutor, groupExecutor);
         serverGroupContext.setHeartbeatTimeout(0);
         serverGroupContext.setTioUuid(tioUuid);
         tioServer = new TioServer(serverGroupContext);

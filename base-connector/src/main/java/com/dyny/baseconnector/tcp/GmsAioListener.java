@@ -1,11 +1,9 @@
 package com.dyny.baseconnector.tcp;
 
-import com.dyny.baseconnector.api.RedisApi;
-import com.dyny.baseconnector.utils.SpringBeanUtils;
 import com.dyny.common.constant.TcpConstant;
+import org.tio.client.intf.ClientAioListener;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
-import org.tio.core.maintain.ClientNodes;
 import org.tio.server.intf.ServerAioListener;
 import org.tio.websocket.common.WsSessionContext;
 
@@ -15,34 +13,25 @@ import org.tio.websocket.common.WsSessionContext;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsServerAioListener implements ServerAioListener {
+public class GmsAioListener implements ServerAioListener, ClientAioListener {
+    public GmsAioListener() {
 
-    private RedisApi redisApi;
-
-    public GmsServerAioListener() {
-        redisApi = SpringBeanUtils.getBean(RedisApi.class);
     }
 
     @Override
     public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
-
-        if (isWsConnection(channelContext)) {
-            WsSessionContext wsSessionContext = new WsSessionContext();
-            channelContext.setAttribute(wsSessionContext);
-            channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, true);
-        } else {
-            channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, false);
+        if (isConnected) {
+            if (GmsClientAioHandler.isWsConnection(channelContext)) {
+                WsSessionContext wsSessionContext = new WsSessionContext();
+                wsSessionContext.setHandshaked(true);
+                channelContext.setAttribute(wsSessionContext);
+                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, true);
+            } else {
+                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, false);
+            }
         }
-
     }
 
-    private boolean isWsConnection(ChannelContext channelContext) {
-        //判断ip地址是否来自服务器,从缓存获取
-        //ip:port
-        String channelIpNPort = ClientNodes.getKey(channelContext);
-
-        return false;
-    }
 
     @Override
     public void onAfterDecoded(ChannelContext channelContext, Packet packet, int packetSize) throws Exception {

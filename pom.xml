@@ -85,7 +85,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -136,7 +135,6 @@
             <artifactId>tio-websocket-common</artifactId>
             <version>${t-io.version}</version>
         </dependency>
-
     </dependencies>
 
 

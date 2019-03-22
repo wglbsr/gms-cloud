@@ -1,10 +1,6 @@
-package com.dyny.bizg1.websocket;
+package com.dyny.baseconnector.websocket;
 
-import com.dyny.bizg1.db.entity.Generator;
-import com.dyny.bizg1.service.GeneratorService;
-import com.dyny.bizg1.utils.SpringBeanUtils;
 import com.dyny.common.constant.TcpConstant;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +22,6 @@ import org.tio.websocket.server.handler.IWsMsgHandler;
 public class G1WsMsgHandler implements IWsMsgHandler {
     private Logger logger = LoggerFactory.getLogger(G1WsMsgHandler.class);
     private static final String PATH_SEPARATOR = "/";
-    private GeneratorService generatorService;
-
-    public G1WsMsgHandler() {
-        this.generatorService = SpringBeanUtils.getBean(GeneratorService.class);
-    }
 
     @Override
     public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
@@ -46,13 +37,8 @@ public class G1WsMsgHandler implements IWsMsgHandler {
             }
         }
         //2.判断设备id是否合法,这里应该用device而不是具体的设备类型
-        Generator generator = generatorService.getById(deviceId);
-        if (generator == null) {
-            return null;
-        }
         return httpResponse;
     }
-
 
     private String getToken(String initPath) {
         return initPath.substring(initPath.indexOf(PATH_SEPARATOR) + 1, initPath.lastIndexOf(PATH_SEPARATOR));
@@ -112,14 +98,14 @@ public class G1WsMsgHandler implements IWsMsgHandler {
 
     @Override
     public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-        if (bytes != null && bytes.length > 0) {
-            logger.info("收到[" + Hex.encodeHexString(bytes) + "]");
-        }
         return null;
     }
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
+
+
         return "消息[" + text + "]已收到";
+
     }
 }

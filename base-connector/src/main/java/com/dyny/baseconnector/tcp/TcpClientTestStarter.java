@@ -28,9 +28,9 @@ public class TcpClientTestStarter {
     //handler, 包括编码、解码、消息处理
     public static Node serverNode = new Node("free.idcfengye.com", 17691);
     //    public static ClientAioHandler tioClientHandler = new HelloClientAioHandler();
-    public static ClientAioHandler tioClientHandler = new TcpClientTestHandler();
+    public static ClientAioHandler tioClientHandler = new GmsClientAioHandler();
     //事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
-    public static ClientAioListener aioListener = null;
+    public static ClientAioListener aioListener = new GmsAioListener();
     //断链后自动连接的，不想自动连接请设为null
     private static ReconnConf reconnConf = new ReconnConf(5000L);
     //一组连接共用的上下文对象
@@ -48,7 +48,6 @@ public class TcpClientTestStarter {
         while (true) {
             Thread.sleep(5000);
             sendPassword();
-//            sendHeartbeat();
         }
     }
 
