@@ -1,6 +1,6 @@
 package com.dyny.basemongodb.controller;
 
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.GridFSBucket;

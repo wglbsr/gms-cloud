@@ -82,7 +82,7 @@ public class MyBatisPlusGenerator {
                     .setInclude(tableName)// 目标表
                     .setRestControllerStyle(true)
                     .setSuperControllerClass("com.dyny.common.utils.BaseController")
-                    .setSuperMapperClass("com.dyny.common.utils.CommonMapper");//默认为BaseMapper
+                    .setSuperMapperClass("com.dyny.common.db.CommonMapper");//默认为BaseMapper
             //6. 执行
             ag.setStrategy(stConfig);
             ag.execute();

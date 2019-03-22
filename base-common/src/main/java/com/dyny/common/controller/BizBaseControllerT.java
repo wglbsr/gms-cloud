@@ -1,4 +1,4 @@
-package com.dyny.common.utils;
+package com.dyny.common.controller;
 
 /**
  * @Auther: lane

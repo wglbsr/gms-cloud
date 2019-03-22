@@ -29,6 +29,7 @@
         <module>mid-region</module>
         <module>mid-user</module>
         <module>biz-g1</module>
+        <module>base-connector</module>
     </modules>
     <dependencies>
         <dependency>
@@ -130,7 +131,11 @@
             <artifactId>tio-http-common</artifactId>
             <version>${t-io.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.t-io</groupId>
+            <artifactId>tio-websocket-common</artifactId>
+            <version>${t-io.version}</version>
+        </dependency>
 
     </dependencies>
 

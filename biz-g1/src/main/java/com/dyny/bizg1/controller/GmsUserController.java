@@ -3,8 +3,8 @@ package com.dyny.bizg1.controller;
 
 import com.dyny.bizg1.db.entity.GmsUser;
 import com.dyny.bizg1.service.GmsUserService;
-import com.dyny.common.utils.BaseController;
-import com.dyny.common.utils.BaseControllerT;
+import com.dyny.common.controller.BaseController;
+import com.dyny.common.controller.BaseControllerT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

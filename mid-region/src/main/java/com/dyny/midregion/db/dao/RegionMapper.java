@@ -1,7 +1,7 @@
 package com.dyny.midregion.db.dao;
 
 import com.dyny.midregion.db.entity.Region;
-import com.dyny.common.utils.CommonMapper;
+import com.dyny.common.db.CommonMapper;
 
 /**
  * <p>

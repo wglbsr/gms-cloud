@@ -1,6 +1,6 @@
 package com.dyny.gateway.exception;
 
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -3,7 +3,7 @@ package com.dyny.userservice.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import com.dyny.userservice.common.BizBaseControllerT;
 import com.dyny.userservice.db.entity.Role;
 import com.dyny.userservice.db.entity.User;

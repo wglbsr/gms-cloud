@@ -1,4 +1,4 @@
-package com.dyny.common.utils;
+package com.dyny.common.db;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 

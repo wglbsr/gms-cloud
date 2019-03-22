@@ -1,7 +1,7 @@
 package com.dyny.userservice.common;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dyny.common.utils.BaseControllerT;
+import com.dyny.common.controller.BaseControllerT;
 import com.dyny.userservice.api.RedisApi;
 import org.springframework.beans.factory.annotation.Autowired;
 

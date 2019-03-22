@@ -1,7 +1,7 @@
 package com.dyny.bizg1.db.dao;
 
 import com.dyny.bizg1.db.entity.Carrier;
-import com.dyny.common.utils.CommonMapper;
+import com.dyny.common.db.CommonMapper;
 
 /**
  * <p>

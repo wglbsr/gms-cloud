@@ -1,4 +1,4 @@
-package com.dyny.common.utils;
+package com.dyny.common.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;

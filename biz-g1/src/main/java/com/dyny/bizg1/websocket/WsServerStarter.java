@@ -24,17 +24,17 @@ public class WsServerStarter {
     @SuppressWarnings("unused")
     private static Logger log = LoggerFactory.getLogger(org.tio.websocket.server.WsServerStarter.class);
 
-    private WsServerConfig wsServerConfig = null;
+    private WsServerConfig wsServerConfig;
 
-    private IWsMsgHandler wsMsgHandler = null;
+    private IWsMsgHandler wsMsgHandler;
 
-    private WsServerAioHandler wsServerAioHandler = null;
+    private WsServerAioHandler wsServerAioHandler;
 
-    private WsServerAioListener wsServerAioListener = null;
+    private WsServerAioListener wsServerAioListener;
 
-    private ServerGroupContext serverGroupContext = null;
+    private ServerGroupContext serverGroupContext;
 
-    private TioServer tioServer = null;
+    private TioServer tioServer;
 
     /**
      * @return the wsServerConfig

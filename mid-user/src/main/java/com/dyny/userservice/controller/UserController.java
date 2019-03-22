@@ -2,7 +2,7 @@ package com.dyny.userservice.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import com.dyny.userservice.api.MongodbApi;
 import com.dyny.userservice.common.BizBaseControllerT;
 import com.dyny.userservice.db.entity.User;

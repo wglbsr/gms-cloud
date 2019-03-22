@@ -2,7 +2,7 @@ package com.dyny.midregion.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import com.dyny.common.utils.Utils;
 import com.dyny.midregion.api.RedisApi;
 import com.dyny.midregion.db.entity.Region;

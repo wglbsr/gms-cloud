@@ -3,6 +3,7 @@ package com.dyny.bizg1.websocket;
 import com.dyny.bizg1.db.entity.Generator;
 import com.dyny.bizg1.service.GeneratorService;
 import com.dyny.bizg1.utils.SpringBeanUtils;
+import com.dyny.common.constant.TcpConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,9 @@ import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
+import org.tio.websocket.common.Opcode;
 import org.tio.websocket.common.WsRequest;
+import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
 /**
@@ -49,7 +52,9 @@ public class G1WsMsgHandler implements IWsMsgHandler {
         return httpResponse;
     }
 
-
+    //    private String getBizName(String initPath) {
+//        return initPath.substring(initPath.indexOf(PATH_SEPARATOR) + 1, initPath.lastIndexOf(PATH_SEPARATOR));
+//    }
     private String getToken(String initPath) {
         return initPath.substring(initPath.indexOf(PATH_SEPARATOR) + 1, initPath.lastIndexOf(PATH_SEPARATOR));
     }
@@ -58,17 +63,12 @@ public class G1WsMsgHandler implements IWsMsgHandler {
         return initPath.substring(initPath.lastIndexOf(PATH_SEPARATOR) + 1);
     }
 
-    private static final String METHOD_CONNECTOR = "connector";
 
     private boolean isConnector(String initPath) {
         String method = initPath.substring(initPath.indexOf(PATH_SEPARATOR) + 1);
-        return METHOD_CONNECTOR.equals(method);
+        return TcpConstant.METHOD_CONNECTOR.equals(method);
     }
 
-    private static final String KEY_IS_CONNECTOR = "isConnector";
-    private static final String KEY_DEVICE_ID = "deviceId";
-    private static final String KEY_CONNECTOR_GROUP = "ConnectorGroup";
-    private static final String PREFIX_BS_ID = "ConnectorBsId";
 
     @Override
     public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
@@ -76,28 +76,38 @@ public class G1WsMsgHandler implements IWsMsgHandler {
         String initPath = httpRequest.getRequestLine().getInitPath();
         String deviceId = getDeviceId(initPath);
         if (isConnector(initPath)) {
-            channelContext.setBsId(PREFIX_BS_ID + deviceId);
-            channelContext.setAttribute(KEY_DEVICE_ID, deviceId);
-            channelContext.setAttribute(KEY_IS_CONNECTOR, true);
-            Tio.bindGroup(channelContext, KEY_CONNECTOR_GROUP);
-            logger.info("来自connector的连接,id为[" + deviceId + "],绑定到" + KEY_CONNECTOR_GROUP + "的固定组");
+            channelContext.setBsId(TcpConstant.PREFIX_BS_ID + deviceId);
+            channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
+            channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, true);
+            Tio.bindGroup(channelContext, TcpConstant.KEY_CONNECTOR_GROUP);
+            logger.info("来自connector的连接,id为[" + deviceId + "],绑定到" + TcpConstant.KEY_CONNECTOR_GROUP + "的固定组");
         } else {
             String token = getToken(initPath);
             channelContext.setBsId(token);
-            channelContext.setAttribute(KEY_DEVICE_ID, deviceId);
+            channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
             logger.info("客户端[" + token + "],绑定到设备id为[" + deviceId + "]的组");
-            channelContext.setAttribute(KEY_IS_CONNECTOR, false);
+            channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, false);
             Tio.bindGroup(channelContext, deviceId);
         }
     }
 
+    /**
+     * @return java.lang.Object
+     * @Author wanggl(lane)
+     * @Description //TODO 该方法只用来与通讯模块交互数据,网页端不能用
+     * @Date 08:55 2019-03-22
+     * @Param [wsRequest, bytes, channelContext]
+     **/
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
         //1.1 来自通讯模块,则判断是否为状态信息
         //1.1.1 是状态信息,则广播
         byte[] body = wsRequest.getBody();
+        String deviceId = (String) channelContext.getAttribute(TcpConstant.KEY_DEVICE_ID);
+        WsResponse wsResponse = new WsResponse();
+        wsResponse.setWsOpcode(Opcode.BINARY);
 
-
+        Tio.sendToGroup(channelContext.getGroupContext(), deviceId, wsResponse);
         return null;
     }
 

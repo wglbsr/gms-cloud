@@ -2,8 +2,8 @@ package com.dyny.userservice.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.dyny.common.utils.BaseController;
-import com.dyny.common.utils.BaseControllerT;
+import com.dyny.common.controller.BaseController;
+import com.dyny.common.controller.BaseControllerT;
 import com.dyny.userservice.db.entity.RelRoleAuth;
 import com.dyny.userservice.service.RelRoleAuthService;
 import org.springframework.beans.factory.annotation.Autowired;

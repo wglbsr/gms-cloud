@@ -1,7 +1,7 @@
 package com.dyny.userservice.db.dao;
 
 import com.dyny.userservice.db.entity.LogLogin;
-import com.dyny.common.utils.CommonMapper;
+import com.dyny.common.db.CommonMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,6 +1,6 @@
 package com.dyny.userservice.controller;
 
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

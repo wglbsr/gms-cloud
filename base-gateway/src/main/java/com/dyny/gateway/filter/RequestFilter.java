@@ -1,7 +1,7 @@
 package com.dyny.gateway.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dyny.common.utils.BaseController;
+import com.dyny.common.controller.BaseController;
 import com.dyny.gateway.api.RedisApi;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
