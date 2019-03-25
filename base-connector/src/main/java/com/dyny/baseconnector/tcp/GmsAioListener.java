@@ -1,6 +1,8 @@
 package com.dyny.baseconnector.tcp;
 
 import com.dyny.common.constant.TcpConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioListener;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
@@ -14,20 +16,17 @@ import org.tio.websocket.common.WsSessionContext;
  * @Version 1.0.0
  */
 public class GmsAioListener implements ServerAioListener, ClientAioListener {
-    public GmsAioListener() {
+    private static Logger logger = LoggerFactory.getLogger(GmsAioListener.class);
 
-    }
 
     @Override
     public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
         if (isConnected) {
-            if (GmsClientAioHandler.isWsConnection(channelContext)) {
+            if (GmsAioHandler.isWsConnection(channelContext)) {
                 WsSessionContext wsSessionContext = new WsSessionContext();
                 wsSessionContext.setHandshaked(true);
                 channelContext.setAttribute(wsSessionContext);
                 channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, true);
-            } else {
-                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, false);
             }
         }
     }
@@ -50,7 +49,6 @@ public class GmsAioListener implements ServerAioListener, ClientAioListener {
 
     @Override
     public void onAfterHandled(ChannelContext channelContext, Packet packet, long cost) throws Exception {
-
     }
 
     @Override

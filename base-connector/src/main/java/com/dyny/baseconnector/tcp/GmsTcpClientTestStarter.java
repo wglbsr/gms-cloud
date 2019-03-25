@@ -1,6 +1,7 @@
 package com.dyny.baseconnector.tcp;
 
 import com.dyny.baseconnector.tcp.packet.TcpPacket;
+import com.dyny.baseconnector.websocket.GmsWsClientAioHandler;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
@@ -20,17 +21,17 @@ import org.tio.core.Tio;
  * @Description:
  * @Version 1.0.0
  */
-public class TcpClientTestStarter {
-    public static Log logger = LogFactory.getLog(TcpClientTestStarter.class);
+public class GmsTcpClientTestStarter {
+    public static Log logger = LogFactory.getLog(GmsTcpClientTestStarter.class);
 
     //服务器节点
 //    public static Node serverNode = new Node("127.0.0.1", 6789);
     //handler, 包括编码、解码、消息处理
-    public static Node serverNode = new Node("free.idcfengye.com", 17691);
+    public static Node serverNode = new Node("127.0.0.1", 7600);
     //    public static ClientAioHandler tioClientHandler = new HelloClientAioHandler();
-    public static ClientAioHandler tioClientHandler = new GmsClientAioHandler();
+    public static ClientAioHandler tioClientHandler = new GmsWsClientAioHandler();
     //事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
-    public static ClientAioListener aioListener = new GmsAioListener();
+    public static ClientAioListener aioListener = null;
     //断链后自动连接的，不想自动连接请设为null
     private static ReconnConf reconnConf = new ReconnConf(5000L);
     //一组连接共用的上下文对象

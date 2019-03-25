@@ -1,7 +1,5 @@
 package com.dyny.baseconnector.websocket;
 
-import com.dyny.baseconnector.tcp.GmsAioListener;
-import com.dyny.baseconnector.tcp.GmsClientAioHandler;
 import org.tio.client.ClientChannelContext;
 import org.tio.client.ClientGroupContext;
 import org.tio.client.ReconnConf;
@@ -17,7 +15,7 @@ import org.tio.websocket.common.WsResponse;
  */
 public class GmsWsClientStarter {
     private ClientChannelContext clientChannelContext = null;
-    private GmsClientAioHandler gmsAioHandler;
+    private GmsWsClientAioHandler wsClientAioHandler;
 
     public GmsWsClientStarter(String ip, int port) {
         this.serverNode = new Node(ip, port);
@@ -39,7 +37,6 @@ public class GmsWsClientStarter {
         this.clientGroupContext = clientGroupContext;
     }
 
-    private GmsAioListener gmsAioListener;
     private ClientGroupContext clientGroupContext;
     private Node serverNode;
     private TioClient tioClient;
@@ -47,15 +44,14 @@ public class GmsWsClientStarter {
 
 
     public void start() throws Exception {
-        gmsAioHandler = new GmsClientAioHandler();
-        gmsAioListener = new GmsAioListener();
-        clientGroupContext = new ClientGroupContext(gmsAioHandler, gmsAioListener, reconnConf);
+        wsClientAioHandler = new GmsWsClientAioHandler();
+        clientGroupContext = new ClientGroupContext(wsClientAioHandler, null, reconnConf);
         tioClient = new TioClient(clientGroupContext);
         clientChannelContext = tioClient.connect(serverNode);
     }
 
     public static void main(String[] args) throws Exception {
-        GmsWsClientStarter gmsWsClientStarter = new GmsWsClientStarter("127.0.0.1", 7500);
+        GmsWsClientStarter gmsWsClientStarter = new GmsWsClientStarter("127.0.0.1", 7600);
         gmsWsClientStarter.start();
         WsResponse wsResponse = new WsResponse();
         wsResponse.setWsOpcode(Opcode.BINARY);

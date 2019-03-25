@@ -223,7 +223,7 @@
             //需要添加断线重连方法
             initWebsocket() {
                 let that = this;
-                let url = "ws://127.0.0.1:7500/" + that.token + "/" + that.deviceId;
+                let url = "ws://127.0.0.1:7600/" + that.token + "/" + that.deviceId;
                 if (that.websocket == null) {
                     that.websocket = new WebSocket(url);
                 }
