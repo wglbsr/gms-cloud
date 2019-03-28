@@ -1,10 +1,10 @@
-package com.dyny.baseconnector.tcp;
+package com.dyny.baseconnector.server;
 
-import com.dyny.baseconnector.tcp.packet.TcpPacket;
 import com.dyny.common.annotation.Unfinished;
 import com.dyny.common.constant.TcpConstant;
+import com.dyny.common.packet.GmsTcpPacket;
+import com.dyny.common.packet.GmsResWsPacket;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioHandler;
@@ -35,31 +35,44 @@ import java.util.Map;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
-    private static Logger logger = LoggerFactory.getLogger(GmsAioHandler.class);
+public class GmsServerAioHandler implements ServerAioHandler, ClientAioHandler {
+    private static Logger logger = LoggerFactory.getLogger(GmsServerAioHandler.class);
 
-    public GmsAioHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
+    public GmsServerAioHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
         this.wsServerConfig = wsServerConfig;
         this.wsMsgHandler = wsMsgHandler;
     }
 
-    public GmsAioHandler() {
+    public GmsServerAioHandler() {
 
+    }
+
+    private Boolean isWsConnection = null;
+
+    public GmsServerAioHandler(boolean isWsConnection) {
+        this.isWsConnection = isWsConnection;
     }
 
     @Override
     public Packet decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
-
-        if (isWsConnection(channelContext)) {
+        if (_isWsConnection(channelContext)) {
             return wsDecoder(buffer, limit, position, readableLength, channelContext);
         } else {
             return tcpDecoder(buffer, limit, position, readableLength, channelContext);
         }
     }
 
+    private boolean _isWsConnection(ChannelContext channelContext) {
+        if (this.isWsConnection != null) {
+            return this.isWsConnection;
+        } else {
+            return isWsConnection(channelContext);
+        }
+    }
+
     @Override
     public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-        if (isWsConnection(channelContext)) {
+        if (_isWsConnection(channelContext)) {
             return wsEncoder(packet, groupContext, channelContext);
         } else {
             return tcpEncoder(packet, groupContext, channelContext);
@@ -68,7 +81,7 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
 
     @Override
     public void handler(Packet packet, ChannelContext channelContext) throws Exception {
-        if (isWsConnection(channelContext)) {
+        if (_isWsConnection(channelContext)) {
             wsHandler(packet, channelContext);
         } else {
             tcpHandler(packet, channelContext);
@@ -83,14 +96,13 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
         if (isWsConnection == null) {
             String key = ClientNodes.getKey(channelContext);
             String ipReg = "127.0.0.1:.*";
-            if (key.matches(ipReg)) {
-                logger.info("来自服务器的连接,[" + key + "]");
+            return true;
+//            return false;
+//            if (key.matches(ipReg)) {
+//                return true;
+//            } else {
 //                return false;
-                return true;
-            } else {
-                logger.info("来自设备的连接,[" + key + "]");
-                return false;
-            }
+//            }
             //从缓存中查找
 //            RedisApi redisApi = SpringBeanUtils.getBean(RedisApi.class);
 //            redisApi.get(TcpConstant.KEY_WS_SERVER_LIST);
@@ -102,8 +114,8 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
 
     /**********************************普通tcp的相关处理逻辑start******************************************/
     private ByteBuffer tcpEncoder(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
-        TcpPacket tcpPacket = (TcpPacket) packet;
-        byte[] fullPack = tcpPacket.getFullPack();
+        GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
+        byte[] fullPack = gmsTcpPacket.getFullPack();
         int packLen = 0;
         if (fullPack != null) {
             packLen = fullPack.length;
@@ -120,13 +132,13 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
     }
 
     /**
-     * @return com.yniot.lms.socket.packet.TcpPacket
+     * @return com.yniot.lms.socket.packet.GmsTcpPacket
      * @Author wanggl(lane)
      * @Description //TODO 普通解包
      * @Date 10:47 2019-01-14
      * @Param [buffer, headerBytes, limit, position, readableLength, channelContext]
      **/
-    private TcpPacket getNormalPacket(ByteBuffer buffer, byte[] headerBytes, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
+    private GmsTcpPacket getNormalPacket(ByteBuffer buffer, byte[] headerBytes, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
         //提醒：buffer的开始位置并不一定是0，应用需要从buffer.position()开始读取数据
         //收到的数据组不了业务包，则返回null以告诉框架数据不够
         Byte lengthByte = buffer.get();
@@ -138,7 +150,7 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
             throw new AioDecodeException("fullPack length [" + fullPackLength + "] is not right, domain:" + ip);
         }
         //除去头部和长度后的长度
-        int bodyLength = fullPackLength - TcpPacket.LENGTH_HEADER - 1;
+        int bodyLength = fullPackLength - GmsTcpPacket.LENGTH_HEADER - 1;
         //收到的数据是否足够组包
         // 不够消息体长度(剩下的buffer组不了消息体)
         if (readableLength - bodyLength < 0) {
@@ -146,38 +158,38 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
             return null;
         } else //组包成功
         {
-            TcpPacket tcpPacket = null;
+            GmsTcpPacket gmsTcpPacket = null;
             if (fullPackLength > 0) {
                 byte address = buffer.get();
                 byte cmd = buffer.get();
                 byte[] data = new byte[0];
-                int dataLength = fullPackLength - TcpPacket.LENGTH_MIN;
+                int dataLength = fullPackLength - GmsTcpPacket.LENGTH_MIN;
                 if (dataLength > 0) {
                     data = new byte[dataLength];
                     buffer.get(data);
                 }
                 byte check = buffer.get();
                 try {
-                    tcpPacket = TcpPacket.parse(headerBytes, lengthByte, address, cmd, data, check);
+                    gmsTcpPacket = GmsTcpPacket.parse(headerBytes, lengthByte, address, cmd, data, check);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
-            return tcpPacket;
+            logger.info(gmsTcpPacket.getFullContent(true));
+            return gmsTcpPacket;
         }
     }
 
     private Packet tcpDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
-
         if (readableLength < 6) {
             return null;
         }
-        byte[] headerBytes = new byte[TcpPacket.LENGTH_HEADER];
+        byte[] headerBytes = new byte[GmsTcpPacket.LENGTH_HEADER];
         //读取消息体的长度
         buffer.get(headerBytes, 0, headerBytes.length);
         logger.info("header[" + Hex.encodeHexString(headerBytes) + "]");
         //分为普通包和二维码包,直接为二维码图片对应的字符,因此也没有头部
-        if (TcpPacket.isHeaderMatch(headerBytes)) {
+        if (GmsTcpPacket.isHeaderMatch(headerBytes)) {
             logger.info("普通包,有格式");
             return this.getNormalPacket(buffer, headerBytes, limit, position, readableLength, channelContext);
         } else {
@@ -186,17 +198,9 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
     }
 
     private void tcpHandler(Packet packet, ChannelContext channelContext) {
-        TcpPacket tcpPacket = (TcpPacket) packet;
-        String wardrobeId = channelContext.getBsId();
-        //是否有绑定业务id,没有则发送获取设备id命令
-        //没有柜子id则不做后续操作
-        if (StringUtils.isEmpty(wardrobeId)) {
-            //1设备id
-            logger.info("没有绑定id!");
-            return;
-        }
-
-        logger.info("full packet[" + tcpPacket.getFullContent(true) + "]");
+        GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
+        logger.info("full packet[" + gmsTcpPacket.getFullContent(true) + "]");
+        Tio.send(channelContext, new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00));
     }
 
 
@@ -205,17 +209,6 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
     /**********************************websocket的相关处理逻辑start******************************************/
     private ByteBuffer wsEncoder(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
         WsResponse wsResponse = (WsResponse) packet;
-        if (wsResponse.isHandShake()) {
-            WsSessionContext imSessionContext = (WsSessionContext) channelContext.getAttribute();
-            HttpResponse handshakeResponse = imSessionContext.getHandshakeResponse();
-            try {
-                return HttpResponseEncoder.encode(handshakeResponse, groupContext, channelContext);
-            } catch (UnsupportedEncodingException e) {
-                logger.error(e.toString(), e);
-                return null;
-            }
-        }
-
         ByteBuffer byteBuffer = WsServerEncoder.encode(wsResponse, groupContext, channelContext);
         return byteBuffer;
     }
@@ -223,7 +216,6 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
 
     private void wsHandler(Packet packet, ChannelContext channelContext) throws Exception {
         WsRequest wsRequest = (WsRequest) packet;
-
         if (wsRequest.isHandShake()) {
             WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
             HttpRequest request = wsSessionContext.getHandshakeRequest();
@@ -234,18 +226,14 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
                 return;
             }
             wsSessionContext.setHandshakeResponse(r);
-
             WsResponse wsResponse = new WsResponse();
             wsResponse.setHandShake(true);
             Tio.send(channelContext, wsResponse);
             wsSessionContext.setHandshaked(true);
-
             wsMsgHandler.onAfterHandshaked(request, httpResponse, channelContext);
             return;
         }
-
-        WsResponse wsResponse = h(wsRequest, wsRequest.getBody(), wsRequest.getWsOpcode(), channelContext);
-
+        GmsResWsPacket wsResponse = h(wsRequest, wsRequest.getBody(), wsRequest.getWsOpcode(), channelContext);
         if (wsResponse != null) {
             Tio.send(channelContext, wsResponse);
         }
@@ -320,8 +308,8 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
         return null;
     }
 
-    private WsResponse h(WsRequest websocketPacket, byte[] bytes, Opcode opcode, ChannelContext channelContext) throws Exception {
-        WsResponse wsResponse;
+    private GmsResWsPacket h(WsRequest websocketPacket, byte[] bytes, Opcode opcode, ChannelContext channelContext) throws Exception {
+        GmsResWsPacket wsResponse;
         if (opcode == Opcode.TEXT) {
             if (bytes == null || bytes.length == 0) {
                 Tio.remove(channelContext, "错误的websocket包，body为空");
@@ -355,23 +343,23 @@ public class GmsAioHandler implements ServerAioHandler, ClientAioHandler {
         }
     }
 
-    private WsResponse processRetObj(Object obj, String methodName, ChannelContext channelContext) throws Exception {
-        WsResponse wsResponse;
+    private GmsResWsPacket processRetObj(Object obj, String methodName, ChannelContext channelContext) throws Exception {
+        GmsResWsPacket wsResponse;
         if (obj == null) {
             return null;
         } else {
             if (obj instanceof String) {
                 String str = (String) obj;
-                wsResponse = WsResponse.fromText(str, wsServerConfig.getCharset());
+                wsResponse = GmsResWsPacket.fromText(str, wsServerConfig.getCharset());
                 return wsResponse;
             } else if (obj instanceof byte[]) {
-                wsResponse = WsResponse.fromBytes((byte[]) obj);
+                wsResponse = GmsResWsPacket.fromBytes((byte[]) obj);
                 return wsResponse;
-            } else if (obj instanceof WsResponse) {
-                return (WsResponse) obj;
+            } else if (obj instanceof GmsResWsPacket) {
+                return (GmsResWsPacket) obj;
             } else if (obj instanceof ByteBuffer) {
                 byte[] bs = ((ByteBuffer) obj).array();
-                wsResponse = WsResponse.fromBytes(bs);
+                wsResponse = GmsResWsPacket.fromBytes(bs);
                 return wsResponse;
             } else {
                 logger.error("{} {}.{}()方法，只允许返回byte[]、ByteBuffer、WsResponse或null，但是程序返回了{}", channelContext, this.getClass().getName(), methodName, obj.getClass().getName());

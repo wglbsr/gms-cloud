@@ -1,7 +1,6 @@
-package com.dyny.baseconnector.tcp;
+package com.dyny.baseconnector.client.tcp;
 
-import com.dyny.baseconnector.tcp.packet.TcpPacket;
-import com.dyny.baseconnector.websocket.GmsWsClientAioHandler;
+import com.dyny.common.packet.GmsTcpPacket;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
@@ -29,7 +28,7 @@ public class GmsTcpClientTestStarter {
     //handler, 包括编码、解码、消息处理
     public static Node serverNode = new Node("127.0.0.1", 7600);
     //    public static ClientAioHandler tioClientHandler = new HelloClientAioHandler();
-    public static ClientAioHandler tioClientHandler = new GmsWsClientAioHandler();
+    public static ClientAioHandler tioClientHandler = new GmsTcpClientAioHandler();
     //事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
     public static ClientAioListener aioListener = null;
     //断链后自动连接的，不想自动连接请设为null
@@ -54,27 +53,27 @@ public class GmsTcpClientTestStarter {
 
     private static void sendDeviceId() {
         logger.info("发送设备id");
-        TcpPacket packet = new TcpPacket(0x00, TcpPacket.CMD_DEVICE_ID, 0, 0, 0, 0, 0, 0, 1, 1);
+        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_DEVICE_ID, 0, 0, 0, 0, 0, 0, 1, 1);
         Tio.send(clientChannelContext, packet);
     }
 
 
     private static void sendHeartbeat() {
         logger.info("发送心跳包");
-        TcpPacket packet = new TcpPacket(0x0);
+        GmsTcpPacket packet = new GmsTcpPacket(0x0);
         Tio.send(clientChannelContext, packet);
     }
 
     private static void sendOpenAll() {
         logger.info("发送打开所有通道的命令");
-        TcpPacket packet = new TcpPacket(0x00, TcpPacket.CMD_OPEN_ALL, 0x00);
+        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00);
         Tio.send(clientChannelContext, packet);
     }
 
     private static void sendPassword() throws DecoderException {
         logger.info("发送打开所有通道的命令");
         String psw = "11666666";
-        TcpPacket packet = new TcpPacket(0x00, TcpPacket.CMD_QR_CODE, Hex.decodeHex(psw));
+        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_QR_CODE, Hex.decodeHex(psw));
         Tio.send(clientChannelContext, packet);
     }
 }

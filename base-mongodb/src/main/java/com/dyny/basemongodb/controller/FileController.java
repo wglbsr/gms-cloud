@@ -75,7 +75,7 @@ public class FileController extends BaseController {
         GridFSDownloadStream in = gridFSBucket.openDownloadStream(file.getObjectId());
         GridFsResource resource = new GridFsResource(file, in);
         String fileName = file.getFilename().replace(",", "");
-//        fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+//        fileName = java.net.URLEncoder.encode(fileName, Charsets.UTF_8.name());
         response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
         IOUtils.copy(resource.getInputStream(), response.getOutputStream());
     }

@@ -1,7 +1,5 @@
-package com.dyny.baseconnector.tcp.packet;
+package com.dyny.common.packet;
 
-import com.dyny.common.packet.IG1TcpPacket;
-import com.dyny.common.packet.IG1WsPacket;
 import com.dyny.common.utils.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,8 +17,8 @@ import java.util.List;
  * <p>
  * 注意通道号port由0x01开始
  */
-public class TcpPacket extends Packet implements IG1TcpPacket {
-    public static Log logger = LogFactory.getLog(TcpPacket.class);
+public class GmsTcpPacket extends Packet  {
+    public static Log logger = LogFactory.getLog(GmsTcpPacket.class);
     private static List<Integer> header = new ArrayList<>();
 
     public static final String IP_PORT_SEPARATOR = ":";
@@ -83,7 +81,7 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
     // 注意数据域长度可以为0
     private byte[] body;
 
-    public TcpPacket(Integer address, Integer cmd, Integer... data) {
+    public GmsTcpPacket(Integer address, Integer cmd, Integer... data) {
         this.address = address;
         this.command = cmd;
         List<Integer> tempData = new ArrayList<>();
@@ -93,7 +91,7 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
         this.data = tempData;
     }
 
-    public TcpPacket(Integer address, Integer cmd, byte... data) {
+    public GmsTcpPacket(Integer address, Integer cmd, byte... data) {
         this.address = address;
         this.command = cmd;
         List<Integer> tempData = new ArrayList<>();
@@ -103,7 +101,7 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
         this.data = tempData;
     }
 
-    public TcpPacket(Integer address, Integer cmd, List<Integer> data) {
+    public GmsTcpPacket(Integer address, Integer cmd, List<Integer> data) {
         this.address = address;
         this.command = cmd;
         if (data != null && !data.isEmpty()) {
@@ -114,14 +112,14 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
 
 
     //默认为心跳包
-    public TcpPacket(Integer address) {
+    public GmsTcpPacket(Integer address) {
         this.address = address;
         this.command = CMD_HEARTBEAT;
     }
 
 
-    public static TcpPacket parse(byte[] header, byte length, byte address, byte cmd, byte[] data, byte check) throws UnsupportedEncodingException {
-        TcpPacket lmsPacket = null;
+    public static GmsTcpPacket parse(byte[] header, byte length, byte address, byte cmd, byte[] data, byte check) throws UnsupportedEncodingException {
+        GmsTcpPacket lmsPacket = null;
         if (((Byte) length).intValue() != (LENGTH_MIN + data.length) || !headerMatch(header)) {
             logger.error("长度或头部不匹配!");
             return lmsPacket;
@@ -148,7 +146,7 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
                 if (fullMessage.size() > LENGTH_MIN) {
                     tempData = fullMessage.subList(INDEX_DATA_START, fullMessage.size() - 1);
                 }
-                lmsPacket = new TcpPacket(fullMessage.get(INDEX_ADDRESS), fullMessage.get(INDEX_COMMAND), tempData);
+                lmsPacket = new GmsTcpPacket(fullMessage.get(INDEX_ADDRESS), fullMessage.get(INDEX_COMMAND), tempData);
             } else {
                 String content = "";
                 for (Integer integer : fullMessage) {
@@ -342,10 +340,5 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public IG1WsPacket toWsPacket(IG1TcpPacket g1TcpPacket) {
-        return null;
     }
 }

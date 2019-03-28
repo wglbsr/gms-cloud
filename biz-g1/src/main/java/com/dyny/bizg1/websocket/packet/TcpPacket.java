@@ -1,7 +1,5 @@
 package com.dyny.bizg1.websocket.packet;
 
-import com.dyny.common.packet.IG1TcpPacket;
-import com.dyny.common.packet.IG1WsPacket;
 import com.dyny.common.utils.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +17,7 @@ import java.util.List;
  * <p>
  * 注意通道号port由0x01开始
  */
-public class TcpPacket extends Packet implements IG1TcpPacket {
+public class TcpPacket extends Packet {
     public static Log logger = LogFactory.getLog(TcpPacket.class);
     private static List<Integer> header = new ArrayList<>();
 
@@ -344,8 +342,4 @@ public class TcpPacket extends Packet implements IG1TcpPacket {
         return false;
     }
 
-    @Override
-    public IG1WsPacket toWsPacket(IG1TcpPacket g1TcpPacket) {
-        return null;
-    }
 }

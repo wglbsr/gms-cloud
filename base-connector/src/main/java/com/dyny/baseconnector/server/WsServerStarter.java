@@ -1,10 +1,12 @@
-package com.dyny.baseconnector.tcp;
+package com.dyny.baseconnector.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.intf.TioUuid;
 import org.tio.server.ServerGroupContext;
 import org.tio.server.TioServer;
+import org.tio.server.intf.ServerAioHandler;
+import org.tio.server.intf.ServerAioListener;
 import org.tio.utils.Threads;
 import org.tio.utils.thread.pool.SynThreadPoolExecutor;
 import org.tio.websocket.common.WsTioUuid;
@@ -26,9 +28,9 @@ public class WsServerStarter {
 
     private IWsMsgHandler wsMsgHandler;
 
-    private GmsAioHandler gmsAioHandler;
+    private ServerAioHandler gmsAioHandler;
 
-    private GmsAioListener gmsAioListener;
+    private ServerAioListener gmsAioListener;
 
     private ServerGroupContext serverGroupContext;
 
@@ -63,14 +65,13 @@ public class WsServerStarter {
         if (tioExecutor == null) {
             tioExecutor = Threads.getTioExecutor();
         }
-
         if (groupExecutor == null) {
             groupExecutor = Threads.getGroupExecutor();
         }
         this.wsServerConfig = wsServerConfig;
         this.wsMsgHandler = wsMsgHandler;
-        gmsAioHandler = new GmsAioHandler(wsServerConfig, wsMsgHandler);
-        gmsAioListener = new GmsAioListener();
+        gmsAioHandler = new GmsServerAioHandler(wsServerConfig, wsMsgHandler);
+        gmsAioListener = new GmsServerAioListener();
         serverGroupContext = new ServerGroupContext("Tio Websocket Server", gmsAioHandler, gmsAioListener, tioExecutor, groupExecutor);
         serverGroupContext.setHeartbeatTimeout(0);
         serverGroupContext.setTioUuid(tioUuid);
@@ -82,7 +83,7 @@ public class WsServerStarter {
     }
 
     public static void main(String[] args) throws IOException {
-        WsServerStarter wsServerStarter = new WsServerStarter(7600, new G1WsMsgHandler());
+        WsServerStarter wsServerStarter = new WsServerStarter(7600, new WsMsgServerHandler());
         wsServerStarter.start();
     }
 }

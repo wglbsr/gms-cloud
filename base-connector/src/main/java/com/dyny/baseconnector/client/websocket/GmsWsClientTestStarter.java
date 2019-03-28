@@ -1,23 +1,23 @@
-package com.dyny.baseconnector.websocket;
+package com.dyny.baseconnector.client.websocket;
 
 import org.tio.client.ClientChannelContext;
 import org.tio.client.ClientGroupContext;
 import org.tio.client.ReconnConf;
 import org.tio.client.TioClient;
+import org.tio.client.intf.ClientAioHandler;
 import org.tio.core.Node;
 import org.tio.core.Tio;
-import org.tio.websocket.common.Opcode;
 import org.tio.websocket.common.WsResponse;
 
 /**
  * @author tanyaowu
  * 2017年7月30日 上午9:45:54
  */
-public class GmsWsClientStarter {
+public class GmsWsClientTestStarter {
     private ClientChannelContext clientChannelContext = null;
-    private GmsWsClientAioHandler wsClientAioHandler;
+    private ClientAioHandler wsClientAioHandler;
 
-    public GmsWsClientStarter(String ip, int port) {
+    public GmsWsClientTestStarter(String ip, int port) {
         this.serverNode = new Node(ip, port);
     }
 
@@ -45,17 +45,17 @@ public class GmsWsClientStarter {
 
     public void start() throws Exception {
         wsClientAioHandler = new GmsWsClientAioHandler();
-        clientGroupContext = new ClientGroupContext(wsClientAioHandler, null, reconnConf);
+        clientGroupContext = new ClientGroupContext(wsClientAioHandler, new GmsWsClientAioListener(), reconnConf);
         tioClient = new TioClient(clientGroupContext);
         clientChannelContext = tioClient.connect(serverNode);
     }
 
     public static void main(String[] args) throws Exception {
-        GmsWsClientStarter gmsWsClientStarter = new GmsWsClientStarter("127.0.0.1", 7600);
-        gmsWsClientStarter.start();
+        GmsWsClientTestStarter gmsWsClientTestStarter = new GmsWsClientTestStarter("127.0.0.1", 7600);
+        gmsWsClientTestStarter.start();
         WsResponse wsResponse = new WsResponse();
-        wsResponse.setWsOpcode(Opcode.BINARY);
+//        wsResponse.setWsOpcode(Opcode.BINARY);
         wsResponse.setBody("123456".getBytes());
-        Tio.send(gmsWsClientStarter.getClientChannelContext(), wsResponse);
+        Tio.send(gmsWsClientTestStarter.getClientChannelContext(), wsResponse);
     }
 }
