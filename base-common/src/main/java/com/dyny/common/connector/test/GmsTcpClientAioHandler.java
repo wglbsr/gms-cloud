@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.client.tcp;
+package com.dyny.common.connector.test;
 
 import com.dyny.common.connector.handler.CommonHandler;
 import com.dyny.common.connector.packet.GmsTcpPacket;
@@ -51,6 +51,5 @@ public class GmsTcpClientAioHandler implements ClientAioHandler {
     public Packet heartbeatPacket(ChannelContext channelContext) {
         return null;
     }
-    /*+++++++++++++++++++++++++++++++++++++websocket的相关处理逻辑end+++++++++++++++++++++++++++++++++++++*/
 
 }

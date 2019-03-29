@@ -1,6 +1,5 @@
 package com.dyny.common.connector.handler;
 
-import com.dyny.common.connector.packet.GmsResWsPacket;
 import com.dyny.common.connector.packet.GmsTcpPacket;
 import org.apache.commons.codec.Charsets;
 import org.slf4j.Logger;
@@ -89,8 +88,8 @@ public class CommonHandler {
         return null;
     }
 
-    public static GmsResWsPacket wsHandler(WsRequest websocketPacket, Opcode opcode, ChannelContext channelContext, IWsMsgHandler wsMsgHandler) throws Exception {
-        GmsResWsPacket wsResponse;
+    public static WsResponse wsHandler(WsRequest websocketPacket, Opcode opcode, ChannelContext channelContext, IWsMsgHandler wsMsgHandler) throws Exception {
+        WsResponse wsResponse;
         byte[] bytes = websocketPacket.getBody();
         if (opcode == Opcode.TEXT) {
             if (bytes == null || bytes.length == 0) {
@@ -123,23 +122,23 @@ public class CommonHandler {
     }
 
 
-    private static GmsResWsPacket processRetObj(Object obj, ChannelContext channelContext) throws Exception {
-        GmsResWsPacket wsResponse;
+    private static WsResponse processRetObj(Object obj, ChannelContext channelContext) throws Exception {
+        WsResponse wsResponse;
         if (obj == null) {
             return null;
         } else {
             if (obj instanceof String) {
                 String str = (String) obj;
-                wsResponse = GmsResWsPacket.fromText(str);
+                wsResponse = WsResponse.fromText(str, Charsets.UTF_8.name());
                 return wsResponse;
             } else if (obj instanceof byte[]) {
-                wsResponse = GmsResWsPacket.fromBytes((byte[]) obj);
+                wsResponse = WsResponse.fromBytes((byte[]) obj);
                 return wsResponse;
-            } else if (obj instanceof GmsResWsPacket) {
-                return (GmsResWsPacket) obj;
+            } else if (obj instanceof WsResponse) {
+                return (WsResponse) obj;
             } else if (obj instanceof ByteBuffer) {
                 byte[] bs = ((ByteBuffer) obj).array();
-                wsResponse = GmsResWsPacket.fromBytes(bs);
+                wsResponse = WsResponse.fromBytes(bs);
                 return wsResponse;
             } else {
                 logger.error("不支持的类型!");

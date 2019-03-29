@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.client.websocket;
+package com.dyny.bizg1.websocket.client;
 
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
@@ -15,8 +15,8 @@ import org.tio.websocket.server.handler.IWsMsgHandler;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsWsMsgClientHandler implements IWsMsgHandler {
-    private Logger logger = LoggerFactory.getLogger(GmsWsMsgClientHandler.class);
+public class G1WsMsgClientHandler implements IWsMsgHandler {
+    private Logger logger = LoggerFactory.getLogger(G1WsMsgClientHandler.class);
 
     @Override
     public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {

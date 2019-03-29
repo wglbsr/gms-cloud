@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.client.websocket;
+package com.dyny.bizg1.websocket.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,8 @@ import org.tio.websocket.common.WsSessionContext;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsWsClientAioListener implements ServerAioListener, ClientAioListener {
-    private static Logger logger = LoggerFactory.getLogger(GmsWsClientAioListener.class);
+public class G1WsClientAioListener implements ServerAioListener, ClientAioListener {
+    private static Logger logger = LoggerFactory.getLogger(G1WsClientAioListener.class);
 
 
     @Override

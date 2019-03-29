@@ -1,7 +1,6 @@
-package com.dyny.baseconnector.client.websocket;
+package com.dyny.bizg1.websocket.client;
 
 import com.dyny.common.connector.handler.CommonHandler;
-import com.dyny.common.connector.packet.GmsResWsPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioHandler;
@@ -23,10 +22,10 @@ import java.nio.ByteBuffer;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsWsClientAioHandler implements ClientAioHandler {
-    private static Logger logger = LoggerFactory.getLogger(GmsWsClientAioHandler.class);
+public class G1WsClientAioHandler implements ClientAioHandler {
+    private static Logger logger = LoggerFactory.getLogger(G1WsClientAioHandler.class);
 
-    private IWsMsgHandler wsMsgHandler = new GmsWsMsgClientHandler();
+    private IWsMsgHandler wsMsgHandler = new G1WsMsgClientHandler();
 
 
     @Override
@@ -45,7 +44,7 @@ public class GmsWsClientAioHandler implements ClientAioHandler {
     @Override
     public void handler(Packet packet, ChannelContext channelContext) throws Exception {
         WsRequest wsRequest = (WsRequest) packet;
-        GmsResWsPacket wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
+        WsResponse wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
     }
 
 

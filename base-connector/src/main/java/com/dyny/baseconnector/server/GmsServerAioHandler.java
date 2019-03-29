@@ -2,7 +2,6 @@ package com.dyny.baseconnector.server;
 
 import com.dyny.common.annotation.Unfinished;
 import com.dyny.common.connector.handler.CommonHandler;
-import com.dyny.common.connector.packet.GmsResWsPacket;
 import com.dyny.common.connector.packet.GmsTcpPacket;
 import com.dyny.common.constant.TcpConstant;
 import org.slf4j.Logger;
@@ -85,8 +84,8 @@ public class GmsServerAioHandler implements ServerAioHandler {
         if (isWsConnection == null) {
             String key = ClientNodes.getKey(channelContext);
             String ipReg = "127.0.0.1:.*";
-            return true;
-//            return false;
+            return false;
+//                return true;
 //            if (key.matches(ipReg)) {
 //                return true;
 //            } else {
@@ -135,7 +134,6 @@ public class GmsServerAioHandler implements ServerAioHandler {
     private Packet tcpDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
         byte[] headerBytes = CommonHandler.getTcpHeader(buffer, limit, position, readableLength);
         if (GmsTcpPacket.isHeaderMatch(headerBytes)) {
-            logger.info("普通包,有格式");
             return CommonHandler.getNormalPacket(buffer, headerBytes, limit, position, readableLength, channelContext);
         }
         return null;
@@ -179,7 +177,7 @@ public class GmsServerAioHandler implements ServerAioHandler {
             CommonHandler.handshake(packet, channelContext, wsMsgHandler);
             return;
         }
-        GmsResWsPacket wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
+        WsResponse wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
         if (wsResponse != null) {
             Tio.send(channelContext, wsResponse);
         }

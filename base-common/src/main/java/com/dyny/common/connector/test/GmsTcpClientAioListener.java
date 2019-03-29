@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.client.tcp;
+package com.dyny.common.connector.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author tanyaowu
  * 2017年7月30日 上午9:45:54
  */
-public class WsServerStarter {
+public class ServerStarter {
     @SuppressWarnings("unused")
     private static Logger log = LoggerFactory.getLogger(org.tio.websocket.server.WsServerStarter.class);
 
@@ -40,19 +40,19 @@ public class WsServerStarter {
         return serverGroupContext;
     }
 
-    public WsServerStarter(int port, IWsMsgHandler wsMsgHandler) throws IOException {
+    public ServerStarter(int port, IWsMsgHandler wsMsgHandler) throws IOException {
         this(port, wsMsgHandler, null, null);
     }
 
-    public WsServerStarter(int port, IWsMsgHandler wsMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
+    public ServerStarter(int port, IWsMsgHandler wsMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
         this(new WsServerConfig(port), wsMsgHandler, tioExecutor, groupExecutor);
     }
 
-    public WsServerStarter(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
+    public ServerStarter(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
         this(wsServerConfig, wsMsgHandler, new WsTioUuid(), tioExecutor, groupExecutor);
     }
 
-    public WsServerStarter(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler, TioUuid tioUuid, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor)
+    public ServerStarter(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler, TioUuid tioUuid, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor)
             throws IOException {
         if (tioExecutor == null) {
             tioExecutor = Threads.getTioExecutor();
@@ -64,7 +64,7 @@ public class WsServerStarter {
         this.wsMsgHandler = wsMsgHandler;
         gmsAioHandler = new GmsServerAioHandler(wsServerConfig, wsMsgHandler);
         gmsAioListener = new GmsServerAioListener();
-        serverGroupContext = new ServerGroupContext("Tio Websocket Server", gmsAioHandler, gmsAioListener, tioExecutor, groupExecutor);
+        serverGroupContext = new ServerGroupContext("base-connector Websocket Server", gmsAioHandler, gmsAioListener, tioExecutor, groupExecutor);
         serverGroupContext.setHeartbeatTimeout(0);
         serverGroupContext.setTioUuid(tioUuid);
         tioServer = new TioServer(serverGroupContext);
@@ -75,7 +75,7 @@ public class WsServerStarter {
     }
 
     public static void main(String[] args) throws IOException {
-        WsServerStarter wsServerStarter = new WsServerStarter(7600, new GmsWsMsgServerHandler());
+        ServerStarter wsServerStarter = new ServerStarter(6789, new GmsWsMsgServerHandler());
         wsServerStarter.start();
     }
 }
