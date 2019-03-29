@@ -1,9 +1,11 @@
 package com.dyny.baseconnector.server;
 
 import com.dyny.common.annotation.Unfinished;
+import com.dyny.common.connector.filter.IsBizChannelFilter;
 import com.dyny.common.connector.handler.CommonHandler;
 import com.dyny.common.connector.packet.GmsTcpPacket;
 import com.dyny.common.constant.TcpConstant;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
@@ -13,6 +15,7 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.core.maintain.ClientNodes;
 import org.tio.server.intf.ServerAioHandler;
+import org.tio.websocket.common.Opcode;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.common.WsServerEncoder;
@@ -20,6 +23,7 @@ import org.tio.websocket.server.WsServerConfig;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
 import java.nio.ByteBuffer;
+import java.time.LocalDateTime;
 
 /**
  * @Auther: lane
@@ -83,14 +87,14 @@ public class GmsServerAioHandler implements ServerAioHandler {
         Boolean isWsConnection = (Boolean) channelContext.getAttribute(TcpConstant.KEY_IS_WS_CONNECTION);
         if (isWsConnection == null) {
             String key = ClientNodes.getKey(channelContext);
-            String ipReg = "127.0.0.1:.*";
-            return false;
+            String ipReg = "127.0.0.1:6.*";
+//            return false;
 //                return true;
-//            if (key.matches(ipReg)) {
-//                return true;
-//            } else {
-//                return false;
-//            }
+            if (!key.matches(ipReg)) {
+                return true;
+            } else {
+                return false;
+            }
             //从缓存中查找
 //            RedisApi redisApi = SpringBeanUtils.getBean(RedisApi.class);
 //            redisApi.get(TcpConstant.KEY_WS_SERVER_LIST);
@@ -160,8 +164,27 @@ public class GmsServerAioHandler implements ServerAioHandler {
     private void tcpHandler(Packet packet, ChannelContext channelContext) {
         GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
         logger.info("received full packet[" + gmsTcpPacket.getFullContent(true) + "]");
-        Tio.send(channelContext, new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00));
+        //绑定设备id到channel
+        String deviceId = "18080008";
+        String bsId = TcpConstant.TCP_CONNECTOR_BS_ID + deviceId;// channelContext.getBsId();
+        if (gmsTcpPacket.getCommand() == GmsTcpPacket.CMD_DEVICE_ID) {
+            channelContext.setBsId(TcpConstant.TCP_CONNECTOR_BS_ID + deviceId);
+            channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
+            channelContext.setAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL, false);
+        }
+        if (StringUtils.isEmpty(bsId)) {
+            Tio.send(channelContext, new GmsTcpPacket(GmsTcpPacket.CMD_DEVICE_ID));
+            logger.info("未绑定id");
+            return;
+        }
+        WsResponse wsResponse = new WsResponse();
+        wsResponse.setWsOpcode(Opcode.TEXT);
+        String message = ("广播消息[" + LocalDateTime.now().toString() + "]");
+        logger.info(message);
+        wsResponse.setBody(message.getBytes());
+        Tio.sendToAll(channelContext.getGroupContext(), wsResponse, new IsBizChannelFilter());
     }
+
 
     /**
      * @return void
@@ -177,6 +200,12 @@ public class GmsServerAioHandler implements ServerAioHandler {
             CommonHandler.handshake(packet, channelContext, wsMsgHandler);
             return;
         }
+        Boolean isBizChannel = (Boolean) channelContext.getAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL);
+        if (isBizChannel == null) {
+            channelContext.setAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL, true);
+            logger.info("连接绑定到业务组");
+        }
+
         WsResponse wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
         if (wsResponse != null) {
             Tio.send(channelContext, wsResponse);

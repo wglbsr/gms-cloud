@@ -20,8 +20,9 @@ import java.io.IOException;
  * @Version 1.0.0
  */
 public class G1WsServerStarter {
+    public static TioServer tioServer;
 
-    public static void main(String[] args) throws IOException {
+    public void start() throws IOException {
         WsServerConfig wsServerConfig = new WsServerConfig(7600);
         IWsMsgHandler wsMsgHandler = new G1WsServerMsgHandler();
         ServerAioHandler serverAioHandler = new WsServerAioHandler(wsServerConfig, wsMsgHandler);
@@ -31,7 +32,11 @@ public class G1WsServerStarter {
                 serverAioListener, Threads.getTioExecutor(), Threads.getGroupExecutor());
         serverGroupContext.setHeartbeatTimeout(0);
         serverGroupContext.setTioUuid(new WsTioUuid());
-        TioServer tioServer = new TioServer(serverGroupContext);
+        G1WsServerStarter.tioServer = new TioServer(serverGroupContext);
         tioServer.start(wsServerConfig.getBindIp(), wsServerConfig.getBindPort());
+    }
+
+    public static void main(String[] args) throws IOException {
+
     }
 }

@@ -37,6 +37,8 @@ public class G1WsMsgClientHandler implements IWsMsgHandler {
      **/
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
+        
+        
         return "字节消息[" + Hex.encodeHexString(wsRequest.getBody()) + "]已收到";
     }
 

@@ -6,38 +6,25 @@ import org.tio.client.ReconnConf;
 import org.tio.client.TioClient;
 import org.tio.client.intf.ClientAioHandler;
 import org.tio.core.Node;
+import org.tio.core.Tio;
+import org.tio.websocket.common.Opcode;
+import org.tio.websocket.common.WsResponse;
 
 /**
  * @author tanyaowu
  * 2017年7月30日 上午9:45:54
  */
-public class G1WsClientTestStarter {
-    private ClientChannelContext clientChannelContext = null;
+public class G1WsClientStarter {
     private ClientAioHandler wsClientAioHandler;
+    private Node serverNode;
 
-    public G1WsClientTestStarter(String ip, int port) {
+    public G1WsClientStarter(String ip, int port) {
         this.serverNode = new Node(ip, port);
     }
 
-    public ClientChannelContext getClientChannelContext() {
-        return clientChannelContext;
-    }
-
-    public void setClientChannelContext(ClientChannelContext clientChannelContext) {
-        this.clientChannelContext = clientChannelContext;
-    }
-
-    public ClientGroupContext getClientGroupContext() {
-        return clientGroupContext;
-    }
-
-    public void setClientGroupContext(ClientGroupContext clientGroupContext) {
-        this.clientGroupContext = clientGroupContext;
-    }
-
-    private ClientGroupContext clientGroupContext;
-    private Node serverNode;
-    private TioClient tioClient;
+    public static ClientGroupContext clientGroupContext;
+    public static TioClient tioClient;
+    public static ClientChannelContext clientChannelContext = null;
     private static ReconnConf reconnConf = new ReconnConf(5000L);
 
 
@@ -49,7 +36,12 @@ public class G1WsClientTestStarter {
     }
 
     public static void main(String[] args) throws Exception {
-        G1WsClientTestStarter gmsWsClientTestStarter = new G1WsClientTestStarter("127.0.0.1", 7600);
+        G1WsClientStarter gmsWsClientTestStarter = new G1WsClientStarter("127.0.0.1", 6789);
         gmsWsClientTestStarter.start();
+        WsResponse wsResponse = new WsResponse();
+        wsResponse.setBody("123123".getBytes());
+        wsResponse.setWsOpcode(Opcode.TEXT);
+        wsResponse.setHandShake(true);
+        Tio.send(G1WsClientStarter.clientChannelContext, wsResponse);
     }
 }
