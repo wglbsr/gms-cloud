@@ -13,7 +13,6 @@ import org.tio.core.GroupContext;
 import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
-import org.tio.core.maintain.ClientNodes;
 import org.tio.server.intf.ServerAioHandler;
 import org.tio.websocket.common.Opcode;
 import org.tio.websocket.common.WsRequest;
@@ -81,20 +80,33 @@ public class GmsServerAioHandler implements ServerAioHandler {
      * @Date 09:52 2019-03-29
      * @Param [channelContext]
      **/
+    public static int temp = 0;
+
     @Unfinished
     public static boolean isWsConnection(ChannelContext channelContext) {
         //首先查找attr里面查找KEY_IS_WS_CONNECTION是否为websocket连接
         Boolean isWsConnection = (Boolean) channelContext.getAttribute(TcpConstant.KEY_IS_WS_CONNECTION);
         if (isWsConnection == null) {
-            String key = ClientNodes.getKey(channelContext);
-            String ipReg = "127.0.0.1:6.*";
-//            return false;
-//                return true;
-            if (!key.matches(ipReg)) {
-                return true;
-            } else {
+            //debug 开发调试使用的代码,生产环境务必注释!
+            //debug 开发调试使用的代码,生产环境务必注释!
+            //debug 开发调试使用的代码,生产环境务必注释!
+            if (temp == 0) {
+                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, false);
+                temp++;
                 return false;
+            } else {
+                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, true);
+                return true;
             }
+
+            //debug 开发调试使用的代码,生产环境务必注释!
+//            String key = ClientNodes.getKey(channelContext);
+//            String ipReg = "127.0.0.1:6.*";
+//            if (!key.matches(ipReg)) {
+//                return true;
+//            } else {
+//                return false;
+//            }
             //从缓存中查找
 //            RedisApi redisApi = SpringBeanUtils.getBean(RedisApi.class);
 //            redisApi.get(TcpConstant.KEY_WS_SERVER_LIST);
@@ -135,7 +147,8 @@ public class GmsServerAioHandler implements ServerAioHandler {
      * @Date 09:50 2019-03-29
      * @Param [buffer, limit, position, readableLength, channelContext]
      **/
-    private Packet tcpDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
+    private Packet tcpDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext
+            channelContext) throws AioDecodeException {
         byte[] headerBytes = CommonHandler.getTcpHeader(buffer, limit, position, readableLength);
         if (GmsTcpPacket.isHeaderMatch(headerBytes)) {
             return CommonHandler.getNormalPacket(buffer, headerBytes, limit, position, readableLength, channelContext);
@@ -150,7 +163,8 @@ public class GmsServerAioHandler implements ServerAioHandler {
      * @Date 09:51 2019-03-29
      * @Param [buffer, limit, position, readableLength, channelContext]
      **/
-    private Packet wsDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
+    private Packet wsDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext
+            channelContext) throws AioDecodeException {
         return CommonHandler.wsDecoder(buffer, limit, position, readableLength, channelContext, wsServerConfig);
     }
 
