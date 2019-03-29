@@ -179,7 +179,7 @@ public class GmsServerAioHandler implements ServerAioHandler {
             CommonHandler.handshake(packet, channelContext, wsMsgHandler);
             return;
         }
-        GmsResWsPacket wsResponse = CommonHandler.tcpHandler(wsRequest, wsRequest.getBody(), wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
+        GmsResWsPacket wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
         if (wsResponse != null) {
             Tio.send(channelContext, wsResponse);
         }

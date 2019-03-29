@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
 import org.tio.websocket.common.WsRequest;
@@ -71,8 +70,8 @@ public class GmsWsMsgServerHandler implements IWsMsgHandler {
             channelContext.setBsId(token);
             channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
             logger.info("客户端[" + token + "],绑定到设备id为[" + deviceId + "]的组");
-//            channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, false);
-            Tio.bindGroup(channelContext, deviceId);
+            channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, false);
+//            Tio.bindGroup(channelContext, deviceId);
         }
     }
 

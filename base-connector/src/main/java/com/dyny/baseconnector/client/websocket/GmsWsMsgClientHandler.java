@@ -50,6 +50,8 @@ public class GmsWsMsgClientHandler implements IWsMsgHandler {
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
-        return "文本消息[" + text + "]已收到";
+        String msg =  "文本消息[" + text + "]已收到";
+        logger.info("[" + msg + "]");
+        return msg;
     }
 }

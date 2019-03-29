@@ -29,7 +29,6 @@ public class GmsWsClientAioListener implements ServerAioListener, ClientAioListe
 
     @Override
     public void onAfterDecoded(ChannelContext channelContext, Packet packet, int packetSize) throws Exception {
-
     }
 
     @Override

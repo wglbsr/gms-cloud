@@ -89,8 +89,9 @@ public class CommonHandler {
         return null;
     }
 
-    public static GmsResWsPacket tcpHandler(WsRequest websocketPacket, byte[] bytes, Opcode opcode, ChannelContext channelContext, IWsMsgHandler wsMsgHandler) throws Exception {
+    public static GmsResWsPacket wsHandler(WsRequest websocketPacket, Opcode opcode, ChannelContext channelContext, IWsMsgHandler wsMsgHandler) throws Exception {
         GmsResWsPacket wsResponse;
+        byte[] bytes = websocketPacket.getBody();
         if (opcode == Opcode.TEXT) {
             if (bytes == null || bytes.length == 0) {
                 Tio.remove(channelContext, "错误的websocket包，body为空");
@@ -98,8 +99,7 @@ public class CommonHandler {
             }
             String text = new String(bytes, Charsets.UTF_8.name());
             Object retObj = wsMsgHandler.onText(websocketPacket, text, channelContext);
-            String methodName = "onText";
-            wsResponse = CommonHandler.processRetObj(retObj, methodName, channelContext);
+            wsResponse = CommonHandler.processRetObj(retObj, channelContext);
             return wsResponse;
         } else if (opcode == Opcode.BINARY) {
             if (bytes == null || bytes.length == 0) {
@@ -107,16 +107,14 @@ public class CommonHandler {
                 return null;
             }
             Object retObj = wsMsgHandler.onBytes(websocketPacket, bytes, channelContext);
-            String methodName = "onBytes";
-            wsResponse = CommonHandler.processRetObj(retObj, methodName, channelContext);
+            wsResponse = CommonHandler.processRetObj(retObj, channelContext);
             return wsResponse;
         } else if (opcode == Opcode.PING || opcode == Opcode.PONG) {
             logger.debug("收到" + opcode);
             return null;
         } else if (opcode == Opcode.CLOSE) {
             Object retObj = wsMsgHandler.onClose(websocketPacket, bytes, channelContext);
-            String methodName = "onClose";
-            wsResponse = CommonHandler.processRetObj(retObj, methodName, channelContext);
+            wsResponse = CommonHandler.processRetObj(retObj, channelContext);
             return wsResponse;
         } else {
             Tio.remove(channelContext, "错误的websocket包，错误的Opcode");
@@ -124,7 +122,8 @@ public class CommonHandler {
         }
     }
 
-    public static GmsResWsPacket processRetObj(Object obj, String methodName, ChannelContext channelContext) throws Exception {
+
+    private static GmsResWsPacket processRetObj(Object obj, ChannelContext channelContext) throws Exception {
         GmsResWsPacket wsResponse;
         if (obj == null) {
             return null;
@@ -143,7 +142,7 @@ public class CommonHandler {
                 wsResponse = GmsResWsPacket.fromBytes(bs);
                 return wsResponse;
             } else {
-                logger.error("{} {}()方法，只允许返回byte[]、ByteBuffer、WsResponse或null，但是程序返回了{}", channelContext, methodName, obj.getClass().getName());
+                logger.error("不支持的类型!");
                 return null;
             }
         }
@@ -167,7 +166,6 @@ public class CommonHandler {
             Tio.send(channelContext, wsResponse);
             wsSessionContext.setHandshaked(true);
             wsMsgHandler.onAfterHandshaked(request, httpResponse, channelContext);
-            return;
         }
     }
 
@@ -238,7 +236,7 @@ public class CommonHandler {
             return wsRequestPacket;
         }
         WsRequest websocketPacket = WsServerDecoder.decode(buffer, channelContext);
-        logger.info("server 收到websocket数据包getWsBodyText[" + new String(websocketPacket.getBody()) + "]");
+        logger.info("收到websocket数据包[" + new String(websocketPacket.getBody()) + "]");
         return websocketPacket;
     }
 }

@@ -31,7 +31,9 @@ public class GmsWsClientAioHandler implements ClientAioHandler {
 
     @Override
     public Packet decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
-        return WsServerDecoder.decode(buffer, channelContext);
+        WsRequest WsRequest = (WsRequest) WsServerDecoder.decode(buffer, channelContext);
+        logger.info(WsRequest.getWsBodyText());
+        return WsRequest;
     }
 
 
@@ -43,7 +45,7 @@ public class GmsWsClientAioHandler implements ClientAioHandler {
     @Override
     public void handler(Packet packet, ChannelContext channelContext) throws Exception {
         WsRequest wsRequest = (WsRequest) packet;
-        GmsResWsPacket wsResponse = CommonHandler.tcpHandler(wsRequest, wsRequest.getBody(), wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
+        GmsResWsPacket wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
     }
 
 
