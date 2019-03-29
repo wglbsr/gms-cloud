@@ -36,10 +36,6 @@ public class WsServerStarter {
 
     private TioServer tioServer;
 
-
-    /**
-     * @return the serverGroupContext
-     */
     public ServerGroupContext getServerGroupContext() {
         return serverGroupContext;
     }
@@ -50,10 +46,6 @@ public class WsServerStarter {
 
     public WsServerStarter(int port, IWsMsgHandler wsMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
         this(new WsServerConfig(port), wsMsgHandler, tioExecutor, groupExecutor);
-    }
-
-    public WsServerStarter(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) throws IOException {
-        this(wsServerConfig, wsMsgHandler, null, null);
     }
 
     public WsServerStarter(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler, SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
@@ -83,7 +75,7 @@ public class WsServerStarter {
     }
 
     public static void main(String[] args) throws IOException {
-        WsServerStarter wsServerStarter = new WsServerStarter(7600, new WsMsgServerHandler());
+        WsServerStarter wsServerStarter = new WsServerStarter(7600, new GmsWsMsgServerHandler());
         wsServerStarter.start();
     }
 }

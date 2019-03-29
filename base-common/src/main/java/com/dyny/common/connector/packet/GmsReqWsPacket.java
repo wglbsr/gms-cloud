@@ -1,4 +1,4 @@
-package com.dyny.common.packet;
+package com.dyny.common.connector.packet;
 
 import org.tio.websocket.common.WsRequest;
 

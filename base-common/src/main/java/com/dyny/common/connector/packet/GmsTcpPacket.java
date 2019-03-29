@@ -1,4 +1,4 @@
-package com.dyny.common.packet;
+package com.dyny.common.connector.packet;
 
 import com.dyny.common.utils.Utils;
 import org.apache.commons.logging.Log;
@@ -17,7 +17,7 @@ import java.util.List;
  * <p>
  * 注意通道号port由0x01开始
  */
-public class GmsTcpPacket extends Packet  {
+public class GmsTcpPacket extends Packet {
     public static Log logger = LogFactory.getLog(GmsTcpPacket.class);
     private static List<Integer> header = new ArrayList<>();
 
@@ -108,7 +108,6 @@ public class GmsTcpPacket extends Packet  {
             this.data = data;
         }
     }
-
 
 
     //默认为心跳包
@@ -331,7 +330,7 @@ public class GmsTcpPacket extends Packet  {
 
 
     public static boolean isHeaderMatch(byte[] headerData) {
-        if (headerData.length == header.size()) {
+        if (headerData != null && headerData.length == header.size()) {
             for (int i = 0; i < header.size(); i++) {
                 if (header.get(i).byteValue() != headerData[i]) {
                     return false;

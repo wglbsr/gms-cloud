@@ -1,4 +1,4 @@
-package com.dyny.common.packet;
+package com.dyny.common.connector.packet;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Hex;

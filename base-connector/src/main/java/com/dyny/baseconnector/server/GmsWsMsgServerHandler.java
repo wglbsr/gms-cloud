@@ -1,8 +1,5 @@
-package com.dyny.bizg1.websocket;
+package com.dyny.baseconnector.server;
 
-import com.dyny.bizg1.db.entity.Generator;
-import com.dyny.bizg1.service.GeneratorService;
-import com.dyny.bizg1.utils.SpringBeanUtils;
 import com.dyny.common.constant.TcpConstant;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +9,7 @@ import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
-import org.tio.websocket.common.Opcode;
 import org.tio.websocket.common.WsRequest;
-import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
 /**
@@ -23,14 +18,9 @@ import org.tio.websocket.server.handler.IWsMsgHandler;
  * @Description:
  * @Version 1.0.0
  */
-public class G1WsMsgHandler implements IWsMsgHandler {
-    private Logger logger = LoggerFactory.getLogger(G1WsMsgHandler.class);
+public class GmsWsMsgServerHandler implements IWsMsgHandler {
+    private Logger logger = LoggerFactory.getLogger(GmsWsMsgServerHandler.class);
     private static final String PATH_SEPARATOR = "/";
-    private GeneratorService generatorService;
-
-    public G1WsMsgHandler() {
-        this.generatorService = SpringBeanUtils.getBean(GeneratorService.class);
-    }
 
     @Override
     public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
@@ -46,10 +36,6 @@ public class G1WsMsgHandler implements IWsMsgHandler {
             }
         }
         //2.判断设备id是否合法,这里应该用device而不是具体的设备类型
-        Generator generator = generatorService.getById(deviceId);
-        if (generator == null) {
-            return null;
-        }
         return httpResponse;
     }
 
@@ -78,14 +64,14 @@ public class G1WsMsgHandler implements IWsMsgHandler {
             channelContext.setBsId(TcpConstant.PREFIX_BS_ID + deviceId);
             channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
             channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, true);
-            Tio.bindGroup(channelContext, TcpConstant.KEY_CONNECTOR_GROUP);
+//            Tio.bindGroup(channelContext, TcpConstant.KEY_CONNECTOR_GROUP);
             logger.info("来自connector的连接,id为[" + deviceId + "],绑定到" + TcpConstant.KEY_CONNECTOR_GROUP + "的固定组");
         } else {
             String token = getToken(initPath);
             channelContext.setBsId(token);
             channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
             logger.info("客户端[" + token + "],绑定到设备id为[" + deviceId + "]的组");
-            channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, false);
+//            channelContext.setAttribute(TcpConstant.KEY_IS_CONNECTOR, false);
             Tio.bindGroup(channelContext, deviceId);
         }
     }
@@ -99,15 +85,7 @@ public class G1WsMsgHandler implements IWsMsgHandler {
      **/
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-        //1.1 来自通讯模块,则判断是否为状态信息
-        //1.1.1 是状态信息,则广播
-        byte[] body = wsRequest.getBody();
-        String deviceId = (String) channelContext.getAttribute(TcpConstant.KEY_DEVICE_ID);
-        WsResponse wsResponse = new WsResponse();
-        wsResponse.setWsOpcode(Opcode.BINARY);
-
-        Tio.sendToGroup(channelContext.getGroupContext(), deviceId, wsResponse);
-        return null;
+        return "字节消息[" + Hex.encodeHexString(wsRequest.getBody()) + "]已收到";
     }
 
     @Override
@@ -120,6 +98,6 @@ public class G1WsMsgHandler implements IWsMsgHandler {
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
-        return "消息[" + text + "]已收到";
+        return "文本消息[" + wsRequest.getWsBodyText() + "]已收到";
     }
 }

@@ -1,6 +1,6 @@
 package com.dyny.baseconnector.client.tcp;
 
-import com.dyny.common.packet.GmsTcpPacket;
+import com.dyny.common.connector.packet.GmsTcpPacket;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
