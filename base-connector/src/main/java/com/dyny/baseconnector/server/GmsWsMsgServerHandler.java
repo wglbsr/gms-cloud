@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
+import org.tio.utils.lock.SetWithLock;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
@@ -53,6 +54,8 @@ public class GmsWsMsgServerHandler implements IWsMsgHandler {
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
+        SetWithLock set =  channelContext.getGroupContext().connections;
+
         logger.info("文本消息[{}]已收到", wsRequest.getWsBodyText());
         return null;
 

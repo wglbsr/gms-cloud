@@ -45,7 +45,7 @@ public class RegionDataCatcher {
         try {
             document = Jsoup.connect(BASE_URL + url)
                     .header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0")
-                    .header("Connection", "close")
+                    .header("ConnectionStatistic", "close")
                     .timeout(30000).get();
         } catch (IOException e) {
             e.printStackTrace();

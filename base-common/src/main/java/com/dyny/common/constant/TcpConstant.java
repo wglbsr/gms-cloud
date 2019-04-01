@@ -26,4 +26,5 @@ public class TcpConstant {
     public static final String TCP_BIZ_BS_ID = "tcp_biz_bs_";
     public static final String METHOD_CONNECTOR = "connector";
 
+    public static final String KEY_APP_NAME = "appName";
 }
