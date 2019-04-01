@@ -37,23 +37,30 @@ public class G1WsMsgClientHandler implements IWsMsgHandler {
      **/
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-
-
-        return "字节消息[" + Hex.encodeHexString(wsRequest.getBody()) + "]已收到";
+        return "G1 字节消息[" + Hex.encodeHexString(wsRequest.getBody()) + "]已收到";
     }
 
     @Override
     public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-        if (bytes != null && bytes.length > 0) {
-            logger.info("收到[" + Hex.encodeHexString(bytes) + "]");
-        }
+        logger.info("G1 连接关闭");
         return null;
     }
 
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 服务器间主要是使用文本格式
+     * @Date 10:15 2019-04-01
+     * @Param [wsRequest, text, channelContext]
+     * @return java.lang.Object
+     **/
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
-        String msg = "文本消息[" + text + "]已收到";
+        String msg = "G1 文本消息[" + text + "]已收到";
+
+
         logger.info(msg);
         return msg;
     }
+
+
 }

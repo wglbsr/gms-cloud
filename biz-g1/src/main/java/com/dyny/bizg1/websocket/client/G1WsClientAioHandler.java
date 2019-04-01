@@ -1,11 +1,13 @@
 package com.dyny.bizg1.websocket.client;
 
+import com.dyny.bizg1.websocket.server.G1WsServerStarter;
 import com.dyny.common.connector.handler.CommonHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioHandler;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
+import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -44,6 +46,7 @@ public class G1WsClientAioHandler implements ClientAioHandler {
     public void handler(Packet packet, ChannelContext channelContext) throws Exception {
         WsRequest wsRequest = (WsRequest) packet;
         WsResponse wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
+        Tio.sendToSet(G1WsServerStarter.tioServer.getServerGroupContext(), G1WsServerStarter.tioServer.getServerGroupContext().connections, wsResponse, null);
     }
 
 

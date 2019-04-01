@@ -21,7 +21,6 @@ public class StartedTask implements ApplicationRunner {
         startWsServerAndClient();
     }
 
-
     private void startWsServerAndClient() throws Exception {
         G1WsClientStarter.start("127.0.0.1", 6789);
         G1WsServerStarter.start();

@@ -44,7 +44,7 @@ public class G1WsServerMsgHandler implements IWsMsgHandler {
         String initPath = httpRequest.getRequestLine().getInitPath();
         String deviceId = getDeviceId(initPath);
         channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
-        logger.info("已经连接上来自[{}]的连接", httpRequest.getClientIp());
+        logger.info("G1 server 已经连接上来自[{}]的连接,设备id[{}]", httpRequest.getClientIp(), deviceId);
     }
 
     private String getDeviceId(String initPath) {
@@ -53,19 +53,19 @@ public class G1WsServerMsgHandler implements IWsMsgHandler {
 
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-        logger.info("收到字节消息[{}]", Hex.encodeHexString(bytes));
+        logger.info("G1 server 收到字节消息[{}]", Hex.encodeHexString(bytes));
         return null;
     }
 
     @Override
     public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-        logger.info("关闭连接");
+        logger.info("G1 server 关闭连接");
         return null;
     }
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
-        logger.info("收到文本消息[{}]", text);
+        logger.info("G1 server 收到文本消息[{}]", text);
         return null;
     }
 }
