@@ -22,8 +22,7 @@ public class G1WsClientStarter {
     public static ClientChannelContext clientChannelContext = null;
     private static ReconnConf reconnConf = new ReconnConf(5000L);
 
-
-    public static void start(String ip, int port) throws Exception {
+    public static void start(String ip, int port, String appName) throws Exception {
         Node serverNode = new Node(ip, port);
         ClientAioHandler wsClientAioHandler = new G1WsClientAioHandler();
         clientGroupContext = new ClientGroupContext(wsClientAioHandler, new G1WsClientAioListener(), reconnConf);
@@ -31,13 +30,13 @@ public class G1WsClientStarter {
         clientChannelContext = tioClient.connect(serverNode);
         //必须发送握手包
         WsResponse wsResponse = new WsResponse();
-        wsResponse.setBody("handshake".getBytes());
+        wsResponse.setBody(appName.getBytes());
         wsResponse.setWsOpcode(Opcode.TEXT);
         wsResponse.setHandShake(true);
         Tio.send(G1WsClientStarter.clientChannelContext, wsResponse);
     }
 
     public static void main(String[] args) throws Exception {
-        G1WsClientStarter.start("127.0.0.1", 6789);
+        G1WsClientStarter.start("127.0.0.1", 6789, "biz-g1");
     }
 }
