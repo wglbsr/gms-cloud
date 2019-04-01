@@ -25,7 +25,8 @@ public class GmsWsMsgServerHandler implements IWsMsgHandler {
 
     @Override
     public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
-
+        String appName = httpRequest.getBodyString();
+        logger.info("与业务端[{}]绑定", appName);
     }
 
     /**
