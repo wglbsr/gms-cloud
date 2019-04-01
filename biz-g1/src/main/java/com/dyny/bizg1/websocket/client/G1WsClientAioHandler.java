@@ -31,7 +31,6 @@ public class G1WsClientAioHandler implements ClientAioHandler {
     @Override
     public Packet decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
         WsRequest WsRequest = (WsRequest) WsServerDecoder.decode(buffer, channelContext);
-        logger.info(WsRequest.getWsBodyText());
         return WsRequest;
     }
 

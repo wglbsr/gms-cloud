@@ -15,12 +15,7 @@ import org.tio.websocket.common.WsResponse;
  * 2017年7月30日 上午9:45:54
  */
 public class G1WsClientStarter {
-    private ClientAioHandler wsClientAioHandler;
-    private Node serverNode;
 
-    public G1WsClientStarter(String ip, int port) {
-        this.serverNode = new Node(ip, port);
-    }
 
     public static ClientGroupContext clientGroupContext;
     public static TioClient tioClient;
@@ -28,20 +23,21 @@ public class G1WsClientStarter {
     private static ReconnConf reconnConf = new ReconnConf(5000L);
 
 
-    public void start() throws Exception {
-        wsClientAioHandler = new G1WsClientAioHandler();
+    public static void start(String ip, int port) throws Exception {
+        Node serverNode = new Node(ip, port);
+        ClientAioHandler wsClientAioHandler = new G1WsClientAioHandler();
         clientGroupContext = new ClientGroupContext(wsClientAioHandler, new G1WsClientAioListener(), reconnConf);
         tioClient = new TioClient(clientGroupContext);
         clientChannelContext = tioClient.connect(serverNode);
-    }
-
-    public static void main(String[] args) throws Exception {
-        G1WsClientStarter gmsWsClientTestStarter = new G1WsClientStarter("127.0.0.1", 6789);
-        gmsWsClientTestStarter.start();
+        //必须发送握手包
         WsResponse wsResponse = new WsResponse();
-        wsResponse.setBody("123123".getBytes());
+        wsResponse.setBody("handshake".getBytes());
         wsResponse.setWsOpcode(Opcode.TEXT);
         wsResponse.setHandShake(true);
         Tio.send(G1WsClientStarter.clientChannelContext, wsResponse);
+    }
+
+    public static void main(String[] args) throws Exception {
+        G1WsClientStarter.start("127.0.0.1", 6789);
     }
 }

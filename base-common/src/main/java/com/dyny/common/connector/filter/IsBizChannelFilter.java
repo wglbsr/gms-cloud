@@ -1,6 +1,6 @@
 package com.dyny.common.connector.filter;
 
-import com.dyny.common.constant.TcpConstant;
+import com.dyny.common.enums.ConnectionTypeEnum;
 import org.tio.core.ChannelContext;
 import org.tio.core.ChannelContextFilter;
 
@@ -13,7 +13,7 @@ import org.tio.core.ChannelContextFilter;
 public class IsBizChannelFilter implements ChannelContextFilter {
     @Override
     public boolean filter(ChannelContext channelContext) {
-        Boolean isBizChannel = (Boolean) channelContext.getAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL);
-        return isBizChannel != null && isBizChannel;
+        Integer connectionType = (Integer) channelContext.getAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE);
+        return ConnectionTypeEnum.WS_FROM_SERVER.getType().equals(connectionType);
     }
 }

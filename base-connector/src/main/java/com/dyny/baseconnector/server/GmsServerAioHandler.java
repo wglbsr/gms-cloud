@@ -5,6 +5,7 @@ import com.dyny.common.connector.filter.IsBizChannelFilter;
 import com.dyny.common.connector.handler.CommonHandler;
 import com.dyny.common.connector.packet.GmsTcpPacket;
 import com.dyny.common.constant.TcpConstant;
+import com.dyny.common.enums.ConnectionTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,21 +86,19 @@ public class GmsServerAioHandler implements ServerAioHandler {
     @Unfinished
     public static boolean isWsConnection(ChannelContext channelContext) {
         //首先查找attr里面查找KEY_IS_WS_CONNECTION是否为websocket连接
-        Boolean isWsConnection = (Boolean) channelContext.getAttribute(TcpConstant.KEY_IS_WS_CONNECTION);
-        if (isWsConnection == null) {
+        Integer connectionType = (Integer) channelContext.getAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE);
+        if (connectionType == null) {
             //debug 开发调试使用的代码,生产环境务必注释!
             //debug 开发调试使用的代码,生产环境务必注释!
             //debug 开发调试使用的代码,生产环境务必注释!
             if (temp == 0) {
-                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, false);
+                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.TCP_FROM_DEVICE.getType());
                 temp++;
                 return false;
             } else {
-                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, true);
+                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.WS_FROM_SERVER.getType());
                 return true;
             }
-
-            //debug 开发调试使用的代码,生产环境务必注释!
 //            String key = ClientNodes.getKey(channelContext);
 //            String ipReg = "127.0.0.1:6.*";
 //            if (!key.matches(ipReg)) {
@@ -111,7 +110,7 @@ public class GmsServerAioHandler implements ServerAioHandler {
 //            RedisApi redisApi = SpringBeanUtils.getBean(RedisApi.class);
 //            redisApi.get(TcpConstant.KEY_WS_SERVER_LIST);
         } else {
-            return isWsConnection;
+            return ConnectionTypeEnum.WS_FROM_SERVER.getType().equals(connectionType);
         }
     }
 
@@ -184,7 +183,7 @@ public class GmsServerAioHandler implements ServerAioHandler {
         if (gmsTcpPacket.getCommand() == GmsTcpPacket.CMD_DEVICE_ID) {
             channelContext.setBsId(TcpConstant.TCP_CONNECTOR_BS_ID + deviceId);
             channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
-            channelContext.setAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL, false);
+            channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.TCP_FROM_DEVICE.getType());
         }
         if (StringUtils.isEmpty(bsId)) {
             Tio.send(channelContext, new GmsTcpPacket(GmsTcpPacket.CMD_DEVICE_ID));
@@ -214,9 +213,9 @@ public class GmsServerAioHandler implements ServerAioHandler {
             CommonHandler.handshake(packet, channelContext, wsMsgHandler);
             return;
         }
-        Boolean isBizChannel = (Boolean) channelContext.getAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL);
-        if (isBizChannel == null) {
-            channelContext.setAttribute(TcpConstant.KEY_IS_BIZ_CHANNEL, true);
+        Integer connectionType = (Integer) channelContext.getAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE);
+        if (connectionType == null) {
+            channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.WS_FROM_SERVER.getType());
             logger.info("连接绑定到业务组");
         }
 

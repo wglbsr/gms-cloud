@@ -17,6 +17,7 @@ public class TcpConstant {
     public static final String KEY_FROM_BIZ_GROUP = "BizGroup";
     public static final String KEY_FROM_DEVICE_GROUP = "DeviceGroup";
     public static final String KEY_WS_SERVER_LIST = "ConnectorGroup";
+    public static final String KEY_FROM_BS = "BrowserConnection";
 
 
     public static final String WS_CONNECTOR_BS_ID = "ws_connector_bs_";

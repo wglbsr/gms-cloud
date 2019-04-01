@@ -1,6 +1,6 @@
 package com.dyny.baseconnector.server;
 
-import com.dyny.common.constant.TcpConstant;
+import com.dyny.common.enums.ConnectionTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioListener;
@@ -26,7 +26,7 @@ public class GmsServerAioListener implements ServerAioListener, ClientAioListene
                 WsSessionContext wsSessionContext = new WsSessionContext();
                 wsSessionContext.setHandshaked(true);
                 channelContext.setAttribute(wsSessionContext);
-                channelContext.setAttribute(TcpConstant.KEY_IS_WS_CONNECTION, true);
+                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.WS_FROM_SERVER.getType());
             }
         }
     }

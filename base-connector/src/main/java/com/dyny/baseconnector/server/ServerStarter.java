@@ -64,7 +64,7 @@ public class ServerStarter {
         this.wsMsgHandler = wsMsgHandler;
         gmsAioHandler = new GmsServerAioHandler(wsServerConfig, wsMsgHandler);
         gmsAioListener = new GmsServerAioListener();
-        serverGroupContext = new ServerGroupContext("base-connector Websocket Server", gmsAioHandler, gmsAioListener, tioExecutor, groupExecutor);
+        serverGroupContext = new ServerGroupContext("base-connector Server", gmsAioHandler, gmsAioListener, tioExecutor, groupExecutor);
         serverGroupContext.setHeartbeatTimeout(0);
         serverGroupContext.setTioUuid(tioUuid);
         tioServer = new TioServer(serverGroupContext);

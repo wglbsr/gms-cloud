@@ -22,7 +22,7 @@ import java.io.IOException;
 public class G1WsServerStarter {
     public static TioServer tioServer;
 
-    public void start() throws IOException {
+    public static void start() throws IOException {
         WsServerConfig wsServerConfig = new WsServerConfig(7600);
         IWsMsgHandler wsMsgHandler = new G1WsServerMsgHandler();
         ServerAioHandler serverAioHandler = new WsServerAioHandler(wsServerConfig, wsMsgHandler);

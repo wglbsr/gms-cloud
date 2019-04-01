@@ -37,8 +37,8 @@ public class G1WsMsgClientHandler implements IWsMsgHandler {
      **/
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-        
-        
+
+
         return "字节消息[" + Hex.encodeHexString(wsRequest.getBody()) + "]已收到";
     }
 
@@ -52,8 +52,8 @@ public class G1WsMsgClientHandler implements IWsMsgHandler {
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
-        String msg =  "文本消息[" + text + "]已收到";
-        logger.info("[" + msg + "]");
+        String msg = "文本消息[" + text + "]已收到";
+        logger.info(msg);
         return msg;
     }
 }
