@@ -5,6 +5,7 @@ import com.dyny.common.enums.ConnectionTypeEnum;
 import org.tio.core.ChannelContext;
 import org.tio.core.ChannelContextFilter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,10 +27,22 @@ public class CommonFilter implements ChannelContextFilter {
         this.attrs.put(ConnectionTypeEnum.KEY_CONNECTION_TYPE, this.connectionType);
     }
 
+    public CommonFilter(ConnectionTypeEnum connectionType, String appName) {
+        this.connectionType = connectionType.getType();
+        this.attrs = new HashMap<>();
+        this.attrs.put(TcpConstant.KEY_APP_NAME, appName);
+        this.attrs.put(ConnectionTypeEnum.KEY_CONNECTION_TYPE, this.connectionType);
+    }
+
     public CommonFilter(String appName, Map<String, Object> attrs) {
         this.attrs = attrs;
         this.attrs.put(TcpConstant.KEY_APP_NAME, appName);
         this.attrs.put(ConnectionTypeEnum.KEY_CONNECTION_TYPE, null);
+    }
+
+    public CommonFilter(String appName) {
+        this.attrs = new HashMap<>();
+        this.attrs.put(TcpConstant.KEY_APP_NAME, appName);
     }
 
     public CommonFilter(Map<String, Object> attrs) {

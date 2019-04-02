@@ -17,8 +17,6 @@ import org.tio.websocket.common.WsSessionContext;
  */
 public class GmsServerAioListener implements ServerAioListener, ClientAioListener {
     private static Logger logger = LoggerFactory.getLogger(GmsServerAioListener.class);
-
-
     @Override
     public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
         if (isConnected) {
@@ -30,7 +28,6 @@ public class GmsServerAioListener implements ServerAioListener, ClientAioListene
             }
         }
     }
-
 
     @Override
     public void onAfterDecoded(ChannelContext channelContext, Packet packet, int packetSize) throws Exception {
@@ -49,6 +46,7 @@ public class GmsServerAioListener implements ServerAioListener, ClientAioListene
 
     @Override
     public void onAfterHandled(ChannelContext channelContext, Packet packet, long cost) throws Exception {
+
     }
 
     @Override

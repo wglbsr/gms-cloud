@@ -10,7 +10,7 @@ import org.tio.core.ChannelContextFilter;
  * @Description:
  * @Version 1.0.0
  */
-public class IsDeviceChannelFilter implements ChannelContextFilter {
+public class IsTcpDeviceFilter implements ChannelContextFilter {
     @Override
     public boolean filter(ChannelContext channelContext) {
         Integer connectionType = (Integer) channelContext.getAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE);

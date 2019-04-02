@@ -1,7 +1,7 @@
 package com.dyny.baseconnector.server;
 
 import com.dyny.common.annotation.Unfinished;
-import com.dyny.common.connector.filter.IsBizChannelFilter;
+import com.dyny.common.connector.filter.IsWsServerFilter;
 import com.dyny.common.connector.handler.CommonHandler;
 import com.dyny.common.connector.packet.GmsTcpPacket;
 import com.dyny.common.constant.TcpConstant;
@@ -164,6 +164,10 @@ public class GmsServerAioHandler implements ServerAioHandler {
      **/
     private Packet wsDecoder(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext
             channelContext) throws AioDecodeException {
+
+        //发送到指定设备,tcp通讯
+
+
         return CommonHandler.wsDecoder(buffer, limit, position, readableLength, channelContext, wsServerConfig);
     }
 
@@ -178,24 +182,29 @@ public class GmsServerAioHandler implements ServerAioHandler {
         GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
         logger.info("received full packet[" + gmsTcpPacket.getFullContent(true) + "]");
         //绑定设备id到channel
-        String deviceId = "18080008";
-        String bsId = TcpConstant.TCP_CONNECTOR_BS_ID + deviceId;// channelContext.getBsId();
-        if (gmsTcpPacket.getCommand() == GmsTcpPacket.CMD_DEVICE_ID) {
-            channelContext.setBsId(TcpConstant.TCP_CONNECTOR_BS_ID + deviceId);
+//        String deviceId = "18080008";
+        String deviceId = (String) channelContext.getAttribute(TcpConstant.KEY_DEVICE_ID);
+        if (StringUtils.isNotEmpty(deviceId) && GmsTcpPacket.CMD_DEVICE_ID.equals(gmsTcpPacket.getCommand())) {
+            logger.info("绑定设备Id[{}]", deviceId);
             channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
             channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.TCP_FROM_DEVICE.getType());
         }
-        if (StringUtils.isEmpty(bsId)) {
+        if (StringUtils.isEmpty(deviceId)) {
             Tio.send(channelContext, new GmsTcpPacket(GmsTcpPacket.CMD_DEVICE_ID));
             logger.info("未绑定id");
             return;
         }
         WsResponse wsResponse = new WsResponse();
         wsResponse.setWsOpcode(Opcode.TEXT);
-        String message = ("广播消息[" + LocalDateTime.now().toString() + "]");
+        String message = ("组播消息[" + LocalDateTime.now().toString() + "]");
         logger.info(message);
         wsResponse.setBody(message.getBytes());
-        Tio.sendToAll(channelContext.getGroupContext(), wsResponse, new IsBizChannelFilter());
+        Tio.sendToAll(channelContext.getGroupContext(), wsResponse, new IsWsServerFilter());
+    }
+
+
+    private void multicast() {
+
     }
 
 
@@ -218,7 +227,6 @@ public class GmsServerAioHandler implements ServerAioHandler {
             channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.WS_FROM_SERVER.getType());
             logger.info("连接绑定到业务组");
         }
-
         WsResponse wsResponse = CommonHandler.wsHandler(wsRequest, wsRequest.getWsOpcode(), channelContext, wsMsgHandler);
         if (wsResponse != null) {
             Tio.send(channelContext, wsResponse);
