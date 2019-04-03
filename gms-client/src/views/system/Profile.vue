@@ -34,6 +34,9 @@
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
+            <el-tab-pane label="栏位设置">
+                <column-setting></column-setting>
+            </el-tab-pane>
         </el-tabs>
     </el-card>
 </template>
@@ -44,6 +47,7 @@
     import qs from 'qs'
     import UploadDialog from "../coms/UploadDialog"
     import AvatarUploader from "../coms/AvatarUploader"
+    import ColumnSetting from "../gms/coms/ColumnSetting"
 
     export default {
         name: "Profile",
@@ -65,7 +69,7 @@
                 host: window.HOST,
             };
         },
-        components: {UploadDialog, AvatarUploader},
+        components: {UploadDialog, AvatarUploader, ColumnSetting},
         mounted() {
             this.token = localStorage.getItem("auth_token");
             this.getUserInfo();

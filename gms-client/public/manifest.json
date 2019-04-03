@@ -1,6 +1,6 @@
 {
-  "name": "gms-admin",
-  "short_name": "gms-admin",
+  "name": "gms-client",
+  "short_name": "gms-client",
   "icons": [
     {
       "src": "/img/icons/android-chrome-192x192.png",

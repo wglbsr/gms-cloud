@@ -4,7 +4,7 @@ module.exports = {
     outputDir: 'dist',
     productionSourceMap: false,
     devServer: {
-        port: 8099,
+        port: 8098,
         // proxy: "https://www.yn-iot.cn"//
     },
     // css相关配置

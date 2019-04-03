@@ -140,10 +140,7 @@ const store = new Vuex.Store({
     actions: {
         // 重新从服务器读取用户信息
         reloadUserAuthority(context) {
-            // return axios.get("/user/queryUserAuthority").then(response => {
             let response = {};
-            let Laundry = 2;
-            let Admin = 1;
             response.data = {
                 menus: [
                     {
@@ -168,12 +165,12 @@ const store = new Vuex.Store({
                     },
                     {
                         menuId: 20,
-                        menuName: "系统管理",
+                        menuName: "系统设置",
                         menuCode: "system",
                         link: "/system",
                         icon: "el-icon-menu",
                         lft: 4,
-                        rgt: 9,
+                        rgt: 8,
                         depth: 1
                     },
                     {
@@ -187,47 +184,13 @@ const store = new Vuex.Store({
                         depth: 2
                     },
                     {
-                        menuId: 22,
-                        menuName: "用户管理",
-                        menuCode: "user",
-                        link: "/system/user",
-                        icon: "el-icon-menu",
-                        lft: 5,
-                        rgt: 6,
-                        depth: 2,
-                        limit: [Admin]
-                    },
-                    {
-                        menuId: 23,
-                        menuName: "角色管理",
-                        menuCode: "role",
-                        link: "/system/role",
-                        icon: "el-icon-menu",
-                        lft: 7,
-                        rgt: 8,
-                        depth: 2,
-                        limit: [Admin]
-                    },
-                    {
-                        menuId: 24,
-                        menuName: "权限配置",
-                        menuCode: "WeChat",
-                        link: "/system/auth",
-                        icon: "el-icon-menu",
-                        lft: 7,
-                        rgt: 8,
-                        depth: 2,
-                        limit: [Admin]
-
-                    },
-                    {
                         menuId: 30,
                         menuName: "油机系统",
                         menuCode: "gms",
                         link: "/gms",
                         icon: "el-icon-menu",
-                        lft: 7,
-                        rgt: 8,
+                        lft: 4,
+                        rgt: 9,
                         depth: 1,
                     },
                     {
@@ -236,7 +199,7 @@ const store = new Vuex.Store({
                         menuCode: "station",
                         link: "/gms/station",
                         icon: "el-icon-menu",
-                        lft: 7,
+                        lft: 5,
                         rgt: 8,
                         depth: 2,
                     },
@@ -246,7 +209,7 @@ const store = new Vuex.Store({
                         menuCode: "generator",
                         link: "/gms/generator",
                         icon: "el-icon-menu",
-                        lft: 7,
+                        lft: 5,
                         rgt: 8,
                         depth: 2,
                     },
@@ -256,7 +219,7 @@ const store = new Vuex.Store({
                         menuCode: "generatorStatus",
                         link: "/gms/generatorStatus",
                         icon: "el-icon-menu",
-                        lft: 7,
+                        lft: 5,
                         rgt: 8,
                         depth: 2,
                     }
@@ -269,7 +232,6 @@ const store = new Vuex.Store({
             context.commit("setMenus", menus);
             context.commit("setMenuTree", rootMenuNode.children);
             context.commit("setAuthorities", response.data.authorities);
-            // });
         },
         signOut(context) {
             localStorage.removeItem("auth_token");

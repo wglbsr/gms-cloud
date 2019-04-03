@@ -33,21 +33,6 @@ export const asyncRouter = [
                 path: "/system/profile",
                 name: "profile",
                 component: () => import("@/views/system/Profile.vue")
-            },
-            {
-                path: "/system/user",
-                name: "user",
-                component: () => import("@/views/system/User.vue")
-            },
-            {
-                path: "/system/role",
-                name: "role",
-                component: () => import("@/views/system/Role.vue")
-            },
-            {
-                path: "/system/auth",
-                name: "auth",
-                component: () => import("@/views/system/Auth.vue")
             }
         ]
     },
@@ -72,7 +57,6 @@ export const asyncRouter = [
             }
         ]
     }
-
 ];
 
 const router = new Router({routes: constantRouter});

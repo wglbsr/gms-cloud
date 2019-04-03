@@ -29,12 +29,12 @@ public class DataController extends BaseController {
 
 
     @PostMapping("/{table}/{id}")
-    public String insert(@PathVariable("table") String tableName, @PathVariable("id") String id, String jsonData) {
-        return getSuccessResult(mongodbDao.insert(tableName,id, jsonData));
+    public String insert(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("setting") String jsonData) {
+        return getSuccessResult(mongodbDao.insert(tableName, id, jsonData));
     }
 
     @PostMapping("/{table}")
-    public String insert(@PathVariable("table") String tableName, String jsonData) {
+    public String insert(@PathVariable("table") String tableName, @RequestParam("setting") String jsonData) {
         return getSuccessResult(mongodbDao.insert(tableName, jsonData));
     }
 
@@ -45,7 +45,7 @@ public class DataController extends BaseController {
 
 
     @PutMapping("/{table}/{id}")
-    public String update(@PathVariable("table") String tableName, @PathVariable("id") String id, String jsonData) {
+    public String update(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("setting") String jsonData) {
         return getSuccessResult(mongodbDao.update(tableName, id, jsonData).toJson());
     }
 

@@ -3,7 +3,7 @@
         <el-aside class="sidebar" v-bind:class="{'sidebar-collapse':isCollapse}">
             <el-header class="logo">
                 <img src="@/assets/logo.png">
-                <h1>LMS Admin</h1>
+                <h1>油机管理系统</h1>
             </el-header>
             <el-menu :router="true" :default-active="$route.path" :collapse="isCollapse">
                 <el-menu-item v-for="menu in this.$store.state.menuTree" :key="menu.menuId" :index="menu.link"

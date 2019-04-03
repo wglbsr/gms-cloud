@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2019-03-12
  */
 @RestController
-@RequestMapping(value = "/Carrier", produces = {BaseController.ENCODE_CHARSET_UTF8})
+@RequestMapping(value = "/carrier", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class CarrierController extends BaseController {
     @Autowired
     CarrierService carrierService;
