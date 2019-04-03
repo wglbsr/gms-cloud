@@ -84,8 +84,8 @@
             getMyColumnSetting() {
                 this.$http.get("/mid-user/setting/column").then(res => {
                     console.log(res);
-                    if (res.result) {
-                        if (res.data) {
+                    if (res.data.result) {
+                        if (res.data.data != 1) {
 
                         } else {
                             this.createMyColumnSetting();
@@ -97,7 +97,7 @@
                 })
             },
             updateMyColumnSetting() {
-                this.$http.put("/mid-user/setting/column", this.column).then(res => {
+                this.$http.put("/mid-user/setting/column", {setting: "123123123"}).then(res => {
                     console.log(res);
                     if (res.result && res.data) {
 
@@ -107,7 +107,7 @@
                 })
             },
             createMyColumnSetting() {
-                this.$http.post("/mid-user/setting/column", this.column).then(res => {
+                this.$http.post("/mid-user/setting/column", JSON.stringify({"setting": "123123123"})).then(res => {
                     console.log(res);
                     if (res.result && res.data) {
 

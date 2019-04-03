@@ -3,6 +3,7 @@ package com.dyny.userservice.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.dyny.common.controller.BaseController;
 import com.dyny.userservice.api.RedisApi;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class BizBaseController extends BaseController {
 
     protected <UserT> UserT getUser(Class<UserT> UserT) {
         String userInfoStr = redisApi.get(getToken());
-        UserT userT = JSONObject.parseObject(userInfoStr, UserT);
+        UserT userT = JSONObject.parseObject(getStrData(userInfoStr), UserT);
         return userT;
     }
 
@@ -30,7 +31,7 @@ public class BizBaseController extends BaseController {
         for (int i = temp.length(); i < 12; i++) {
             temp = "0" + temp;
         }
-        return temp;
+        return Hex.encodeHexString(temp.getBytes());
     }
 
 
