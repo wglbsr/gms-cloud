@@ -1,11 +1,10 @@
 package com.dyny.basemongodb.controller;
 
+import com.dyny.basemongodb.dao.MongodbDao;
 import com.dyny.common.controller.BaseController;
-import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Auther: lane
@@ -17,12 +16,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/data", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class DataController extends BaseController {
     @Autowired
-    MongoDbFactory mongoDbFactory;
+    private MongodbDao mongodbDao;
 
-    public String select(String keyWord) {
-        MongoDatabase mongoDatabase = mongoDbFactory.getDb();
-        return getSuccessResult(1);
+    @GetMapping("/{table}/{id}")
+    public String select(@PathVariable("table") String tableName, @PathVariable("id") String id) {
+        Document document = mongodbDao.find(tableName, id);
+        if (document == null) {
+            return getSuccessResult();
+        }
+        return getSuccessResult(document.toJson());
     }
 
+
+    @PostMapping("/{table}/{id}")
+    public String insert(@PathVariable("table") String tableName, @PathVariable("id") String id, String jsonData) {
+        return getSuccessResult(mongodbDao.insert(tableName,id, jsonData));
+    }
+
+    @PostMapping("/{table}")
+    public String insert(@PathVariable("table") String tableName, String jsonData) {
+        return getSuccessResult(mongodbDao.insert(tableName, jsonData));
+    }
+
+    @DeleteMapping("/{table}/{id}")
+    public String delete(@PathVariable("table") String tableName, @PathVariable("id") String id) {
+        return getSuccessResult(mongodbDao.delete(tableName, id));
+    }
+
+
+    @PutMapping("/{table}/{id}")
+    public String update(@PathVariable("table") String tableName, @PathVariable("id") String id, String jsonData) {
+        return getSuccessResult(mongodbDao.update(tableName, id, jsonData).toJson());
+    }
 
 }

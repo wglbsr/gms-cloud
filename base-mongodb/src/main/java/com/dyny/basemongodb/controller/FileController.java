@@ -35,7 +35,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/file", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class FileController extends BaseController {
-    Log log = LogFactory.getLog(FileController.class);
+    private static Log log = LogFactory.getLog(FileController.class);
     @Autowired
     private GridFsTemplate gridFsTemplate;
 
@@ -75,7 +75,6 @@ public class FileController extends BaseController {
         GridFSDownloadStream in = gridFSBucket.openDownloadStream(file.getObjectId());
         GridFsResource resource = new GridFsResource(file, in);
         String fileName = file.getFilename().replace(",", "");
-//        fileName = java.net.URLEncoder.encode(fileName, Charsets.UTF_8.name());
         response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
         IOUtils.copy(resource.getInputStream(), response.getOutputStream());
     }

@@ -26,7 +26,6 @@
         <module>base-gateway</module>
         <module>base-redis</module>
         <module>base-mongodb</module>
-        <module>mid-region</module>
         <module>mid-user</module>
         <module>biz-g1</module>
         <module>base-connector</module>
@@ -186,6 +185,14 @@
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+            <id>ibiblio</id>
+            <url>http://mirrors.ibiblio.org/maven2</url>
+        </repository>
+        <repository>
+            <id>oschina</id>
+            <url>http://maven.oschina.net/content/groups/public/</url>
         </repository>
     </repositories>
 </project>

@@ -15,14 +15,14 @@
 </template>
 
 <script>
-    import region from '@/assets/data/region.json'
+    import region from '@/assets/data/regions.json'
 
     export default {
         data() {
             return {
                 regionIds: [],
                 regionObjectList: [],
-                props: {value: 'id', label: 'name', children: 'children'},
+                props: {value: 'adcode', label: 'name', children: 'districts'},
             }
         },
         props: ['regionId'],
@@ -39,7 +39,7 @@
                     return;
                 }
                 regionId = regionId + "";
-                let lengthArray = [2, 4, 6, 9];
+                let lengthArray = [2, 4, 6];
                 this.regionIds = [];
                 this.getNextRegionId(regionId, this.regionIds, 0, lengthArray);
             },
@@ -57,7 +57,6 @@
                 this.$emit("change", val[val.length - 1]);
             },
         },
-
     }
 </script>
 
