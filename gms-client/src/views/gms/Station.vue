@@ -109,9 +109,8 @@
     export default {
         data() {
             return {
-                exampleFileLink: "",
                 uploadParams: {},
-                uploadUri: "/biz-g1/station/importStationDataByExcel",
+                uploadUri: "http://localhost:8610/station/importStationDataByExcel",
                 importDataWindowVisible: false,
                 dialogVisible: false,
                 targetObject: {
@@ -138,14 +137,23 @@
             clearImportWindowDialogData(){
 
             },
-            uploadError() {
-
+            beforeUploadFile: function (file) {
+                let fileName = file.name;
             },
-            uploadSuccess() {
-
+            uploadSuccess: function (response, file, fileList) {
+                if (response.result && response.data > 0) {
+                    this.$message({
+                        type: 'success',
+                        message: "导入成功"
+                    });
+                    this.importDataWindowVisible = false;
+                    this.initTable();
+                } else {
+                    this.$message.error("操作失败,请检查文件类型!");
+                }
             },
-            beforeUploadFile: function () {
-
+            uploadError: function (response, file, fileList) {
+                this.$message.error("操作失败,请检查文件类型!");
             },
             regionChange(val) {
                 this.targetObject.regionId = val;

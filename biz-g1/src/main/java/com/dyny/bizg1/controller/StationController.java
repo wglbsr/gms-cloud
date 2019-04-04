@@ -61,6 +61,16 @@ public class StationController extends BizBaseControllerT<Station> {
     }
 
 
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 后续应该做成通用的方式
+     * 1.上传到mongodb,获得文件id
+     * 2.将文件id作为参数传到这个方法进行导入
+     *
+     * @Date 16:41 2019-04-04
+     * @Param [file]
+     * @return java.lang.String
+     **/
     @RequestMapping("/importStationDataByExcel")
     @ResponseBody
     public String importStationDataByExcel(@RequestParam("file") MultipartFile file) throws IOException {
