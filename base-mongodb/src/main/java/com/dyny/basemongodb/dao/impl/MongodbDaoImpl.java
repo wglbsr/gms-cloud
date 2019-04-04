@@ -34,7 +34,7 @@ public class MongodbDaoImpl implements MongodbDao {
     public String insert(String tableName, String id, String jsonData) {
         Document document = Document.parse(jsonData);
         if (StringUtils.isNotEmpty(id)) {
-            document.append(KEY_ID, id);
+            document.append(KEY_ID, new ObjectId(id));
         }
         return insert(tableName, document);
     }
@@ -86,7 +86,7 @@ public class MongodbDaoImpl implements MongodbDao {
     @Override
     public Document update(String tableName, String id, Document data) {
         MongoCollection<Document> collection = this.mongoDbFactory.getDb().getCollection(tableName);
-        ObjectId objectId ;
+        ObjectId objectId;
         try {
             objectId = new ObjectId(id);
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class MongodbDaoImpl implements MongodbDao {
         }
         Bson filter = Filters.eq(KEY_ID, objectId);
         collection.replaceOne(filter, data);
-        return collection.find(Filters.eq(KEY_ID, id)).first();
+        return collection.find(Filters.eq(KEY_ID, new ObjectId(id))).first();
     }
 
     @Override

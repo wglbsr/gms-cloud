@@ -1,5 +1,6 @@
 package com.dyny.userservice.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dyny.common.controller.BaseController;
 import com.dyny.userservice.api.MongodbApi;
 import com.dyny.userservice.db.entity.User;
@@ -34,21 +35,21 @@ public class UserSettingController extends BizBaseController {
     }
 
     @PutMapping("/{settingType}")
-    public String updateSetting(@PathVariable("settingType") String settingType, @RequestParam("setting") String setting) {
+    public String updateSetting(@PathVariable("settingType") String settingType, @RequestBody JSONObject setting) {
         User user = getUser(User.class);
         Integer userId = user.getId();
-        if (StringUtils.isNotEmpty(settingType) && userId > 0) {
-            return mongodbApi.update(getTableName(settingType), get12BytesUserId(userId), setting);
+        if (StringUtils.isNotEmpty(settingType) && userId > 0 && setting != null) {
+            return mongodbApi.update(getTableName(settingType), get12BytesUserId(userId), setting.toJSONString());
         }
         return getErrorMsg("参数或路径错误!");
     }
 
     @PostMapping("/{settingType}")
-    public String createSetting(@PathVariable("settingType") String settingType, @RequestParam("setting") String setting) {
+    public String createSetting(@PathVariable("settingType") String settingType, @RequestBody JSONObject setting) {
         User user = getUser(User.class);
         Integer userId = user.getId();
-        if (StringUtils.isNotEmpty(settingType) && userId > 0) {
-            return mongodbApi.insert(getTableName(settingType), get12BytesUserId(userId), setting);
+        if (StringUtils.isNotEmpty(settingType) && userId > 0 && setting != null) {
+            return mongodbApi.insert(getTableName(settingType), get12BytesUserId(userId), setting.toJSONString());
         }
         return getErrorMsg("参数或路径错误!");
     }

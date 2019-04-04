@@ -22,11 +22,10 @@ public class DataController extends BaseController {
     public String select(@PathVariable("table") String tableName, @PathVariable("id") String id) {
         Document document = mongodbDao.find(tableName, id);
         if (document == null) {
-            return getSuccessResult();
+            return getSuccessResult(0);
         }
         return getSuccessResult(document.toJson());
     }
-
 
     @PostMapping("/{table}/{id}")
     public String insert(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("setting") String jsonData) {
