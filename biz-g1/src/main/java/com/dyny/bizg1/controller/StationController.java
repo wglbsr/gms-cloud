@@ -3,12 +3,16 @@ package com.dyny.bizg1.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dyny.bizg1.db.entity.GmsUser;
 import com.dyny.bizg1.db.entity.Station;
 import com.dyny.bizg1.service.StationService;
 import com.dyny.common.controller.BaseController;
-import com.dyny.common.controller.BaseControllerT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * <p>
@@ -20,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/station", produces = {BaseController.ENCODE_CHARSET_UTF8})
-public class StationController extends BaseControllerT<Station> {
+public class StationController extends BizBaseControllerT<Station> {
     @Autowired
     StationService stationService;
 
@@ -54,6 +58,30 @@ public class StationController extends BaseControllerT<Station> {
     @RequestMapping("/create")
     public String create(@RequestBody Station station) {
         return getSuccessResult(stationService.save(station) ? station.getId() : 0);
+    }
+
+
+    @RequestMapping("/importStationDataByExcel")
+    @ResponseBody
+    public String importStationDataByExcel(@RequestParam("file") MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            return super.getErrorMsg("文件为空!");
+        }
+        String fileName = file.getOriginalFilename();
+        String path = "";
+        File fileAbsPath = new File(path + File.separator + fileName);
+        //覆盖旧文件
+        if (fileAbsPath.exists()) {
+            fileAbsPath.delete();
+        }
+        if (!fileAbsPath.getParentFile().exists()) { //判断文件父目录是否存在
+            fileAbsPath.getParentFile().mkdirs();
+        } else {
+            file.transferTo(fileAbsPath);
+        }
+        GmsUser user = getUser(GmsUser.class);
+        int customerId = user.getCustomerId();
+        return super.getSuccessResult(stationService.importStationFromExcelFile(fileAbsPath, customerId));
     }
 }
 

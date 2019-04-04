@@ -19,7 +19,6 @@ public class BaseMongodbApplicationTests {
 
     @Test
     public void contextLoads() {
-
         MongoDatabase mongoDatabase = mongoDbFactory.getDb();
         ListCollectionsIterable<Document> result = mongoDatabase.listCollections();
         MongoCollection resulr1 = mongoDatabase.getCollection("fs");

@@ -31,10 +31,10 @@ public class Test {
 //        for(int i = 0;i<arr.length;i++){
 //            System.out.println(arr[i]);
 //        }
-        String s1 = "hello";
-        String s2 = "he" + new String("llo");
-        String s3 = new String("hello");
-        System.out.println(s1.equals(s2));
-        System.out.println(s2.equals(s3));
+//        String s1 = "hello";
+//        String s2 = "he" + new String("llo");
+//        String s3 = new String("hello");
+//        System.out.println(s1.equals(s2));
+//        System.out.println(s2.equals(s3));
     }
 }

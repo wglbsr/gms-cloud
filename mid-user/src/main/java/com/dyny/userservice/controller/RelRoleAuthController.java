@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
  * @author wanggl
  * @since 2019-03-06
  */
@@ -38,7 +34,6 @@ public class RelRoleAuthController extends BaseControllerT<RelRoleAuth> {
         } else {
             return super.getErrorMsg("角色id或权限id错误！");
         }
-
     }
 
     @RequestMapping("/unRelate")

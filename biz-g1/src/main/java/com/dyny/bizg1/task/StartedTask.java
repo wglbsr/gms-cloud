@@ -1,7 +1,5 @@
 package com.dyny.bizg1.task;
 
-import com.dyny.bizg1.websocket.client.G1WsClientStarter;
-import com.dyny.bizg1.websocket.server.G1WsServerStarter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -26,8 +24,8 @@ public class StartedTask implements ApplicationRunner {
     private String appName;
 
     private void startWsServerAndClient() throws Exception {
-        G1WsClientStarter.start("127.0.0.1", 6789, appName);
-        G1WsServerStarter.start();
+//        G1WsClientStarter.start("127.0.0.1", 6789, appName);
+//        G1WsServerStarter.start();
     }
 
     public static void main(String[] args) throws Exception {

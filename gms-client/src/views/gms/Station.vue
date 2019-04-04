@@ -9,6 +9,9 @@
                 <el-button size="mini" type="primary" icon="el-icon-plus"
                            @click="showModifyDialog(false)">新增
                 </el-button>
+                <el-button size="mini" type="primary" icon="el-icon-plus"
+                           @click="showImportDialog(false)">导入
+                </el-button>
             </el-button-group>
         </div>
         <el-table :data="stationList" style="width: 100%"
@@ -77,6 +80,24 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+
+        <el-dialog title="文件导入" :visible.sync="importDataWindowVisible" class="station-import-dialog" width="400px"
+                   @close="clearImportWindowDialogData">
+            <el-upload
+                    class="upload-station"
+                    ref="upload"
+                    drag
+                    :action="uploadUri"
+                    :data="uploadParams"
+                    accept="xlsx"
+                    :before-upload="beforeUploadFile"
+                    :on-success="uploadSuccess"
+                    :on-error="uploadError"
+            >
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            </el-upload>
+        </el-dialog>
     </div>
 </template>
 
@@ -88,6 +109,10 @@
     export default {
         data() {
             return {
+                exampleFileLink: "",
+                uploadParams: {},
+                uploadUri: "/biz-g1/station/importStationDataByExcel",
+                importDataWindowVisible: false,
                 dialogVisible: false,
                 targetObject: {
                     customerId: 0,
@@ -110,6 +135,18 @@
             this.query();
         },
         methods: {
+            clearImportWindowDialogData(){
+
+            },
+            uploadError() {
+
+            },
+            uploadSuccess() {
+
+            },
+            beforeUploadFile: function () {
+
+            },
             regionChange(val) {
                 this.targetObject.regionId = val;
             },
@@ -135,6 +172,9 @@
                         message: '已取消操作'
                     });
                 });
+            },
+            showImportDialog() {
+                this.importDataWindowVisible = true;
             },
             showModifyDialog(editMode, id) {
                 let that = this;
