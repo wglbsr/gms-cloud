@@ -42,6 +42,25 @@ public class Utils {
 
     }
 
+    public static class OS {
+        public static boolean isWindows() {
+            return System.getProperty("os.name").toLowerCase().contains("window");
+        }
+
+        public static java.lang.String getTempDir() {
+            java.lang.String tempDirFullPath = "/tmp";
+            java.lang.String separator = java.io.File.separator;
+            if (isWindows()) {
+                tempDirFullPath = "c:" + separator + separator + "temp";
+                java.io.File file = new java.io.File(tempDirFullPath);
+                if (!file.exists()) {
+                    file.mkdir();
+                }
+            }
+            return tempDirFullPath;
+        }
+    }
+
 
     /**
      * 文件工具类

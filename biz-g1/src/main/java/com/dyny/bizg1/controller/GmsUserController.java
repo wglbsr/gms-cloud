@@ -34,7 +34,7 @@ public class GmsUserController extends BaseControllerT<GmsUser> {
         user.setUserId(userId);
         user.setCustomerId(customerId);
         user.setCreateTime(LocalDateTime.now());
-        user.setRegionId(regionId);
+//        user.setRegionId(regionId);
         return getSuccessResult(gmsUserService.save(user));
     }
 
@@ -45,7 +45,7 @@ public class GmsUserController extends BaseControllerT<GmsUser> {
                              @RequestParam("customerId") int customerId) {
         GmsUser user = gmsUserService.getById(userId);
         user.setCustomerId(customerId);
-        user.setRegionId(regionId);
+//        user.setRegionId(regionId);
         return getSuccessResult(gmsUserService.updateById(user));
     }
 

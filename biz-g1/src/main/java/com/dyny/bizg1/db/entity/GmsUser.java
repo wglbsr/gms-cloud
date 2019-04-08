@@ -24,7 +24,7 @@ public class GmsUser extends Model<GmsUser> {
     @TableId(value = "user_id", type = IdType.INPUT)
     private Integer userId;
 
-    private Integer regionId;
+//    private Integer regionId;
 
     private Integer customerId;
 
@@ -39,13 +39,13 @@ public class GmsUser extends Model<GmsUser> {
         this.userId = userId;
     }
 
-    public Integer getRegionId() {
-        return regionId;
-    }
-
-    public void setRegionId(Integer regionId) {
-        this.regionId = regionId;
-    }
+//    public Integer getRegionId() {
+//        return regionId;
+//    }
+//
+//    public void setRegionId(Integer regionId) {
+//        this.regionId = regionId;
+//    }
 
     public Integer getCustomerId() {
         return customerId;
@@ -72,7 +72,7 @@ public class GmsUser extends Model<GmsUser> {
     public String toString() {
         return "GmsUser{" +
         "userId=" + userId +
-        ", regionId=" + regionId +
+//        ", regionId=" + regionId +
         ", customerId=" + customerId +
         ", createTime=" + createTime +
         "}";

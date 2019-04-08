@@ -84,6 +84,7 @@
         <el-dialog title="文件导入" :visible.sync="importDataWindowVisible" class="station-import-dialog" width="400px"
                    @close="clearImportWindowDialogData">
             <el-upload
+                    :headers="header"
                     class="upload-station"
                     ref="upload"
                     drag
@@ -109,8 +110,10 @@
     export default {
         data() {
             return {
+                token: localStorage.getItem("auth_token"),
+                header: {'auth_token': localStorage.getItem("auth_token")},
                 uploadParams: {},
-                uploadUri: "http://localhost:8610/station/importStationDataByExcel",
+                uploadUri: "http://localhost:8010/base-mongodb/file/upload",
                 importDataWindowVisible: false,
                 dialogVisible: false,
                 targetObject: {
@@ -134,19 +137,23 @@
             this.query();
         },
         methods: {
-            clearImportWindowDialogData(){
+            clearImportWindowDialogData() {
 
             },
             beforeUploadFile: function (file) {
                 let fileName = file.name;
             },
             uploadSuccess: function (response, file, fileList) {
-                if (response.result && response.data > 0) {
-                    this.$message({
-                        type: 'success',
-                        message: "导入成功"
+                if (response.result && response.data) {
+                    let fileId = response.data;
+                    this.$http.post("/biz-g1/station/import", qs.stringify({fileId: fileId,suffix:".xlsx"})).then(res => {//, {emulateJSON: true}
+                        if (res.result && res.data) {
+                            this.$message.success("操作成功!");
+                            this.dialogVisible = false;
+                            this.importDataWindowVisible = false;
+                        }
+                        this.query();
                     });
-                    this.importDataWindowVisible = false;
                     this.initTable();
                 } else {
                     this.$message.error("操作失败,请检查文件类型!");

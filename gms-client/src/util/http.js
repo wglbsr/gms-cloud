@@ -3,7 +3,6 @@ import {Notification} from "element-ui";
 import store from "../store";
 
 
-
 let HOST = 'https://www.yn-iot.cn';
 //开发环境
 if (process.env.NODE_ENV !== 'production') {
@@ -35,8 +34,8 @@ axios.interceptors.request.use(
         const requestConfig = config;
         //axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         // if (requestConfig.method == "post") {
-        // requestConfig.data = qs.stringify(requestConfig.data);
-        // requestConfig.headers['Content-Type'] = 'application/json';
+        //     requestConfig.data = qs.stringify(requestConfig.data);
+        //     requestConfig.headers['Content-Type'] = 'application/json';
         // }
         if (store.state.token) {
             requestConfig.headers.auth_token = `${store.state.token}`;

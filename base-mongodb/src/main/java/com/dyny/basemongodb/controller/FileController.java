@@ -65,6 +65,14 @@ public class FileController extends BaseController {
     }
 
 
+
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 调用文件下载需要使用feign包中的Response接收返回结果
+     * @Date 09:06 2019-04-08
+     * @Param [fileId, response]
+     * @return void
+     **/
     @GetMapping(value = "/download/{fileId}")
     public void getFileById(@PathVariable("fileId") String fileId, HttpServletResponse response) throws IOException {
         Query query = Query.query(Criteria.where("_id").is(fileId));

@@ -3,16 +3,18 @@ package com.dyny.bizg1.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dyny.bizg1.api.FileApi;
 import com.dyny.bizg1.db.entity.GmsUser;
 import com.dyny.bizg1.db.entity.Station;
+import com.dyny.bizg1.service.GmsUserService;
 import com.dyny.bizg1.service.StationService;
 import com.dyny.common.controller.BaseController;
+import com.dyny.common.utils.Utils;
+import feign.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * <p>
@@ -26,7 +28,9 @@ import java.io.IOException;
 @RequestMapping(value = "/station", produces = {BaseController.ENCODE_CHARSET_UTF8})
 public class StationController extends BizBaseControllerT<Station> {
     @Autowired
-    StationService stationService;
+    private StationService stationService;
+    @Autowired
+    private FileApi fileApi;
 
     @RequestMapping("/select/{id}")
     public String selectById(@PathVariable("id") int stationId) {
@@ -60,38 +64,51 @@ public class StationController extends BizBaseControllerT<Station> {
         return getSuccessResult(stationService.save(station) ? station.getId() : 0);
     }
 
+    @Autowired
+    GmsUserService gmsUserService;
 
     /**
+     * @return java.lang.String
      * @Author wanggl(lane)
      * @Description //TODO 后续应该做成通用的方式
      * 1.上传到mongodb,获得文件id
      * 2.将文件id作为参数传到这个方法进行导入
-     *
+     * 3.删除文件
      * @Date 16:41 2019-04-04
      * @Param [file]
-     * @return java.lang.String
      **/
-    @RequestMapping("/importStationDataByExcel")
+    @RequestMapping("/import")
     @ResponseBody
-    public String importStationDataByExcel(@RequestParam("file") MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return super.getErrorMsg("文件为空!");
+    public String importStationDataByExcel(@RequestParam("fileId") String fileId, @RequestParam("suffix") String suffix) {
+        Response response;
+        InputStream inputStream;
+        FileOutputStream fos;
+        BufferedOutputStream bos;
+        File file = null;
+        Boolean result = false;
+        try {
+            response = fileApi.getFileById(fileId);
+            Response.Body body = response.body();
+            inputStream = body.asInputStream();
+            byte[] b = new byte[inputStream.available()];
+            file = new File(Utils.OS.getTempDir() + File.separator + fileId + suffix);
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            bos.write(b);
+            Integer userId = getUserId();
+            GmsUser gmsUser = gmsUserService.getById(userId);
+            result = stationService.importStationFromExcelFile(file, gmsUser.getCustomerId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            fileApi.deleteFile(fileId);
+            if (file != null && file.exists()) {
+                file.delete();
+            }
         }
-        String fileName = file.getOriginalFilename();
-        String path = "";
-        File fileAbsPath = new File(path + File.separator + fileName);
-        //覆盖旧文件
-        if (fileAbsPath.exists()) {
-            fileAbsPath.delete();
-        }
-        if (!fileAbsPath.getParentFile().exists()) { //判断文件父目录是否存在
-            fileAbsPath.getParentFile().mkdirs();
-        } else {
-            file.transferTo(fileAbsPath);
-        }
-        GmsUser user = getUser(GmsUser.class);
-        int customerId = user.getCustomerId();
-        return super.getSuccessResult(stationService.importStationFromExcelFile(fileAbsPath, customerId));
+
+
+        return super.getSuccessResult(result);
     }
 }
 
