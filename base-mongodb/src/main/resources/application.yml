@@ -14,3 +14,10 @@ spring:
       database: gms_file
 server:
   port: 8020
+hystrix:
+  command:
+    helloService:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15000

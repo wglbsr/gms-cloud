@@ -11,10 +11,13 @@ import com.dyny.bizg1.service.StationService;
 import com.dyny.common.controller.BaseController;
 import com.dyny.common.utils.Utils;
 import feign.Response;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -79,22 +82,24 @@ public class StationController extends BizBaseControllerT<Station> {
      **/
     @RequestMapping("/import")
     @ResponseBody
-    public String importStationDataByExcel(@RequestParam("fileId") String fileId, @RequestParam("suffix") String suffix) {
+    public String importStationDataByExcel(@RequestParam("fileId") String fileId) {
         Response response;
         InputStream inputStream;
-        FileOutputStream fos;
-        BufferedOutputStream bos;
         File file = null;
         Boolean result = false;
         try {
             response = fileApi.getFileById(fileId);
+            Map headers = response.headers();
+            List fileNameList = (List) headers.get("fileName");
+            String fileName = null;
+            if (fileNameList != null && !fileNameList.isEmpty()) {
+                fileName = (String) fileNameList.get(0);
+            }
             Response.Body body = response.body();
             inputStream = body.asInputStream();
-            byte[] b = new byte[inputStream.available()];
-            file = new File(Utils.OS.getTempDir() + File.separator + fileId + suffix);
-            fos = new FileOutputStream(file);
-            bos = new BufferedOutputStream(fos);
-            bos.write(b);
+            file = new File(Utils.OS.getTempDir() + File.separator + fileName);
+            OutputStream outputStream = new FileOutputStream(file);
+            IOUtils.copy(inputStream, outputStream);
             Integer userId = getUserId();
             GmsUser gmsUser = gmsUserService.getById(userId);
             result = stationService.importStationFromExcelFile(file, gmsUser.getCustomerId());
@@ -106,8 +111,6 @@ public class StationController extends BizBaseControllerT<Station> {
                 file.delete();
             }
         }
-
-
         return super.getSuccessResult(result);
     }
 }

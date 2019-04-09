@@ -52,10 +52,11 @@ public class Station extends Model<Station> {
 
 //    @Excel(name = "地区id", width = 30, isImportField = "true_st")
     private Integer customerId;
-    @Excel(name = "站址", width = 30, isImportField = "true_st")
+    @Excel(name = "详细地址", width = 30, isImportField = "true_st")
     private String address;
-
-    @Excel(name = "产权属性", width = 30, isImportField = "true_st")
+    @Excel(name = "站址备注", width = 30, isImportField = "true_st")
+    private String addressRemark;
+    @Excel(name = "产权属性", width = 30, isImportField = "true_st" ,replace={"自建_0","注入_1"})
     private Integer type;
 
     public String getProvince() {
