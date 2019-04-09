@@ -31,6 +31,8 @@ public class StationServiceImpl extends ServiceImpl<StationMapper, Station> impl
         List<Station> importList = ExcelImportUtil.importExcel(file, Station.class, params);
         for (Station station : importList) {
             station.setCustomerId(customerId);
+            String code = station.getCode();
+            station.setRegionId(Integer.valueOf(code.substring(0, 6)));
         }
         return saveOrUpdateBatch(importList);
     }

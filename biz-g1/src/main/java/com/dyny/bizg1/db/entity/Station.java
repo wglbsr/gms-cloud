@@ -1,9 +1,7 @@
 package com.dyny.bizg1.db.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 import java.io.Serializable;
@@ -21,10 +19,11 @@ import java.math.BigDecimal;
 public class Station extends Model<Station> {
 
     private static final long serialVersionUID = 1L;
-//    @Excel(name = "经度", width = 30, isImportField = "true_st")
-    @TableId(value = "id", type = IdType.AUTO)
+    //    @Excel(name = "经度", width = 30, isImportField = "true_st")
+//    @TableField(strategy = FieldStrategy.IGNORED)
     private Integer id;
     @Excel(name = "站址编码", width = 30, isImportField = "true_st")
+    @TableId(value = "code", type = IdType.INPUT)
     private String code;
 
     @Excel(name = "纬度", width = 30, isImportField = "true_st")
@@ -32,8 +31,7 @@ public class Station extends Model<Station> {
 
     @Excel(name = "经度", width = 30, isImportField = "true_st")
     private BigDecimal longitude;
-
-    @Excel(name = "站址名称", width = 30, isImportField = "true_st")
+    @Excel(name = "名称", width = 30, isImportField = "true_st")
     private String name;
 
     @Excel(name = "省份", width = 30, isImportField = "true_st")
@@ -47,18 +45,23 @@ public class Station extends Model<Station> {
 
     @Excel(name = "备注", width = 30, isImportField = "true_st")
     private String description;
-
     private Integer regionId;
-
-//    @Excel(name = "地区id", width = 30, isImportField = "true_st")
+    //    @Excel(name = "地区id", width = 30, isImportField = "true_st")
     private Integer customerId;
     @Excel(name = "详细地址", width = 30, isImportField = "true_st")
     private String address;
-    @Excel(name = "站址备注", width = 30, isImportField = "true_st")
-    private String addressRemark;
-    @Excel(name = "产权属性", width = 30, isImportField = "true_st" ,replace={"自建_0","注入_1"})
+    @Excel(name = "产权属性", width = 30, isImportField = "true_st", replace = {"自建_0", "注入_1"})
     private Integer type;
 
+    public Integer getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(Integer carrier) {
+        this.carrier = carrier;
+    }
+    @Excel(name = "运营商", width = 30, isImportField = "true_st", replace = {"电信_1", "联通_2", "移动_4"})
+    private Integer carrier;
     public String getProvince() {
         return province;
     }
