@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.107.72.98:7990
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      username: gms_file_admin
+      password: gms_file_admin
+      database: gms_file

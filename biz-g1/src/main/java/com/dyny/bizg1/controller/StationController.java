@@ -86,7 +86,7 @@ public class StationController extends BizBaseControllerT<Station> {
         Response response;
         InputStream inputStream;
         File file = null;
-        Boolean result = false;
+        List<Integer> result = null;
         try {
             response = fileApi.getFileById(fileId);
             Map headers = response.headers();

@@ -17,13 +17,43 @@
         <el-table :data="stationList" style="width: 100%"
                   stripe highlight-current-row
                   v-loading="$store.state.loading">
-            <el-table-column prop="name" label="名称"></el-table-column>
+            <el-table-column type="expand">
+                <template slot-scope="props">
+                    <el-form label-position="left">
+                        <el-form-item size="mini">
+                            <span>{{ props.row.province }}</span>
+                            <span>{{ props.row.city }}</span>
+                            <span>{{ props.row.district }}</span>
+                        </el-form-item>
+                        <el-form-item label="类型:" size="mini">
+                            <span v-if="props.row.type==1">注入</span>
+                            <span v-if="props.row.type==0">自建</span>
+                        </el-form-item>
+                        <el-form-item label="所属:" size="mini">
+                            <span v-if="props.row.carrier==4">移动</span>
+                            <span v-if="props.row.carrier==2">联通</span>
+                            <span v-if="props.row.carrier==1">电信</span>
+                        </el-form-item>
+                        <el-form-item label="地区编码:" size="mini">
+                            {{props.row.regionId}}
+                        </el-form-item>
+                        <el-form-item label="客户编号:" size="mini">
+                            {{props.row.customerId}}
+                        </el-form-item>
+                        <el-form-item label="详细地址:" fixed="right" size="mini">
+                            <span>{{ props.row.address}}</span>
+                        </el-form-item>
+                        <el-form-item label="坐标:" fixed="right" size="mini">
+                            <span>{{ props.row.longitude?props.row.longitude:'暂无'}}</span>, <span>{{ props.row.latitude?props.row.latitude:'暂无'}}</span>
+                        </el-form-item>
+                        <el-form-item label="备注:" fixed="right" size="mini">
+                            <span>{{ props.row.description?props.row.description:'暂无'}}</span>
+                        </el-form-item>
+                    </el-form>
+                </template>
+            </el-table-column>
             <el-table-column prop="code" label="编号"></el-table-column>
-            <el-table-column prop="longitude" label="经度"></el-table-column>
-            <el-table-column prop="latitude" label="纬度"></el-table-column>
-            <el-table-column prop="description" label="备注"></el-table-column>
-            <el-table-column prop="customerId" label="客户编号"></el-table-column>
-            <el-table-column prop="regionId" label="地区"></el-table-column>
+            <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                     <el-button size="mini" type="danger" @click="deleteStation(scope.row.id)">
@@ -81,7 +111,7 @@
             </el-form>
         </el-dialog>
 
-        <el-dialog title="文件导入" :visible.sync="importDataWindowVisible" class="station-import-dialog" width="400px"
+        <el-dialog title="文件导入" :visible="importDataWindowVisible" class="station-import-dialog" width="400px"
                    @close="clearImportWindowDialogData">
             <el-upload
                     :headers="header"
@@ -144,17 +174,24 @@
                 let fileName = file.name;
             },
             uploadSuccess: function (response, file, fileList) {
+                let that = this;
                 if (response.result && response.data) {
                     let fileId = response.data;
-                    this.$http.post("/biz-g1/station/import", qs.stringify({fileId: fileId,suffix:".xlsx"})).then(res => {//, {emulateJSON: true}
-                        if (res.result && res.data) {
-                            this.$message.success("操作成功!");
-                            this.dialogVisible = false;
-                            this.importDataWindowVisible = false;
+                    this.$http.post("/biz-g1/station/import", qs.stringify({
+                        fileId: fileId,
+                        suffix: ".xlsx"
+                    })).then(res => {
+                        if (res.data.result) {
+                            let errorList = res.data.data;
+                            if (errorList != null && errorList.length > 0) {
+                                alert("部分数据导入成功,第" + JSON.stringify(errorList) + "条数据存在问题!");
+                            } else {
+                                this.$message.success("操作成功!");
+                            }
+                            that.importDataWindowVisible = false;
                         }
                         this.query();
                     });
-                    this.initTable();
                 } else {
                     this.$message.error("操作失败,请检查文件类型!");
                 }
@@ -249,5 +286,4 @@
 </script>
 
 <style scoped>
-
 </style>

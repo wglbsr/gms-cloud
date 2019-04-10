@@ -4,6 +4,7 @@ import com.dyny.bizg1.db.entity.Station;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +15,5 @@ import java.io.File;
  * @since 2019-03-12
  */
 public interface StationService extends IService<Station> {
-    boolean importStationFromExcelFile(File file, int customerId);
+    List<Integer> importStationFromExcelFile(File file, int customerId);
 }
