@@ -4,7 +4,7 @@ spring:
     port: 6379
     database: 1
     password: Dyny0763Redis
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 47.107.72.98:7990
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 47.107.72.98:7990

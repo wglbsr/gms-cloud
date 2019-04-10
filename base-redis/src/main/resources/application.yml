@@ -3,6 +3,10 @@ server:
     active: @package.environment@
   port: 8015 #8181
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.107.72.98:7990
   application:
     name: base-redis
 management:
