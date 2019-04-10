@@ -1,17 +1,10 @@
 server:
+  profiles:
+    active: @package.environment@
   port: 8015 #8181
 spring:
-  redis:
-    host: 39.108.127.174
-    port: 6379
-    database: 1
-    password: Dyny0763Redis
   application:
     name: base-redis
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:7990
 management:
   endpoints:
     web:

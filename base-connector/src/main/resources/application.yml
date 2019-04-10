@@ -1,14 +1,12 @@
 server:
   port: 8030
 spring:
+  profiles:
+    active: @package.environment@
   main:
     allow-bean-definition-overriding: true
   application:
     name: base-connector
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:7990
 management:
   endpoints:
     web:

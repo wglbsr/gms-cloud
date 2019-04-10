@@ -1,0 +1,28 @@
+spring:
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    #开发时关闭缓存,不然没法看到实时页面
+    cache: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.107.72.98:7990
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://120.79.91.131:3306/gms_cloud?characterEncoding=utf8&useSSL=true
+      username: nacos_admin
+      password: nacos_admin
+      initial-size: 1
+      min-idle: 5
+      max-active: 50
+      max-wait: 6000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30000
+      validation-query: select 1
+      test-while-idle: false
+      test-on-borrow: false
+      test-on-return: false
+      filters: stat,wall,slf4j
+      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=15000
