@@ -21,15 +21,15 @@ public interface MongodbApi {
 
 
     @PostMapping("/data/{table}/{id}")
-    String insert(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("setting") String jsonData);
+    String insert(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("jsonData") String jsonData);
 
     @PostMapping("/data/{table}")
-    String insert(@PathVariable("table") String tableName, @RequestParam("setting") String jsonData);
+    String insert(@PathVariable("table") String tableName, @RequestParam("jsonData") String jsonData);
 
     @DeleteMapping("/data/{table}/{id}")
     String delete(@PathVariable("table") String tableName, @PathVariable("id") String id);
 
 
     @PutMapping("/data/{table}/{id}")
-    String update(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("setting") String jsonData);
+    String update(@PathVariable("table") String tableName, @PathVariable("id") String id, @RequestParam("jsonData") String jsonData);
 }

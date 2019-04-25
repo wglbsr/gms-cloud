@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -93,8 +94,8 @@ public class MongodbDaoImpl implements MongodbDao {
             return null;
         }
         Bson filter = Filters.eq(KEY_ID, objectId);
-        collection.replaceOne(filter, data);
-        return collection.find(Filters.eq(KEY_ID, new ObjectId(id))).first();
+        UpdateResult updateResult = collection.replaceOne(filter, data);
+        return updateResult.getMatchedCount() > 0 ? data : null;
     }
 
     @Override

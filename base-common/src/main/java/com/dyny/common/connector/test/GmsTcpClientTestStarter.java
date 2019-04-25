@@ -26,7 +26,7 @@ public class GmsTcpClientTestStarter {
     //服务器节点
 //    public static Node serverNode = new Node("127.0.0.1", 6789);
     //handler, 包括编码、解码、消息处理
-    public static Node serverNode = new Node("120.79.91.131", 6789);
+    public static Node serverNode = new Node("free.idcfengye.com", 17691);
     //    public static ClientAioHandler tioClientHandler = new HelloClientAioHandler();
     public static ClientAioHandler tioClientHandler = new GmsTcpClientAioHandler();
     //事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
