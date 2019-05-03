@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.server;
+package com.dyny.baseconnector.server.tcp;
 
 import com.dyny.common.enums.ConnectionTypeEnum;
 import org.slf4j.Logger;
@@ -15,12 +15,12 @@ import org.tio.websocket.common.WsSessionContext;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsServerAioListener implements ServerAioListener, ClientAioListener {
-    private static Logger logger = LoggerFactory.getLogger(GmsServerAioListener.class);
+public class GmsTcpServerAioListener implements ServerAioListener, ClientAioListener {
+    private static Logger logger = LoggerFactory.getLogger(GmsTcpServerAioListener.class);
     @Override
     public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
         if (isConnected) {
-            if (GmsServerAioHandler.isWsConnection(channelContext)) {
+            if (GmsTcpServerAioHandler.isWsConnection(channelContext)) {
                 WsSessionContext wsSessionContext = new WsSessionContext();
                 wsSessionContext.setHandshaked(true);
                 channelContext.setAttribute(wsSessionContext);

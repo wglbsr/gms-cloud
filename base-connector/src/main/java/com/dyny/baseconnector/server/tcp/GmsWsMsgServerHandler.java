@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.server;
+package com.dyny.baseconnector.server.tcp;
 
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;

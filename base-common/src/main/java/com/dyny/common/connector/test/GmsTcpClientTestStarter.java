@@ -1,8 +1,6 @@
 package com.dyny.common.connector.test;
 
 import com.dyny.common.connector.packet.GmsTcpPacket;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tio.client.ClientChannelContext;
@@ -47,33 +45,26 @@ public class GmsTcpClientTestStarter {
         clientChannelContext = tioClient.connect(serverNode);
         while (true) {
             Thread.sleep(5000);
-            sendPassword();
         }
     }
 
     private static void sendDeviceId() {
         logger.info("发送设备id");
-        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_DEVICE_ID, 0, 0, 0, 0, 0, 0, 1, 1);
+        GmsTcpPacket packet = new GmsTcpPacket(0x00, 0xff, 0x19, 0x01, 0x00, 0x10);
         Tio.send(clientChannelContext, packet);
     }
 
 
-    private static void sendHeartbeat() {
-        logger.info("发送心跳包");
-        GmsTcpPacket packet = new GmsTcpPacket(0x0);
-        Tio.send(clientChannelContext, packet);
-    }
-
-    private static void sendOpenAll() {
-        logger.info("发送打开所有通道的命令");
-        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00);
-        Tio.send(clientChannelContext, packet);
-    }
-
-    private static void sendPassword() throws DecoderException {
-        logger.info("发送打开所有通道的命令");
-        String psw = "11666666";
-        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_QR_CODE, Hex.decodeHex(psw));
-        Tio.send(clientChannelContext, packet);
-    }
+//    private static void sendOpenAll() {
+//        logger.info("发送打开所有通道的命令");
+//        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00);
+//        Tio.send(clientChannelContext, packet);
+//    }
+//
+//    private static void sendPassword() throws DecoderException {
+//        logger.info("发送打开所有通道的命令");
+//        String psw = "11666666";
+//        GmsTcpPacket packet = new GmsTcpPacket(0x00, GmsTcpPacket.CMD_QR_CODE, Hex.decodeHex(psw));
+//        Tio.send(clientChannelContext, packet);
+//    }
 }

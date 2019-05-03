@@ -1,12 +1,9 @@
-package com.dyny.baseconnector.server;
+package com.dyny.baseconnector.server.tcp;
 
 import com.dyny.common.annotation.Unfinished;
-import com.dyny.common.connector.filter.IsWsServerFilter;
 import com.dyny.common.connector.handler.CommonHandler;
 import com.dyny.common.connector.packet.GmsTcpPacket;
-import com.dyny.common.constant.TcpConstant;
 import com.dyny.common.enums.ConnectionTypeEnum;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
@@ -15,7 +12,6 @@ import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioHandler;
-import org.tio.websocket.common.Opcode;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.common.WsServerEncoder;
@@ -23,7 +19,6 @@ import org.tio.websocket.server.WsServerConfig;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
 import java.nio.ByteBuffer;
-import java.time.LocalDateTime;
 
 /**
  * @Auther: lane
@@ -31,13 +26,13 @@ import java.time.LocalDateTime;
  * @Description:
  * @Version 1.0.0
  */
-public class GmsServerAioHandler implements ServerAioHandler {
-    private static Logger logger = LoggerFactory.getLogger(GmsServerAioHandler.class);
+public class GmsTcpServerAioHandler implements ServerAioHandler {
+    private static Logger logger = LoggerFactory.getLogger(GmsTcpServerAioHandler.class);
     private WsServerConfig wsServerConfig;
     private IWsMsgHandler wsMsgHandler;
 
 
-    public GmsServerAioHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
+    public GmsTcpServerAioHandler(WsServerConfig wsServerConfig, IWsMsgHandler wsMsgHandler) {
         this.wsServerConfig = wsServerConfig;
         this.wsMsgHandler = wsMsgHandler;
     }
@@ -53,7 +48,7 @@ public class GmsServerAioHandler implements ServerAioHandler {
     }
 
     private boolean _isWsConnection(ChannelContext channelContext) {
-        return isWsConnection(channelContext);
+        return false;//isWsConnection(channelContext);
     }
 
     @Override
@@ -85,20 +80,21 @@ public class GmsServerAioHandler implements ServerAioHandler {
 
     @Unfinished
     public static boolean isWsConnection(ChannelContext channelContext) {
+        return false;
         //首先查找attr里面查找KEY_IS_WS_CONNECTION是否为websocket连接
-        Integer connectionType = (Integer) channelContext.getAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE);
-        if (connectionType == null) {
-            //debug 开发调试使用的代码,生产环境务必注释!
-            //debug 开发调试使用的代码,生产环境务必注释!
-            //debug 开发调试使用的代码,生产环境务必注释!
-            if (temp == 0) {
-                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.TCP_FROM_DEVICE.getType());
-                temp++;
-                return false;
-            } else {
-                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.WS_FROM_SERVER.getType());
-                return true;
-            }
+//        Integer connectionType = (Integer) channelContext.getAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE);
+//        if (connectionType == null) {
+        //debug 开发调试使用的代码,生产环境务必注释!
+        //debug 开发调试使用的代码,生产环境务必注释!
+        //debug 开发调试使用的代码,生产环境务必注释!
+//            if (temp == 0) {
+//                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.TCP_FROM_DEVICE.getType());
+//                temp++;
+//                return false;
+//            } else {
+//                channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.WS_FROM_SERVER.getType());
+//                return true;
+//            }
 //            String key = ClientNodes.getKey(channelContext);
 //            String ipReg = "127.0.0.1:6.*";
 //            if (!key.matches(ipReg)) {
@@ -106,12 +102,12 @@ public class GmsServerAioHandler implements ServerAioHandler {
 //            } else {
 //                return false;
 //            }
-            //从缓存中查找
+        //从缓存中查找
 //            RedisApi redisApi = SpringBeanUtils.getBean(RedisApi.class);
 //            redisApi.get(TcpConstant.KEY_WS_SERVER_LIST);
-        } else {
-            return ConnectionTypeEnum.WS_FROM_SERVER.getType().equals(connectionType);
-        }
+//        } else {
+//            return ConnectionTypeEnum.WS_FROM_SERVER.getType().equals(connectionType);
+//        }
     }
 
 
@@ -181,30 +177,8 @@ public class GmsServerAioHandler implements ServerAioHandler {
     private void tcpHandler(Packet packet, ChannelContext channelContext) {
         GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
         logger.info("received full packet[" + gmsTcpPacket.getFullContent(true) + "]");
-        //绑定设备id到channel
-//        String deviceId = "18080008";
-        String deviceId = (String) channelContext.getAttribute(TcpConstant.KEY_DEVICE_ID);
-        if (StringUtils.isNotEmpty(deviceId) && GmsTcpPacket.CMD_DEVICE_ID.equals(gmsTcpPacket.getCommand())) {
-            logger.info("绑定设备Id[{}]", deviceId);
-            channelContext.setAttribute(TcpConstant.KEY_DEVICE_ID, deviceId);
-            channelContext.setAttribute(ConnectionTypeEnum.KEY_CONNECTION_TYPE, ConnectionTypeEnum.TCP_FROM_DEVICE.getType());
-        }
-        if (StringUtils.isEmpty(deviceId)) {
-            Tio.send(channelContext, new GmsTcpPacket(GmsTcpPacket.CMD_DEVICE_ID));
-            logger.info("未绑定id");
-            return;
-        }
-        WsResponse wsResponse = new WsResponse();
-        wsResponse.setWsOpcode(Opcode.TEXT);
-        String message = ("组播消息[" + LocalDateTime.now().toString() + "]");
-        logger.info(message);
-        wsResponse.setBody(message.getBytes());
-        Tio.sendToAll(channelContext.getGroupContext(), wsResponse, new IsWsServerFilter());
-    }
-
-
-    private void multicast() {
-
+        GmsTcpPacket res = new GmsTcpPacket(0xff, 0x19, 0x01, 0x00, 0x10, 0xff, 0xff);
+        Tio.send(channelContext, res);
     }
 
 

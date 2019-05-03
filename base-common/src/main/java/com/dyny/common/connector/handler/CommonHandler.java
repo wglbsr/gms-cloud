@@ -33,11 +33,11 @@ public class CommonHandler {
 
 
     public static byte[] getTcpHeader(ByteBuffer buffer, int limit, int position, int readableLength) {
+        //84 07 FF 19 01 00 10 FF FF 27 16
         if (readableLength < GmsTcpPacket.LENGTH_MIN) {
             return null;
         }
         byte[] headerBytes = new byte[GmsTcpPacket.LENGTH_HEADER];
-        //读取消息体的长度
         buffer.get(headerBytes, 0, headerBytes.length);
         return headerBytes;
     }
@@ -89,7 +89,6 @@ public class CommonHandler {
     }
 
     public static WsResponse wsHandler(WsRequest websocketPacket, Opcode opcode, ChannelContext channelContext, IWsMsgHandler wsMsgHandler) throws Exception {
-
 
 
         WsResponse wsResponse;
@@ -171,7 +170,8 @@ public class CommonHandler {
         }
     }
 
-
+    //头 长度 命令          数据位            校验   尾部
+    //84  07  ff     19 01 00 10 ff ff        27    16
     /**
      * @return com.yniot.lms.socket.packet.GmsTcpPacket
      * @Author wanggl(lane)
@@ -183,34 +183,32 @@ public class CommonHandler {
         //提醒：buffer的开始位置并不一定是0，应用需要从buffer.position()开始读取数据
         //收到的数据组不了业务包，则返回null以告诉框架数据不够
         Byte lengthByte = buffer.get();
-        Integer fullPackLength = lengthByte.intValue();
+        //这个长度是命令加数据的长度,不包括头部,长度,校验位,尾部4个位置
+        Integer bodyLength = lengthByte.intValue();
         //数据不正确，则抛出AioDecodeException异常
         Node clientNode = channelContext.getClientNode();
         String ip = clientNode.getIp();
-        if (fullPackLength < 0) {
-            throw new AioDecodeException("fullPack length [" + fullPackLength + "] is not right, domain:" + ip);
+        if (bodyLength < 0) {
+            throw new AioDecodeException("fullPack length [" + bodyLength + "] is not right, domain:" + ip);
         }
-        //除去头部和长度后的长度
-        int bodyLength = fullPackLength - GmsTcpPacket.LENGTH_HEADER - 1;
-        //收到的数据是否足够组包
         // 不够消息体长度(剩下的buffer组不了消息体)
         if (readableLength - bodyLength < 0) {
             logger.info("长度不够");
             return null;
         } else {//组包成功
             GmsTcpPacket gmsTcpPacket = null;
-            if (fullPackLength > 0) {
-                byte address = buffer.get();
+            if (bodyLength > 0) {
                 byte cmd = buffer.get();
                 byte[] data = new byte[0];
-                int dataLength = fullPackLength - GmsTcpPacket.LENGTH_MIN;
+                int dataLength = bodyLength - 1;
                 if (dataLength > 0) {
                     data = new byte[dataLength];
                     buffer.get(data);
                 }
                 byte check = buffer.get();
+                byte tail = buffer.get();
                 try {
-                    gmsTcpPacket = GmsTcpPacket.parse(headerBytes, lengthByte, address, cmd, data, check);
+                    gmsTcpPacket = GmsTcpPacket.parse(headerBytes, lengthByte, cmd, data, check);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

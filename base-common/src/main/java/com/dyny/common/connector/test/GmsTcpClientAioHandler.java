@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioHandler;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
-import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 
@@ -43,7 +42,7 @@ public class GmsTcpClientAioHandler implements ClientAioHandler {
     public void handler(Packet packet, ChannelContext channelContext) throws Exception {
         GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
         logger.info("full packet[" + gmsTcpPacket.getFullContent(true) + "]");
-        Tio.send(channelContext, new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00));
+//        Tio.send(channelContext, new GmsTcpPacket(0x00, GmsTcpPacket.CMD_OPEN_ALL, 0x00));
     }
 
 

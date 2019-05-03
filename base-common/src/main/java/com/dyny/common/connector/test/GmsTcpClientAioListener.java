@@ -1,5 +1,6 @@
 package com.dyny.common.connector.test;
 
+import com.dyny.common.connector.packet.GmsTcpPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioListener;
@@ -34,7 +35,8 @@ public class GmsTcpClientAioListener implements ServerAioListener, ClientAioList
 
     @Override
     public void onAfterSent(ChannelContext channelContext, Packet packet, boolean isSentSuccess) throws Exception {
-
+        GmsTcpPacket gmsTcpPacket = (GmsTcpPacket) packet;
+        logger.info("发送[{}]" + gmsTcpPacket.getFullContent(true));
     }
 
     @Override
