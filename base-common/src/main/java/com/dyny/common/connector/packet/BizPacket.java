@@ -15,5 +15,5 @@ import java.util.Map;
 public class BizPacket {
 
     private Integer cmd;
-    private Map<Integer,List<Byte>> content;
+    private Map<Integer, List<Byte>> content;
 }

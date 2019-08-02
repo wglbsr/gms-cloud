@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.107.72.98:7990

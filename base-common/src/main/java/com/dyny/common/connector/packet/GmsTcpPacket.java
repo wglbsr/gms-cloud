@@ -177,7 +177,7 @@ public class GmsTcpPacket extends Packet {
             resultByte[index++] = b.byteValue();
         }
         beforeCheck.addAll(header);
-        resultByte[index++] = Integer.valueOf(this.data.size()+1).byteValue();
+        resultByte[index++] = Integer.valueOf(this.data.size() + 1).byteValue();
         beforeCheck.add(this.length);
         resultByte[index++] = this.command.byteValue();
         beforeCheck.add(this.command);

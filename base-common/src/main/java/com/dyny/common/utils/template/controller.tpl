@@ -31,25 +31,25 @@ public String select(@RequestParam(KEY_KEY_WORD) String keyWord,
 @RequestParam(KEY_PAGE_NUM) int pageNum,
 @RequestParam(KEY_PAGE_SIZE) int pageSize) {
 QueryWrapper<${entityName}> ${entityNameLower}QueryWrapper = new QueryWrapper<>();
-    ${entityNameLower}QueryWrapper.like("name", keyWord).or()
-    .like("address", keyWord);
-    return getSuccessResult(${entityNameLower}Service.page(new Page<>(pageNum, pageSize), ${entityNameLower}QueryWrapper));
-    }
+${entityNameLower}QueryWrapper.like("name", keyWord).or()
+.like("address", keyWord);
+return getSuccessResult(${entityNameLower}Service.page(new Page<>(pageNum, pageSize), ${entityNameLower}QueryWrapper));
+}
 
-    @RequestMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int ${entityNameLower}Id) {
-    return getSuccessResult(${entityNameLower}Service.removeById(${entityNameLower}Id));
-    }
+@RequestMapping("/delete/{id}")
+public String delete(@PathVariable("id") int ${entityNameLower}Id) {
+return getSuccessResult(${entityNameLower}Service.removeById(${entityNameLower}Id));
+}
 
 
-    @RequestMapping("/modify")
-    public String modify(@RequestBody ${entityName} ${entityNameLower}) {
-    return getSuccessResult(${entityNameLower}Service.updateById(${entityNameLower}));
-    }
+@RequestMapping("/modify")
+public String modify(@RequestBody ${entityName} ${entityNameLower}) {
+return getSuccessResult(${entityNameLower}Service.updateById(${entityNameLower}));
+}
 
-    @RequestMapping("/create")
-    public String create(@RequestBody ${entityName} ${entityNameLower}) {
-    return getSuccessResult(${entityNameLower}Service.save(${entityNameLower}) ? ${entityNameLower}.getId() : 0);
-    }
+@RequestMapping("/create")
+public String create(@RequestBody ${entityName} ${entityNameLower}) {
+return getSuccessResult(${entityNameLower}Service.save(${entityNameLower}) ? ${entityNameLower}.getId() : 0);
+}
 }
 

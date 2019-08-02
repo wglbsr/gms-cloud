@@ -172,6 +172,7 @@ public class CommonHandler {
 
     //头 长度 命令          数据位            校验   尾部
     //84  07  ff     19 01 00 10 ff ff        27    16
+
     /**
      * @return com.yniot.lms.socket.packet.GmsTcpPacket
      * @Author wanggl(lane)

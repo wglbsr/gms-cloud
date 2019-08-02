@@ -14,7 +14,6 @@ public interface CommonMapper<T> extends BaseMapper<T> {
     static boolean saveOrUpdateAuto(Collection collection) {
 
 
-
         return false;
     }
 

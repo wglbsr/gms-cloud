@@ -77,7 +77,7 @@ public class MyBatisPlusGenerator {
             stConfig.setCapitalMode(true) //全局大写命名
                     .setNaming(NamingStrategy.underline_to_camel) // 数据库表映射到实体的命名策略
                     .setColumnNaming(NamingStrategy.underline_to_camel) // 字段名映射策略
-                    .setFieldPrefix("s_","b_","i_","d_")
+                    .setFieldPrefix("s_", "b_", "i_", "d_")
                     .setTablePrefix(prefix)
                     .setInclude(tableName)// 目标表
                     .setRestControllerStyle(true)
