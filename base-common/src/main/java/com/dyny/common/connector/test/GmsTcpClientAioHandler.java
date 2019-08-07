@@ -24,7 +24,6 @@ public class GmsTcpClientAioHandler implements ClientAioHandler {
     @Override
     public Packet decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
         byte[] headerBytes = CommonHandler.getTcpHeader(buffer, limit, position, readableLength);
-        //分为普通包和二维码包,直接为二维码图片对应的字符,因此也没有头部
         if (GmsTcpPacket.isHeaderMatch(headerBytes)) {
             logger.info("普通包,有格式");
             return CommonHandler.getNormalPacket(buffer, headerBytes, limit, position, readableLength, channelContext);

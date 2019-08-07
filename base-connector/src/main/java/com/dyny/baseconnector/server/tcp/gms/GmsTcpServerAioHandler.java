@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.server.tcp;
+package com.dyny.baseconnector.server.tcp.gms;
 
 import com.dyny.common.annotation.Unfinished;
 import com.dyny.common.connector.handler.CommonHandler;
