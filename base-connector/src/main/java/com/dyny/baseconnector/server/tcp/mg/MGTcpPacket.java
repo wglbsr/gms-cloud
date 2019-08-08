@@ -3,6 +3,7 @@ package com.dyny.baseconnector.server.tcp.mg;
 import com.dyny.common.utils.Crc16Util;
 import com.dyny.common.utils.Utils;
 import lombok.Data;
+import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
@@ -90,7 +91,7 @@ public class MGTcpPacket extends Packet {
     public void setPayloadBytes0(byte[] payloadBytes0) {
         this.payloadBytes0 = payloadBytes0;
         byte[] size = Utils.Byte.int2bytes(payloadBytes0.length);
-        this.setLengthBytes2(ByteBuffer.wrap(size, 0, 2).array());
+        this.setLengthBytes2(ByteBuffer.wrap(size).array());
     }
 
     private void setCrcCheck2() {
@@ -197,8 +198,13 @@ public class MGTcpPacket extends Packet {
         this.dataUnitList = new ArrayList<>();
         for (int i = 0; i * 12 < payloadBytes0.length; i++) {
             int index = i * 12;
-            MGDataUnit mgDataUnit = new MGDataUnit(ByteBuffer.wrap(payloadBytes0, index, 12).array());
+            MGDataUnit mgDataUnit = new MGDataUnit(ByteUtils.subArray(payloadBytes0, index, 12));
             dataUnitList.add(mgDataUnit);
         }
     }
+
+
+//    public float getLatitude(){
+//
+//    }
 }
