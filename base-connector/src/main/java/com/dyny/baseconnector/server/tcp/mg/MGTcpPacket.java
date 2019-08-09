@@ -11,6 +11,7 @@ import org.tio.core.intf.Packet;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,4 +208,109 @@ public class MGTcpPacket extends Packet {
 //    public float getLatitude(){
 //
 //    }
+
+    /**************************回复型报文**********************************/
+    public static byte[] combinePayload(byte[] id4, byte[] data8) {
+        return ByteUtils.concatenate(id4, data8);
+    }
+//    public static byte[] combinePayload(byte... id4, byte[] data8) {
+//        return ByteBuffer.wrap(id4).put(data8).array();
+//    }
+//    public static byte[] combinePayload(Integer id4, byte[] data8) {
+//        return combinePayload(Utils.Byte.int2bytes(id4), data8);
+//    }
+
+    public static byte[] combinePayload(Integer id4, byte... data8) {
+        return combinePayload(Utils.Byte.int2bytes(id4), data8);
+    }
+
+
+    public static byte[] combinePayload(Integer id4, int size, byte... data) {
+        byte[] tempData;
+        if (size == 0 || size == data.length) {
+            tempData = data;
+        } else {
+            tempData = new byte[size];
+            for (int i = 0; i < size; i++) {
+                if (i >= data.length) {
+                    tempData[i] = 0x00;
+                } else {
+                    tempData[i] = data[i];
+                }
+            }
+        }
+        return combinePayload(Utils.Byte.int2bytes(id4), tempData);
+
+    }
+
+    //1.时间应答报文0x1C006601
+    public static MGTcpPacket getTimeResPacket(byte[] frameSerial2, byte[] prodSerialBytes6) {
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        String year1 = (year + "").substring(0, 2);
+        String year2 = (year + "").substring(2, 4);
+        Integer month = now.getMonthValue();
+        Integer day = now.getDayOfMonth();
+        Integer hour = now.getHour();
+        Integer minute = now.getMinute();
+        Integer second = now.getSecond();
+        byte[] data8 = {Integer.valueOf(year1).byteValue(),
+                Integer.valueOf(year2).byteValue(),
+                month.byteValue(),
+                day.byteValue(),
+                hour.byteValue(),
+                minute.byteValue(),
+                second.byteValue(), 0x00};
+        MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
+                , (byte) 0x00, prodSerialBytes6, combinePayload(0x1C006601, data8), frameSerial2);
+        return mgTcpPacket;
+    }
+
+
+    //2.动态型报文发送周期配置0x12340004
+    //第五个字节0x55,固定
+    //六七个字节为发送周期
+    public static MGTcpPacket getDynamicTimePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int seconds) {
+        byte[] data = {0x55};
+        byte[] secondBytes = ByteUtils.subArray(Utils.Byte.int2bytes(seconds), 0, 2);
+
+        MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
+                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12340004, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
+        return mgTcpPacket;
+    }
+
+
+    //3.心跳报文发送周期配置0x12340005
+    //第五个字节0x55,固定
+    //六七个字节为发送周期
+    public static MGTcpPacket getHeartbeatTimePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int seconds) {
+        byte[] data = {0x55};
+        byte[] secondBytes = ByteUtils.subArray(Utils.Byte.int2bytes(seconds), 0, 2);
+
+        MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
+                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12340005, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
+        return mgTcpPacket;
+    }
+
+    //4.强制休眠0x12340008
+    //第五个字节0x55,固定
+    public static MGTcpPacket getForceToSleepPacketRes(byte[] frameSerial2, byte[] prodSerialBytes6) {
+        byte[] data = {0x55};
+
+        MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
+                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12340008, 8, data), frameSerial2);
+        return mgTcpPacket;
+    }
+
+
+    //5.远程升级0x12345040
+    //第五个字节0x02：升级无线通讯程序，0x03：升级控制器程序
+    public static MGTcpPacket getUpgradePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int upgradeType) {
+        byte[] data = {0x55, (byte) upgradeType};
+
+        MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
+                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12345040, 8, data), frameSerial2);
+        return mgTcpPacket;
+    }
+
 }
