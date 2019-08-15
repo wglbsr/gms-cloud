@@ -40,6 +40,14 @@ public class Utils {
             return result;
         }
 
+        public static int bytes2int(byte[] bytes) {
+            int i0 = bytes[0];
+            int i1 = (bytes[1] & 0xFF) << 8;
+            int i2 = (bytes[2] & 0xFF) << 16;
+            int i3 = (bytes[3] & 0xFF) << 24;
+            return i0 | i1 | i2 | i3;
+        }
+
     }
 
     public static class OS {

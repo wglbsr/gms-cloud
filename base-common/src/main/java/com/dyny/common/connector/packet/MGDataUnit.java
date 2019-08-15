@@ -1,4 +1,4 @@
-package com.dyny.baseconnector.server.tcp.mg;
+package com.dyny.common.connector.packet;
 
 import lombok.Data;
 import org.apache.tomcat.util.buf.HexUtils;

@@ -18,7 +18,7 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
-        <t-io.version>3.2.7.v20190222-RELEASE</t-io.version>
+        <t-io.version>3.3.6.v20190725-RELEASE</t-io.version>
     </properties>
 
     <modules>

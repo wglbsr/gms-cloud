@@ -24,7 +24,7 @@ public class MyBatisPlusGenerator {
         Map<String, String> table = new HashMap<>();
 
         //直接在这里添加表名和前缀即可,key为表名,value为前缀
-        table.put("base_region", "base_");
+        table.put("packet", "");
 
         MyBatisPlusGenerator myBatisPlusGenerator = new MyBatisPlusGenerator();
         myBatisPlusGenerator.generateCode(table);
@@ -36,7 +36,7 @@ public class MyBatisPlusGenerator {
         GlobalConfig config = new GlobalConfig();
         config.setActiveRecord(true) // 是否支持AR模式
                 .setAuthor("wanggl") // 作者
-                .setOutputDir("/Users/lane/IdeaProjects/gms-cloud/mid-region/src/main/java") // 生成路径
+                .setOutputDir("D:\\ideaWorkspace\\gms-cloud\\biz-gdmodule\\src\\main\\java") // 生成路径
                 .setFileOverride(true)  // 文件覆盖
                 .setIdType(IdType.AUTO) // 主键策略
                 .setServiceName("%sService")  // 设置生成的service接口的名字
@@ -47,13 +47,13 @@ public class MyBatisPlusGenerator {
         DataSourceConfig dsConfig = new DataSourceConfig();
         dsConfig.setDbType(DbType.MYSQL)  // 设置数据库类型
                 .setDriverName("com.mysql.jdbc.Driver")
-                .setUrl("jdbc:mysql://120.79.91.131:3306/gms_cloud?useUnicode=true&useSSL=false&characterEncoding=utf8")
-                .setUsername("nacos_admin")
-                .setPassword("nacos_admin");
+                .setUrl("jdbc:mysql://120.79.91.131:3306/gd_module?useUnicode=true&useSSL=false&characterEncoding=utf8")
+                .setUsername("gd_module_admin")
+                .setPassword("gd_module_admin");
 
         //4. 包名策略配置
         PackageConfig pkConfig = new PackageConfig();
-        pkConfig.setParent("com.dyny.midregion")
+        pkConfig.setParent("com.dyny.gdmodule")
                 .setMapper("db.dao")//dao
                 .setService("service")//servcie
                 .setServiceImpl("service.impl")//

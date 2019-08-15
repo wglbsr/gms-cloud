@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyny.gdmodule.db.dao.PacketMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dyny.gdmodule.db.entity.Packet">
+        <id column="id" property="id" />
+        <result column="caller_username" property="callerUsername" />
+        <result column="caller_password" property="callerPassword" />
+        <result column="producer" property="producer" />
+        <result column="sp_name" property="spName" />
+        <result column="state" property="state" />
+        <result column="serial_num" property="serialNum" />
+        <result column="begin_time" property="beginTime" />
+        <result column="end_time" property="endTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="sid" property="sid" />
+        <result column="bid" property="bid" />
+        <result column="sp_lng" property="spLng" />
+        <result column="sp_lat" property="spLat" />
+        <result column="lat" property="lat" />
+        <result column="lng" property="lng" />
+        <result column="distance" property="distance" />
+        <result column="oil_cost" property="oilCost" />
+        <result column="mnc" property="mnc" />
+        <result column="total_oil_num" property="totalOilNum" />
+        <result column="avg_current" property="avgCurrent" />
+        <result column="avg_voltage" property="avgVoltage" />
+        <result column="avg_elec_frequency" property="avgElecFrequency" />
+        <result column="total_generate_num" property="totalGenerateNum" />
+        <result column="vol_a" property="volA" />
+        <result column="vol_b" property="volB" />
+        <result column="vol_c" property="volC" />
+        <result column="curt_a" property="curtA" />
+        <result column="curt_b" property="curtB" />
+        <result column="curt_c" property="curtC" />
+        <result column="battery" property="battery" />
+        <result column="elec_frequency" property="elecFrequency" />
+        <result column="use_power" property="usePower" />
+        <result column="nouse_power" property="nousePower" />
+        <result column="appar_power" property="apparPower" />
+        <result column="power_factor" property="powerFactor" />
+        <result column="elec_type" property="elecType" />
+        <result column="oil_percent" property="oilPercent" />
+        <result column="battery_vol" property="batteryVol" />
+        <result column="elec_last" property="elecLast" />
+        <result column="power_num_a" property="powerNumA" />
+        <result column="power_num_b" property="powerNumB" />
+        <result column="power_num_c" property="powerNumC" />
+        <result column="power_total_num" property="powerTotalNum" />
+        <result column="generate_num" property="generateNum" />
+        <result column="oil_num" property="oilNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, caller_username, caller_password, producer, sp_name, state, serial_num, begin_time, end_time, update_time, sid, bid, sp_lng, sp_lat, lat, lng, distance, oil_cost, mnc, total_oil_num, avg_current, avg_voltage, avg_elec_frequency, total_generate_num, vol_a, vol_b, vol_c, curt_a, curt_b, curt_c, battery, elec_frequency, use_power, nouse_power, appar_power, power_factor, elec_type, oil_percent, battery_vol, elec_last, power_num_a, power_num_b, power_num_c, power_total_num, generate_num, oil_num
+    </sql>
+
+</mapper>

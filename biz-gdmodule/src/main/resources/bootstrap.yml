@@ -1,0 +1,8 @@
+spring:
+    application:
+        name: biz-gd-module
+    cloud:
+        nacos:
+            config:
+                server-addr: 127.0.0.1:7990
+                file-extension: yaml

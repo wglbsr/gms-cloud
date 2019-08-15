@@ -1,6 +1,8 @@
 package com.dyny.baseconnector.server.tcp.mg;
 
+import com.dyny.common.connector.packet.MGDataUnit;
 import com.dyny.common.utils.Crc16Util;
+import com.dyny.common.utils.GDPayloadUtils;
 import com.dyny.common.utils.Utils;
 import lombok.Data;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
@@ -67,8 +69,7 @@ public class MGTcpPacket extends Packet {
         this.setFrameSerial2(frameSerial2);
         this.setPayloadBytes0(payloadBytes0);
         //设置fullPacket
-        byte[] fullBytes = new byte[this.payloadBytes0.length + 16];
-        ByteBuffer bb = ByteBuffer.wrap(fullBytes);
+        ByteBuffer bb = ByteBuffer.allocate(this.payloadBytes0.length + 16);
         bb.put(MGTcpPacket.headerByte1);
         bb.put(this.typeByte1);
         bb.put(this.propertyByte1);
@@ -83,6 +84,25 @@ public class MGTcpPacket extends Packet {
         this.setFullPacket(bb.array());
         this.setDataUnitList();
     }
+
+    public MGTcpPacket(int radix, String typeByte1, String propertyByte1, List<String> prodSerialNum6, List<String> payloadByteList, List<String> frameSerialNum2) {
+
+
+        new MGTcpPacket(Byte.valueOf(typeByte1, radix),
+                Byte.valueOf(propertyByte1, radix),
+                list2ByteArray(prodSerialNum6, radix),
+                list2ByteArray(payloadByteList, radix),
+                list2ByteArray(frameSerialNum2, radix));
+
+    }
+
+    private byte[] list2ByteArray(List<String> stringArray, int radix) {
+        byte[] byteArray = new byte[stringArray.size()];
+        for (int i = 0; i < stringArray.size(); i++) {
+            byteArray[i] = Byte.valueOf(stringArray.get(i), radix);
+        }
+        return byteArray;
+    }
 //
 //    MGTcpPacket() {
 //
@@ -92,7 +112,7 @@ public class MGTcpPacket extends Packet {
     public void setPayloadBytes0(byte[] payloadBytes0) {
         this.payloadBytes0 = payloadBytes0;
         byte[] size = Utils.Byte.int2bytes(payloadBytes0.length);
-        this.setLengthBytes2(ByteBuffer.wrap(size).array());
+        this.setLengthBytes2(ByteUtils.subArray(size, 2, 4));
     }
 
     private void setCrcCheck2() {
@@ -130,67 +150,14 @@ public class MGTcpPacket extends Packet {
 
 
     public boolean isAllMatch(byte headerByte1, byte tailByte1, byte[] crcCheck2) {
-        return this.isHeaderMatch(headerByte1) && this.isTailMatch(tailByte1) && isCrcMatch(crcCheck2);
+        return MGTcpPacket.isHeaderMatch(headerByte1) && MGTcpPacket.isTailMatch(tailByte1) && isCrcMatch(crcCheck2);
     }
 
 
-    public static MGTcpPacket decodeMGTcpPacket(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext
-            channelContext) {
-        //1.头部,固定
-        byte headerByte = buffer.get();
-        if (!isHeaderMatch(headerByte)) {
-            logger.info("头部不匹配![" + headerByte + "]");
-            return null;
-        }
-        //2.类型
-        //0x11 心跳帧
-        //0x13 动态型数据帧
-        //0x14 参数设置帧
-        //0x15 统计型数据帧
-        //0x16 时间帧
-        byte typeByte = buffer.get();
-
-        //3.属性,预留
-        byte propertyByte = buffer.get();
-
-        //4.长度2位 ≤500	有效载荷区的数据长度
-        byte[] lengthBytes2 = new byte[2];
-        buffer.get(lengthBytes2);
-
-        //5.产品序列号
-        byte[] prodSerialBytes6 = new byte[6];
-        buffer.get(prodSerialBytes6);
-
-        //6.荷载
-        BigInteger payloadLength = new BigInteger(lengthBytes2);
-        if (500 < payloadLength.intValue()) {
-            logger.info("有效荷载长度大于500!");
-            return null;
-        }
-        byte[] payloadBytes0 = new byte[payloadLength.intValue()];
-        buffer.get(payloadBytes0);
-
-        //7.帧序列号,2位
-        byte[] frameSerial2 = new byte[2];
-        buffer.get(frameSerial2);
-
-        //8.CRC校验位,长度固定2位
-        byte[] crcCheck2 = new byte[2];
-        buffer.get(crcCheck2);
-
-        //9.尾部,固定一位
-        byte tailByte = buffer.get();
-        if (!isTailMatch(tailByte)) {
-            logger.info("尾部不匹配![" + headerByte + "]");
-            return null;
-        }
-        MGTcpPacket mgTcpPacket = new MGTcpPacket(typeByte, propertyByte, prodSerialBytes6, payloadBytes0, frameSerial2);
-        return mgTcpPacket.isCrcMatch(crcCheck2) ? mgTcpPacket : null;
-
-    }
 
     private List<MGDataUnit> dataUnitList = null;
 
+    //
     private void setDataUnitList() {
         int size = this.payloadBytes0.length;
         if (size > 0 && size % 12 == 0) {
@@ -210,38 +177,7 @@ public class MGTcpPacket extends Packet {
 //    }
 
     /**************************回复型报文**********************************/
-    public static byte[] combinePayload(byte[] id4, byte[] data8) {
-        return ByteUtils.concatenate(id4, data8);
-    }
-//    public static byte[] combinePayload(byte... id4, byte[] data8) {
-//        return ByteBuffer.wrap(id4).put(data8).array();
-//    }
-//    public static byte[] combinePayload(Integer id4, byte[] data8) {
-//        return combinePayload(Utils.Byte.int2bytes(id4), data8);
-//    }
 
-    public static byte[] combinePayload(Integer id4, byte... data8) {
-        return combinePayload(Utils.Byte.int2bytes(id4), data8);
-    }
-
-
-    public static byte[] combinePayload(Integer id4, int size, byte... data) {
-        byte[] tempData;
-        if (size == 0 || size == data.length) {
-            tempData = data;
-        } else {
-            tempData = new byte[size];
-            for (int i = 0; i < size; i++) {
-                if (i >= data.length) {
-                    tempData[i] = 0x00;
-                } else {
-                    tempData[i] = data[i];
-                }
-            }
-        }
-        return combinePayload(Utils.Byte.int2bytes(id4), tempData);
-
-    }
 
     //1.时间应答报文0x1C006601
     public static MGTcpPacket getTimeResPacket(byte[] frameSerial2, byte[] prodSerialBytes6) {
@@ -262,7 +198,7 @@ public class MGTcpPacket extends Packet {
                 minute.byteValue(),
                 second.byteValue(), 0x00};
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, combinePayload(0x1C006601, data8), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x1C006601, data8), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -273,9 +209,8 @@ public class MGTcpPacket extends Packet {
     public static MGTcpPacket getDynamicTimePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int seconds) {
         byte[] data = {0x55};
         byte[] secondBytes = ByteUtils.subArray(Utils.Byte.int2bytes(seconds), 0, 2);
-
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12340004, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340004, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -286,9 +221,8 @@ public class MGTcpPacket extends Packet {
     public static MGTcpPacket getHeartbeatTimePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int seconds) {
         byte[] data = {0x55};
         byte[] secondBytes = ByteUtils.subArray(Utils.Byte.int2bytes(seconds), 0, 2);
-
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12340005, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340005, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -296,9 +230,8 @@ public class MGTcpPacket extends Packet {
     //第五个字节0x55,固定
     public static MGTcpPacket getForceToSleepPacketRes(byte[] frameSerial2, byte[] prodSerialBytes6) {
         byte[] data = {0x55};
-
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12340008, 8, data), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340008, 8, data), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -307,9 +240,8 @@ public class MGTcpPacket extends Packet {
     //第五个字节0x02：升级无线通讯程序，0x03：升级控制器程序
     public static MGTcpPacket getUpgradePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int upgradeType) {
         byte[] data = {0x55, (byte) upgradeType};
-
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, combinePayload(0x12345040, 8, data), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12345040, 8, data), frameSerial2);
         return mgTcpPacket;
     }
 

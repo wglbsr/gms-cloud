@@ -1,0 +1,14 @@
+server:
+  port: 8620
+spring:
+  profiles:
+    active: @package.environment@
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: biz-gdmodule
+management:
+  endpoints:
+    web:
+      exposure:
+        include: \*
