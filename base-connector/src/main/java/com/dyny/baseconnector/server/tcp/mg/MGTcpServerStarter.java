@@ -2,7 +2,6 @@ package com.dyny.baseconnector.server.tcp.mg;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
 import org.tio.server.ServerGroupContext;

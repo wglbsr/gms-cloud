@@ -21,11 +21,8 @@ public class MGTcpClientStarter {
     private static Logger logger = LoggerFactory.getLogger(MGTcpClientStarter.class);
 
     //服务器节点
-    //handler, 包括编码、解码、消息处理
-//    public static Node serverNode = new Node("dy-iot.net", 10118);
-//    public static Node serverNode = new Node("free.idcfengye.com", 17691);
     public static Node serverNode = new Node("127.0.0.1", 6700);
-
+    //handler, 包括编码、解码、消息处理
     public static ClientAioHandler tioClientHandler = new MGTcpClientAioHandler();
     //事件监听器，可以为null，但建议自己实现该接口，可以参考showcase了解些接口
     public static ClientAioListener aioListener = new MGTcpClientAioListener();
