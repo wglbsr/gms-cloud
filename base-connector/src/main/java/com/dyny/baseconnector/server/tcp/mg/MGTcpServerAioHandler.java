@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
 import org.tio.core.GroupContext;
+import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioHandler;
@@ -48,6 +49,12 @@ public class MGTcpServerAioHandler implements ServerAioHandler {
     public void handler(Packet packet, ChannelContext channelContext) throws Exception {
         MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
         if (mgTcpPacket != null) {
+            byte[] prodSerial = {0x11, 0x12, 0x13, 0x14, 0x15, 0x16};
+            byte[] frameSerial = {0x21, 0x22};
+            byte[] payload = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0x0a, 0x0b, 0x0c};
+
+            MGTcpPacket res = new MGTcpPacket((byte) 0x01, (byte) 0x02, prodSerial, payload, frameSerial);
+            Tio.send(channelContext, res);
             logger.info("解码成功!");
         }
 

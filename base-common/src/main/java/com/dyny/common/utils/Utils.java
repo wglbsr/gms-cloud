@@ -1,7 +1,9 @@
 package com.dyny.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.util.DigestUtils;
 import org.w3c.dom.Document;
 
@@ -46,6 +48,16 @@ public class Utils {
             int i2 = (bytes[2] & 0xFF) << 16;
             int i3 = (bytes[3] & 0xFF) << 24;
             return i0 | i1 | i2 | i3;
+        }
+
+        public static java.lang.String bytesToString(byte[] bytes) {
+
+
+
+           return  HexUtils.toHexString(bytes);
+
+
+
         }
 
     }

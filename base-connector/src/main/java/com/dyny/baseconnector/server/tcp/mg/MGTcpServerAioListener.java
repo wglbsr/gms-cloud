@@ -1,5 +1,8 @@
 package com.dyny.baseconnector.server.tcp.mg;
 
+import com.dyny.common.utils.Utils;
+import com.google.common.primitives.UnsignedBytes;
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioListener;
@@ -24,8 +27,10 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
 
     @Override
     public void onAfterDecoded(ChannelContext channelContext, Packet packet, int packetSize) throws Exception {
-        logger.info("已经连接上!");
-
+        if (packet != null) {
+            MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
+            logger.info("解码完成!长度:{},内容:[{}]", packetSize,  Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
+        }
     }
 
     @Override
@@ -36,7 +41,10 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
 
     @Override
     public void onAfterSent(ChannelContext channelContext, Packet packet, boolean isSentSuccess) throws Exception {
-        logger.info("已经发送!");
+        if (isSentSuccess) {
+            MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
+            logger.info("发送成功![{}]",  Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
+        }
 
     }
 
