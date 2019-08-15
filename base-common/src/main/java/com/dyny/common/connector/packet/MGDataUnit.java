@@ -1,10 +1,12 @@
 package com.dyny.common.connector.packet;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 /**
  * @Auther: wglbs
@@ -14,6 +16,7 @@ import java.nio.ByteBuffer;
  */
 @Data
 public class MGDataUnit {
+
     public MGDataUnit(byte[] data12) {
         this.data12 = ByteUtils.subArray(data12, 0, 12);
         this.id = ByteUtils.subArray(data12, 0, 4);
@@ -62,105 +65,69 @@ public class MGDataUnit {
     }
 
     /********************动态报文1********************/
-    public Float getPhaseAVoltage() {
-        if (ByteBuffer.wrap(this.id).getInt() == (DYNAMIC_MSG_VOL1_ID)) {
-            return getByteVal(this.data8, 0, 2).getInt() * 0.01f;
+
+    private static final String KEY_ID = "id";
+    private static final String KEY_LENGTH = "length";
+
+    public <T> T getTargetVal(Integer id, Object factor, Class<T> targetClass) {
+        JSONObject jsonArray = JSONObject.parseObject("{}");
+        JSONObject targetJson = jsonArray.getJSONObject(String.valueOf(id));
+        int startIndex = targetJson.getInteger(KEY_ID);
+        int length = targetJson.getInteger(KEY_LENGTH);
+
+        if (factor instanceof Float) {
+            float result = getByteVal(this.data8, startIndex, length).getInt() * ((Float) factor);
+            return targetClass.cast(result);
+        } else if (factor instanceof Integer) {
+            Integer result = getByteVal(this.data8, startIndex, length).getInt() * ((Integer) factor);
+            return targetClass.cast(result);
         }
+
         return null;
     }
 
-    public Float getPhaseBVoltage() {
-        if (ByteBuffer.wrap(this.id).getInt() == (DYNAMIC_MSG_VOL1_ID)) {
-            return ByteBuffer.wrap(this.data8, 2, 2).getInt() * 0.01f;
+    public static final String KEY_PHASE_A_VOL = "phaseAVoltage";
+    public static final String KEY_PHASE_B_VOL = "phaseBVoltage";
+    public static final String KEY_PHASE_C_VOL = "phaseCVoltage";
+    public static final String KEY_FREQ = "freq";
+    public static final String KEY_PHASE_A_CURT = "phaseACurt";
+    public static final String KEY_PHASE_B_CURT = "phaseBCurt";
+    public static final String KEY_PHASE_C_CURT = "phaseCCurt";
+    public static final String KEY_BATTERY_PERCT = "batteryPercent";
+    public static final String KEY_CITY_ELEC = "cityElec";
+    public static final String KEY_LOADED_FLAG = "loaded";
+    public static final String KEY_TOTAL_ELEC = "loaded";
+    private static final String KEY_TOTAL_RUN_TIME = "";
+
+    public void getPhaseAVoltage(int id, byte[] byteData, Map<String, Object> data) {
+        switch (id) {
+            case DYNAMIC_MSG_VOL1_ID:
+                float volFactor = 0.01f;
+                float freqFactor = 0.1f;
+                data.put(KEY_PHASE_A_VOL, getByteVal(byteData, 0, 2).getInt() * volFactor);
+                data.put(KEY_PHASE_B_VOL, getByteVal(byteData, 2, 2).getInt() * volFactor);
+                data.put(KEY_PHASE_C_VOL, getByteVal(byteData, 4, 2).getInt() * volFactor);
+                data.put(KEY_FREQ, getByteVal(byteData, 6, 2).getInt() * freqFactor);
+                break;
+            case DYNAMIC_MSG_VOL2_ID:
+                float curtFactor = 0.001f;
+                data.put(KEY_PHASE_A_CURT, getByteVal(byteData, 0, 2).getInt() * curtFactor);
+                data.put(KEY_PHASE_B_CURT, getByteVal(byteData, 2, 2).getInt() * curtFactor);
+                data.put(KEY_PHASE_C_CURT, getByteVal(byteData, 4, 2).getInt() * curtFactor);
+                data.put(KEY_BATTERY_PERCT, getByteVal(byteData, 6, 1).getInt());
+                data.put(KEY_CITY_ELEC, getBitVal(byteData, 7, 2));
+                data.put(KEY_LOADED_FLAG, getBitVal(byteData, 7, 3));
+                break;
+            case DYNAMIC_MSG_VOL3_ID:
+                float totalElecFactor = 0.01f;
+                data.put(KEY_TOTAL_ELEC, getByteVal(byteData, 4, 4).getInt() * totalElecFactor);
+                break;
+            case DYNAMIC_MSG_VOL4_ID:
+                data.put(KEY_TOTAL_RUN_TIME, getByteVal(byteData, 4, 4).getInt());
+                break;
+            default:
+                break;
         }
-        return null;
-    }
-
-
-    public Float getPhaseCVoltage() {
-        if (ByteBuffer.wrap(this.id).getInt() == DYNAMIC_MSG_VOL1_ID) {
-            return ByteBuffer.wrap(this.data8, 4, 2).getInt() * 0.01f;
-        }
-        return null;
-    }
-
-
-    public Float getFreq() {
-        if (ByteBuffer.wrap(this.id).getInt() == DYNAMIC_MSG_VOL1_ID) {
-            return ByteBuffer.wrap(this.data8, 6, 2).getInt() * 0.1f;
-        }
-        return null;
-    }
-
-
-    /********************动态报文2********************/
-    public Float getPhaseACurrent() {
-        if (ByteBuffer.wrap(this.id).getInt() == (DYNAMIC_MSG_VOL2_ID)) {
-            return ByteBuffer.wrap(this.data8, 0, 2).getInt() * 0.001f;
-        }
-        return null;
-    }
-
-    public Float getPhaseBCurrent() {
-        if (ByteBuffer.wrap(this.id).getInt() == (DYNAMIC_MSG_VOL2_ID)) {
-            return ByteBuffer.wrap(this.data8, 2, 2).getInt() * 0.001f;
-        }
-        return null;
-    }
-
-
-    public Float getPhaseCCurrent() {
-        if (ByteBuffer.wrap(this.id).getInt() == DYNAMIC_MSG_VOL2_ID) {
-            return ByteBuffer.wrap(this.data8, 4, 2).getInt() * 0.001f;
-        }
-        return null;
-    }
-
-    public Integer getBatteryPercent() {
-        if (ByteBuffer.wrap(this.id).getInt() == DYNAMIC_MSG_VOL2_ID) {
-            return ByteBuffer.wrap(this.data8, 6, 1).getInt();
-        }
-        return null;
-    }
-
-
-    public Boolean getCityElec() {
-        if (ByteBuffer.wrap(this.id).getInt() == DYNAMIC_MSG_VOL2_ID) {
-            return getBitVal(this.data8, 7, 2);
-        }
-        return null;
-    }
-
-
-    public Boolean getIsLoaded() {
-        if (ByteBuffer.wrap(this.id).getInt() == DYNAMIC_MSG_VOL2_ID) {
-            return getBitVal(this.data8, 7, 3);
-        }
-        return null;
-    }
-
-
-    /********************动态报文3********************/
-    public Float getTotalElec() {
-        if (ByteBuffer.wrap(this.id).getInt() == (DYNAMIC_MSG_VOL3_ID)) {
-            return ByteBuffer.wrap(this.data8, 4, 4).getInt() * 0.01f;
-        }
-        return null;
-    }
-
-    /********************动态报文4********************/
-    /**
-     * @return java.lang.Integer
-     * @Author wanggl(lane)
-     * @Description //TODO 有机运行时长
-     * @Date 16:58 2019/8/7
-     * @Param []
-     **/
-    public Integer getTotalRunTime() {
-        if (ByteBuffer.wrap(this.id).getInt() == (DYNAMIC_MSG_VOL4_ID)) {
-            return ByteBuffer.wrap(this.data8, 4, 4).getInt();
-        }
-        return null;
     }
 
 

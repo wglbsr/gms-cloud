@@ -1,6 +1,5 @@
 package com.dyny.baseconnector.server.tcp.mg;
 
-import com.dyny.common.connector.packet.MGDataUnit;
 import com.dyny.common.utils.Crc16Util;
 import com.dyny.common.utils.GDPayloadUtils;
 import com.dyny.common.utils.Utils;
@@ -16,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author wanggl(lane)
@@ -215,7 +215,7 @@ public class MGTcpPacket extends Packet {
 
     }
 
-    private List<MGDataUnit> dataUnitList = null;
+    private Map<Integer, Object> dataValueList = null;
 
     //
     private void setDataUnitList() {
@@ -223,11 +223,11 @@ public class MGTcpPacket extends Packet {
         if (size > 0 && size % 12 == 0) {
             return;
         }
-        this.dataUnitList = new ArrayList<>();
         for (int i = 0; i * 12 < payloadBytes0.length; i++) {
             int index = i * 12;
-            MGDataUnit mgDataUnit = new MGDataUnit(ByteUtils.subArray(payloadBytes0, index, 12));
-            dataUnitList.add(mgDataUnit);
+            byte[] key = ByteUtils.subArray(payloadBytes0, index, index + 4);
+            byte[] value = ByteUtils.subArray(payloadBytes0, index + 4, index + 12);
+            int keyInt = Utils.Byte.bytes2int(key);
         }
     }
 

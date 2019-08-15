@@ -1,5 +1,8 @@
 package com.dyny.baseconnector;
 
+import com.dyny.common.utils.Utils;
+import org.apache.tomcat.util.buf.HexUtils;
+
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class BaseConnectorApplicationTests {
@@ -18,9 +21,9 @@ public class BaseConnectorApplicationTests {
 //
 //        }
 //        System.out.println(HexUtils.toHexString(test));
+        byte[] test = {0x01, 0x00};
 
-
-        System.out.println(989);
+        System.out.println(HexUtils.toHexString(test));
     }
 
 }

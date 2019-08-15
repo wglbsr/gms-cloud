@@ -50,12 +50,11 @@ public class Utils {
             return i0 | i1 | i2 | i3;
         }
 
+
         public static java.lang.String bytesToString(byte[] bytes) {
 
 
-
-           return  HexUtils.toHexString(bytes);
-
+            return HexUtils.toHexString(bytes);
 
 
         }
