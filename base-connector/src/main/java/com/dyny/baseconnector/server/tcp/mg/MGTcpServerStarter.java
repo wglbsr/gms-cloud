@@ -26,6 +26,9 @@ public class MGTcpServerStarter {
         Tio.sendToId(serverGroupContext, deviceId, packet);
     }
 
+    public static void send2BsId(String deviceId, Packet packet) {
+        Tio.sendToAll(serverGroupContext,  packet);
+    }
 
     private static void init() throws IOException {
         ServerAioHandler mGTcpServerAioHandler = new MGTcpServerAioHandler();

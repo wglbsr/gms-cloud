@@ -5,9 +5,12 @@ import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
+import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
+import org.tio.server.TioServer;
 import org.tio.websocket.common.WsRequest;
+import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
 /**
@@ -16,8 +19,8 @@ import org.tio.websocket.server.handler.IWsMsgHandler;
  * @Description:
  * @Version 1.0.0
  */
-public class G1WsServerMsgHandler implements IWsMsgHandler {
-    private static Logger logger = LoggerFactory.getLogger(G1WsServerMsgHandler.class);
+public class MGWsServerMsgHandler implements IWsMsgHandler {
+    private static Logger logger = LoggerFactory.getLogger(MGWsServerMsgHandler.class);
 
     /**
      * @return org.tio.http.common.HttpResponse
@@ -54,7 +57,7 @@ public class G1WsServerMsgHandler implements IWsMsgHandler {
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
         logger.info("G1 server 收到字节消息[{}]", Hex.encodeHexString(bytes));
-        return null;
+        return "ws response3!";
     }
 
     @Override
@@ -66,6 +69,8 @@ public class G1WsServerMsgHandler implements IWsMsgHandler {
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
         logger.info("G1 server 收到文本消息[{}]", text);
-        return null;
+        WsResponse wsResponse = WsResponse.fromText("ws response!!", "utf-8");
+        Tio.send(channelContext, wsResponse);
+        return "ws response2!";
     }
 }

@@ -19,12 +19,12 @@ import java.io.IOException;
  * @Description:
  * @Version 1.0.0
  */
-public class G1WsServerStarter {
+public class MGWsServerStarter {
     public static TioServer tioServer;
 
     public static void start() throws IOException {
-        WsServerConfig wsServerConfig = new WsServerConfig(7600);
-        IWsMsgHandler wsMsgHandler = new G1WsServerMsgHandler();
+        WsServerConfig wsServerConfig = new WsServerConfig(6800);
+        IWsMsgHandler wsMsgHandler = new MGWsServerMsgHandler();
         ServerAioHandler serverAioHandler = new WsServerAioHandler(wsServerConfig, wsMsgHandler);
         ServerAioListener serverAioListener = new WsServerAioListener();
         String serverName = "biz-gd-module Websocket Server";
@@ -32,11 +32,11 @@ public class G1WsServerStarter {
                 serverAioListener, Threads.getTioExecutor(), Threads.getGroupExecutor());
         serverGroupContext.setHeartbeatTimeout(0);
         serverGroupContext.setTioUuid(new WsTioUuid());
-        G1WsServerStarter.tioServer = new TioServer(serverGroupContext);
+        MGWsServerStarter.tioServer = new TioServer(serverGroupContext);
         tioServer.start(wsServerConfig.getBindIp(), wsServerConfig.getBindPort());
     }
 
     public static void main(String[] args) throws IOException {
-        G1WsServerStarter.start();
+        MGWsServerStarter.start();
     }
 }

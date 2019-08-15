@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioListener;
 import org.tio.core.ChannelContext;
+import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioListener;
 
@@ -22,7 +23,10 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
 
     @Override
     public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
-        logger.info("已经连接上!");
+        if(isConnected){
+            channelContext.setBsId("1993");
+            logger.info("已经连接上!");
+        }
     }
 
     @Override
@@ -30,6 +34,7 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
         if (packet != null) {
             MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
             logger.info("解码完成!长度:{},内容:[{}]", packetSize,  Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
+            MGWSClientStarter.getWsClient().send(mgTcpPacket.getFullPacket());
         }
     }
 

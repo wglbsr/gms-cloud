@@ -2,11 +2,8 @@ package com.dyny.baseconnector.server.tcp.mg;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tio.server.TioServer;
 import org.tio.websocket.client.WebSocket;
 import org.tio.websocket.client.WsClient;
-
-import java.io.IOException;
 
 /**
  * @Auther: wglbs
@@ -30,14 +27,19 @@ public class MGWSClientStarter {
     }
 
     private static void init() throws Exception {
-        WsClient client = WsClient.create("ws://127.0.0.1:7600/?encoding=text");
+        WsClient client = WsClient.create("ws://127.0.0.1:6800/?encoding=text");
         webSocket = client.connect();
         webSocket.addOnMessage(e -> {
             //1.获取data
             //2.获取目标设备编号
             //3.根据编号获取channel
             //4.发送数据
+            byte[] prodSerial = {0x11, 0x12, 0x13, 0x14, 0x15, 0x16};
+            byte[] frameSerial = {0x21, 0x22};
+            byte[] payload = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0x0a, 0x0b, 0x0c};
 
+            MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x02, (byte) 0x02, prodSerial, payload, frameSerial);
+            MGTcpServerStarter.send2BsId("1993", mgTcpPacket);
             logger.info(e.data.getWsBodyText());
         });
         webSocket.addOnOpen(e -> {
