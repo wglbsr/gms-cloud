@@ -8,7 +8,6 @@ import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 import org.tio.server.intf.ServerAioHandler;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
