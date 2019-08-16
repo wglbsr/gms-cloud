@@ -13,7 +13,6 @@ import org.tio.core.intf.Packet;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -111,8 +110,9 @@ public class MGTcpPacket extends Packet {
 
     public void setPayloadBytes0(byte[] payloadBytes0) {
         this.payloadBytes0 = payloadBytes0;
-        byte[] size = Utils.Byte.int2bytes(payloadBytes0.length);
-        this.setLengthBytes2(ByteUtils.subArray(size, 2, 4));
+        byte[] sizeByte4 = Utils.Byte.int2bytes(payloadBytes0.length);
+        byte[] sizeByte2 = {sizeByte4[2], sizeByte4[3]};
+        this.setLengthBytes2(sizeByte2);
     }
 
     private void setCrcCheck2() {
@@ -182,8 +182,8 @@ public class MGTcpPacket extends Packet {
         buffer.get(prodSerialBytes6);
 
         //获取荷载的长度
-        BigInteger payloadLength = new BigInteger(lengthBytes2);
-        if (500 < payloadLength.intValue()) {
+        int payloadLength = (new BigInteger(lengthBytes2)).intValue();
+        if (500 < payloadLength) {
             logger.info("有效荷载长度大于500!");
             return null;
         }
@@ -193,7 +193,7 @@ public class MGTcpPacket extends Packet {
         buffer.get(frameSerial2);
 
         //7.荷载
-        byte[] payloadBytes0 = new byte[payloadLength.intValue()];
+        byte[] payloadBytes0 = new byte[payloadLength];
         buffer.get(payloadBytes0);
 
 
@@ -212,7 +212,6 @@ public class MGTcpPacket extends Packet {
             return mgTcpPacket;
         }
         return null;
-
     }
 
     private Map<Integer, Object> dataValueList = null;
@@ -225,8 +224,8 @@ public class MGTcpPacket extends Packet {
         }
         for (int i = 0; i * 12 < payloadBytes0.length; i++) {
             int index = i * 12;
-            byte[] key = ByteUtils.subArray(payloadBytes0, index, index + 4);
-            byte[] value = ByteUtils.subArray(payloadBytes0, index + 4, index + 12);
+            byte[] key = ByteBuffer.wrap(payloadBytes0, index, 4).array();
+            byte[] value = ByteBuffer.wrap(payloadBytes0, index + 4, 12).array();
             int keyInt = Utils.Byte.bytes2int(key);
         }
     }
@@ -268,7 +267,7 @@ public class MGTcpPacket extends Packet {
     //六七个字节为发送周期
     public static MGTcpPacket getDynamicTimePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int seconds) {
         byte[] data = {0x55};
-        byte[] secondBytes = ByteUtils.subArray(Utils.Byte.int2bytes(seconds), 0, 2);
+        byte[] secondBytes = ByteBuffer.wrap(Utils.Byte.int2bytes(seconds), 0, 2).array();
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
                 , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340004, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
         return mgTcpPacket;
@@ -280,7 +279,7 @@ public class MGTcpPacket extends Packet {
     //六七个字节为发送周期
     public static MGTcpPacket getHeartbeatTimePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int seconds) {
         byte[] data = {0x55};
-        byte[] secondBytes = ByteUtils.subArray(Utils.Byte.int2bytes(seconds), 0, 2);
+        byte[] secondBytes = ByteBuffer.wrap(Utils.Byte.int2bytes(seconds), 0, 2).array();
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
                 , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340005, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
         return mgTcpPacket;

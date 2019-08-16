@@ -33,12 +33,12 @@ public class Utils {
     }
 
     public static class Byte {
-        public static byte[] int2bytes(int num) {
+        public static byte[] int2bytes(int i) {
             byte[] result = new byte[4];
-            result[0] = (byte) ((num >>> 24) & 0xff);
-            result[1] = (byte) ((num >>> 16) & 0xff);
-            result[2] = (byte) ((num >>> 8) & 0xff);
-            result[3] = (byte) ((num >>> 0) & 0xff);
+            result[3] = (byte) i;
+            result[2] = (byte) (i >> 8);
+            result[1] = (byte) (i >> 16);
+            result[0] = (byte) (i >> 24);
             return result;
         }
 

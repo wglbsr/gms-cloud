@@ -49,4 +49,9 @@ public class G1WsClientAioListener implements ServerAioListener, ClientAioListen
     public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) throws Exception {
 
     }
+
+    @Override
+    public boolean onHeartbeatTimeout(ChannelContext channelContext, Long interva, int heartbeatTimeoutCount) {
+        return false;
+    }
 }

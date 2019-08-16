@@ -1,9 +1,6 @@
 package com.dyny.gdmodule;
 
-import com.alibaba.fastjson.JSONObject;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.nio.ByteBuffer;
 
 /**
  * @Auther: wglbs
@@ -14,10 +11,11 @@ import java.time.format.DateTimeFormatter;
 public class Test {
 
     public static void main(String[] args) {
-        LocalDateTime now = LocalDateTime.now();
-        now.format(DateTimeFormatter.ISO_OFFSET_DATE);
+//        LocalDateTime now = LocalDateTime.now();
+//        now.format(DateTimeFormatter.ISO_OFFSET_DATE);
 //        now.format()
-        String jsonObject = JSONObject.toJSONString(now);
-        System.out.println(jsonObject);
+//        String jsonObject = JSONObject.toJSONString(now);
+//        System.out.println(jsonObject);
+        byte[] test = {12, 0, 0, 0};
     }
 }

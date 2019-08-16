@@ -1,9 +1,17 @@
 package com.dyny.common.utils;
 
+import com.dyny.common.connector.packet.DataRule;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.buf.HexUtils;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,17 +61,137 @@ public class GDPayloadUtils {
      * @Date 10:47 2019/8/14
      * @Param [payloadBytes0]
      **/
-    public static Map<Integer, byte[]> decodePayload(byte[] payloadBytes0) {
-        if (payloadBytes0 == null || payloadBytes0.length == 0 || payloadBytes0.length % 12 != 0) {
+
+
+    private static ByteBuffer getByteVal(byte[] data, int start, int size) {
+        byte[] temp = ArrayUtils.subarray(data, start, start + size);
+        return ByteBuffer.wrap(temp);
+    }
+
+
+    private static boolean getBitVal(Byte b, int index) {
+        if (index > 7) {
+            index = 7;
+        } else if (index < 0) {
+            index = 0;
+        }
+        return (b.intValue() & (0x01 << index)) > 0;
+    }
+
+    private static boolean getBitVal(byte[] data, int byteIndex, int bitIndex) {
+        return getBitVal(getByteVal(data, byteIndex, 1).get(), bitIndex);
+    }
+
+    private static final Integer LENGTH_ID = 4;
+    private static final Integer LENGTH_PER_DATA = 12;
+    private static Logger logger = LoggerFactory.getLogger(GDPayloadUtils.class);
+
+    public static Map<String, Object> getVal(byte[] payloadBytes0, Map<Integer, List<DataRule>> dataRulesMap) {
+//        Map<Integer, List<DataRule>> dataRulesMap = new HashMap<>();
+        if (dataRulesMap == null || dataRulesMap.isEmpty()) {
+            logger.info("没有规则来获取数据!");
             return null;
         }
-        Map<Integer, byte[]> payloadMap = new HashMap<>();
-        for (int i = 0; i * 12 < payloadBytes0.length; i++) {
-            int index = i * 12;
-            int id = ByteBuffer.wrap(payloadBytes0, index, 4).getInt();
-            byte[] dataUnit = ByteUtils.subArray(payloadBytes0, index + 4, 12);
-            payloadMap.put(id, dataUnit);
+        Map<String, Object> data = new HashMap<>();
+        for (int i = 0; (i + 1) * LENGTH_PER_DATA <= payloadBytes0.length; i++) {
+            //每个数据段的起始下标
+            int index = i * LENGTH_PER_DATA;
+            //通讯id,长度为LENGTH_ID
+            byte[] key = ArrayUtils.subarray(payloadBytes0, index, index + LENGTH_ID);
+            List<DataRule> dataRuleList = dataRulesMap.get(Utils.Byte.bytes2int(key));
+            if (dataRuleList == null || dataRuleList.isEmpty()) {
+                logger.info("数据规则长度为零!");
+                return null;
+            }
+            for (DataRule dataRule : dataRuleList) {
+                int startIndex = index + LENGTH_ID + dataRule.getStartIndex();
+                int size = dataRule.getSize();
+                String dataKey = dataRule.getKey();
+                //非布尔型
+                if (dataRule.getBitIndex() == null) {
+                    //浮点型
+                    byte[] value = ArrayUtils.subarray(payloadBytes0, startIndex, startIndex + size);
+                    //非字符型
+                    if (dataRule.getTargetClass() != String.class) {
+                        Object factor = dataRule.getFactor();
+                        data.put(dataKey, getFromBytes(value, dataRule.getOriClass(), dataRule.getTargetClass(), factor));
+                    } else if (dataRule.getTargetClass() == String.class) {
+                        String result = HexUtils.toHexString(value);
+                        String suffix = dataRule.getSuffix();
+                        String prefix = dataRule.getPrefix();
+                        //是否添加前缀后缀
+                        if (StringUtils.isNotEmpty(suffix)) {
+                            result = result + suffix;
+                        }
+                        if (StringUtils.isNotEmpty(prefix)) {
+                            result = prefix + result;
+                        }
+                        data.put(dataKey, result);
+                    }
+                    //布尔型
+                } else {
+                    Boolean value = getBitVal(payloadBytes0, startIndex, dataRule.getBitIndex());
+                    data.put(dataRule.getKey(), value);
+                }
+            }
         }
-        return payloadMap;
+        return data;
     }
+
+    private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Object factor) {
+        if (oriClass == Float.class) {
+            float floatVal = ByteBuffer.wrap(valueByte).getFloat();
+            if (factor instanceof Float) {
+                return targetClass.cast(floatVal * (Float) factor);
+            } else if (factor instanceof Integer) {
+                return targetClass.cast(floatVal * (Integer) factor);
+            } else if (factor == null) {
+                return targetClass.cast(floatVal);
+            }
+        } else if (oriClass == Integer.class) {
+            int intVal = (new BigInteger(valueByte)).intValue();
+            if (factor instanceof Float) {
+                return targetClass.cast(intVal * (Float) factor);
+            } else if (factor instanceof Integer) {
+                return targetClass.cast(intVal * (Integer) factor);
+            } else if (factor == null) {
+                return targetClass.cast(intVal);
+            }
+        }
+        return null;
+    }
+
+    public static final int DYNAMIC_MSG_VOL1_ID = 0x1C006501;
+    public static final int DYNAMIC_MSG_CURT_ID = 0x1C006502;
+    public static final int DYNAMIC_MSG_VOL3_ID = 0x1C006504;
+    public static final int DYNAMIC_MSG_VOL4_ID = 0x1C006505;
+    public static final int DYNAMIC_MSG_VOL5_ID = 0x1C00650B;
+    public static final int DYNAMIC_MSG_VOL6_ID = 0x1C00651B;
+    public static final int DYNAMIC_MSG_VOL7_ID = 0x1C00651A;
+    public static final int DYNAMIC_MSG_VOL8_ID = 0x1C00651C;
+    public static final int DYNAMIC_MSG_VOL9_ID = 0x1C00651D;
+    public static final int DYNAMIC_MSG_VOL10_ID = 0x1C00651E;
+
+    public static final int STATISTIC_MSG_VOL1_ID = 0x1C006506;
+    public static final int STATISTIC_MSG_VOL2_ID = 0x1C006507;
+    public static final int STATISTIC_MSG_VOL3_ID = 0x1C006508;
+    public static final int STATISTIC_MSG_VOL4_ID = 0x1C006509;
+    public static final int STATISTIC_MSG_VOL5_ID = 0x1C00650A;
+    public static final String KEY_PHASE_A_VOL = "phaseAVoltage";
+    public static final String KEY_PHASE_B_VOL = "phaseBVoltage";
+    public static final String KEY_PHASE_C_VOL = "phaseCVoltage";
+    public static final String KEY_FREQ = "freq";
+    public static final String KEY_PHASE_A_CURT = "phaseACurt";
+    public static final String KEY_PHASE_B_CURT = "phaseBCurt";
+    public static final String KEY_PHASE_C_CURT = "phaseCCurt";
+    public static final String KEY_BATTERY_PERCT = "batteryPercent";
+    public static final String KEY_CITY_ELEC = "cityElec";
+    public static final String KEY_LOADED_FLAG = "loaded";
+    public static final String KEY_TOTAL_ELEC = "loaded";
+    private static final String KEY_TOTAL_RUN_TIME = "";
+
+    public static void main(String[] args) {
+
+    }
+
 }

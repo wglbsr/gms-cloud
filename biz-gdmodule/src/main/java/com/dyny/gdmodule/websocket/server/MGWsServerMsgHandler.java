@@ -1,6 +1,8 @@
 package com.dyny.gdmodule.websocket.server;
 
+import com.dyny.common.connector.packet.DataRule;
 import com.dyny.common.constant.TcpConstant;
+import com.dyny.common.utils.GDPayloadUtils;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +10,14 @@ import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
-import org.tio.server.TioServer;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.server.handler.IWsMsgHandler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: lane
@@ -57,6 +63,69 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
         logger.info("G1 server 收到字节消息[{}]", Hex.encodeHexString(bytes));
+        DataRule dataRuleVolA = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
+                GDPayloadUtils.KEY_PHASE_A_VOL,
+                0,
+                2,
+                null,
+                0.01f,
+                Float.class,
+                Integer.class,
+                null,
+                null);
+        DataRule dataRuleVolB = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
+                GDPayloadUtils.KEY_PHASE_B_VOL,
+                2,
+                2,
+                null,
+                0.01f,
+                Float.class,
+                Integer.class,
+                null,
+                null);
+        DataRule dataRuleVolC = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
+                GDPayloadUtils.KEY_PHASE_C_VOL,
+                4,
+                2,
+                null,
+                0.01f,
+                Float.class,
+                Integer.class,
+                null,
+                null);
+        DataRule dataRuleCurtA = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
+                GDPayloadUtils.KEY_PHASE_A_CURT,
+                0,
+                2,
+                null,
+                0.001f,
+                Float.class,
+                Integer.class,
+                null,
+                null);
+        DataRule dataRuleCityElec = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
+                GDPayloadUtils.KEY_CITY_ELEC,
+                7,
+                1,
+                1,
+                0.001f,
+                Boolean.class,
+                null,
+                null,
+                null);
+        List<DataRule> dataRuleListVol = new ArrayList<>();
+        List<DataRule> dataRuleListCurt = new ArrayList<>();
+        dataRuleListVol.add(dataRuleVolA);
+        dataRuleListVol.add(dataRuleVolB);
+        dataRuleListVol.add(dataRuleVolC);
+        dataRuleListCurt.add(dataRuleCurtA);
+        dataRuleListCurt.add(dataRuleCityElec);
+
+        Map<Integer, List<DataRule>> dataRulesMap = new HashMap<>();
+        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID, dataRuleListVol);
+        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_CURT_ID, dataRuleListCurt);
+
+        Map<String, Object> result = GDPayloadUtils.getVal(bytes, dataRulesMap);
         return "ws response3!";
     }
 
