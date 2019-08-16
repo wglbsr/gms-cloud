@@ -2,9 +2,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://120.79.91.131:3306/gms_cloud?characterEncoding=utf8&useSSL=true
-      username: nacos_admin
-      password: nacos_admin
+      url: jdbc:mysql://120.79.91.131:3306/gd_module?characterEncoding=utf8&useSSL=true
+      username: gd_module_admin
+      password: gd_module_admin
       initial-size: 1
       min-idle: 5
       max-active: 50
@@ -20,4 +20,4 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 47.107.72.98:7990
+        server-addr: 192.168.0.112:8848

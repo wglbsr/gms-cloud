@@ -1,10 +1,10 @@
 package com.dyny.gdmodule.controller;
 
 
+import com.dyny.common.controller.BaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.dyny.common.utils.BaseController;
 
 /**
  * <p>

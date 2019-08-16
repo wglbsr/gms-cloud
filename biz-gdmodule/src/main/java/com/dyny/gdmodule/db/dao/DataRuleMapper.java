@@ -2,6 +2,7 @@ package com.dyny.gdmodule.db.dao;
 
 import com.dyny.gdmodule.db.entity.DataRule;
 import com.dyny.common.db.CommonMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>

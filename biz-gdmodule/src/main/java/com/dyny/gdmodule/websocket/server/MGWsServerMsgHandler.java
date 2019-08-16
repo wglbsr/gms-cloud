@@ -1,11 +1,14 @@
 package com.dyny.gdmodule.websocket.server;
 
-import com.dyny.common.connector.packet.DataRule;
 import com.dyny.common.constant.TcpConstant;
-import com.dyny.common.utils.GDPayloadUtils;
+import com.dyny.gdmodule.db.entity.DataRule;
+import com.dyny.gdmodule.service.DataRuleService;
+import com.dyny.gdmodule.utils.PayloadUtils;
+import com.dyny.gdmodule.utils.SpringBeanUtils;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.http.common.HttpRequest;
@@ -14,8 +17,6 @@ import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,81 +60,15 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
     private String getDeviceId(String initPath) {
         return initPath.substring(initPath.lastIndexOf("/") + 1);
     }
+//    @Autowired
+//    DataRuleService dataRuleService;
 
     @Override
     public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
         logger.info("G1 server 收到字节消息[{}]", Hex.encodeHexString(bytes));
-        DataRule dataRuleVolA = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
-                GDPayloadUtils.KEY_PHASE_A_VOL,
-                0,
-                2,
-                "0.01",
-                2,
-                2,
-                1);
-        DataRule dataRuleVolB = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
-                GDPayloadUtils.KEY_PHASE_B_VOL,
-                2,
-                2,
-                "0.01",
-                2,
-                2,
-                1);
-        DataRule dataRuleVolC = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
-                GDPayloadUtils.KEY_PHASE_C_VOL,
-                4,
-                2,
-                "0.01",
-                2,
-                2,
-                1);
-        DataRule dataRuleCurtA = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
-                GDPayloadUtils.KEY_PHASE_A_CURT,
-                0,
-                2,
-                "0.001",
-                2,
-                2,
-                1);
-        DataRule dataRuleCityElec = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
-                GDPayloadUtils.KEY_CITY_ELEC,
-                7,
-                1
-        );
-
-        DataRule dataRuleCCID = new DataRule(GDPayloadUtils.DYNAMIC_SIM_CCID_ID,
-                GDPayloadUtils.KEY_SIM_CCID,
-                0,
-                8,
-                "8986", null);
-        DataRule dataRuleLatitude = new DataRule(GDPayloadUtils.DYNAMIC_LOCATION,
-                GDPayloadUtils.KEY_LATITUDE,
-                0,
-                4,
-                null, null, 2, 2, 2);
-        DataRule dataRuleLongitude = new DataRule(GDPayloadUtils.DYNAMIC_LOCATION,
-                GDPayloadUtils.KEY_LONGITUDE,
-                4,
-                4,
-                null, null, 2, 2, 2);
-        List<DataRule> dataRuleListVol = new ArrayList<>();
-        List<DataRule> dataRuleListCurt = new ArrayList<>();
-        List<DataRule> dataRuleListCCID = new ArrayList<>();
-        List<DataRule> dataRuleListLocation = new ArrayList<>();
-        dataRuleListVol.add(dataRuleVolA);
-        dataRuleListVol.add(dataRuleVolB);
-        dataRuleListVol.add(dataRuleVolC);
-        dataRuleListCurt.add(dataRuleCurtA);
-        dataRuleListCCID.add(dataRuleCCID);
-        dataRuleListLocation.add(dataRuleLatitude);
-        dataRuleListLocation.add(dataRuleLongitude);
-        Map<Integer, List<DataRule>> dataRulesMap = new HashMap<>();
-//        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID, dataRuleListVol);
-//        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_CURT_ID, dataRuleListCurt);
-//        dataRulesMap.put(GDPayloadUtils.DYNAMIC_SIM_CCID_ID, dataRuleListCCID);
-        dataRulesMap.put(GDPayloadUtils.DYNAMIC_LOCATION, dataRuleListLocation);
-
-        Map<String, Object> result = GDPayloadUtils.getVal(bytes, dataRulesMap);
+        DataRuleService dataRuleService = SpringBeanUtils.getBean(DataRuleService.class);
+        Map<Integer, List<DataRule>> dataRulesMap = dataRuleService.getAllDataRule();
+        Map<String, Object> result = PayloadUtils.getVal(bytes, dataRulesMap);
         result.forEach((key, data) -> {
             logger.info("[{}] : [{}]", key, data.toString());
         });

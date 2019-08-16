@@ -1,7 +1,6 @@
 package com.dyny.baseconnector.server.tcp.mg;
 
 import com.dyny.common.utils.Crc16Util;
-import com.dyny.common.utils.GDPayloadUtils;
 import com.dyny.common.utils.Utils;
 import lombok.Data;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
@@ -257,7 +256,7 @@ public class MGTcpPacket extends Packet {
                 minute.byteValue(),
                 second.byteValue(), 0x00};
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x1C006601, data8), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, Utils.Byte.combinePayload(0x1C006601, data8), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -269,7 +268,7 @@ public class MGTcpPacket extends Packet {
         byte[] data = {0x55};
         byte[] secondBytes = ByteBuffer.wrap(Utils.Byte.int2bytes(seconds), 0, 2).array();
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340004, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, Utils.Byte.combinePayload(0x12340004, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -281,7 +280,7 @@ public class MGTcpPacket extends Packet {
         byte[] data = {0x55};
         byte[] secondBytes = ByteBuffer.wrap(Utils.Byte.int2bytes(seconds), 0, 2).array();
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340005, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, Utils.Byte.combinePayload(0x12340005, 8, ByteUtils.concatenate(data, secondBytes)), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -290,7 +289,7 @@ public class MGTcpPacket extends Packet {
     public static MGTcpPacket getForceToSleepPacketRes(byte[] frameSerial2, byte[] prodSerialBytes6) {
         byte[] data = {0x55};
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12340008, 8, data), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, Utils.Byte.combinePayload(0x12340008, 8, data), frameSerial2);
         return mgTcpPacket;
     }
 
@@ -300,7 +299,7 @@ public class MGTcpPacket extends Packet {
     public static MGTcpPacket getUpgradePacketRes(byte[] frameSerial2, byte[] prodSerialBytes6, int upgradeType) {
         byte[] data = {0x55, (byte) upgradeType};
         MGTcpPacket mgTcpPacket = new MGTcpPacket((byte) 0x14
-                , (byte) 0x00, prodSerialBytes6, GDPayloadUtils.combinePayload(0x12345040, 8, data), frameSerial2);
+                , (byte) 0x00, prodSerialBytes6, Utils.Byte.combinePayload(0x12345040, 8, data), frameSerial2);
         return mgTcpPacket;
     }
 

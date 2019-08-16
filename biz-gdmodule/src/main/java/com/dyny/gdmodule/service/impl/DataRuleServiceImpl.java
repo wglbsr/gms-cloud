@@ -25,7 +25,7 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
     @Override
     public Map<Integer, List<DataRule>> getAllDataRule() {
         Map<Integer, List<DataRule>> dataRuleMap = new HashMap<>();
-        List<DataRule> dataRuleList = super.list();
+        List<DataRule> dataRuleList = list();
         dataRuleList.forEach(data -> {
             int communicateId = data.getCommunicateId();
             if (dataRuleMap.containsKey(communicateId)) {

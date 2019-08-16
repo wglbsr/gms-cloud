@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.dyny.gdmodule.db.entity.DataRule">
-        <id column="key" property="key" />
+        <id column="data_key" property="dataKey" />
         <result column="communicate_id" property="communicateId" />
         <result column="start_index" property="startIndex" />
         <result column="size" property="size" />
