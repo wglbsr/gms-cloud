@@ -1,7 +1,5 @@
 package com.dyny.gdmodule;
 
-import java.nio.ByteBuffer;
-
 /**
  * @Auther: wglbs
  * @Date: 2019/8/14 09:19
@@ -17,5 +15,6 @@ public class Test {
 //        String jsonObject = JSONObject.toJSONString(now);
 //        System.out.println(jsonObject);
         byte[] test = {12, 0, 0, 0};
+        System.out.println(Boolean.class.toString());
     }
 }

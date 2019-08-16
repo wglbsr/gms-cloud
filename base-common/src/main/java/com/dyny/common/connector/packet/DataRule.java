@@ -16,12 +16,12 @@ public class DataRule {
     private Integer size;
     private Integer bitIndex;
     private Object factor;
-    private Class targetClass;
-    private Class oriClass;
+    private int targetClass;
+    private int oriClass;
     private String prefix;
     private String suffix;
 
-    public DataRule(Integer communicateId, String key, Integer startIndex, Integer size, Integer bitIndex, Object factor, Class targetClass, Class oriClass, String prefix, String suffix) {
+    public DataRule(Integer communicateId, String key, Integer startIndex, Integer size, Integer bitIndex, Object factor, int targetClass, int oriClass, String prefix, String suffix) {
         this.communicateId = communicateId;
         this.key = key;
         this.startIndex = startIndex;

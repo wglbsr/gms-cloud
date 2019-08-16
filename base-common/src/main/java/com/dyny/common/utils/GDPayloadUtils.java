@@ -104,6 +104,8 @@ public class GDPayloadUtils {
                 return null;
             }
             for (DataRule dataRule : dataRuleList) {
+                Class targetClass = getClass(dataRule.getTargetClass());
+                Class oriClass = getClass(dataRule.getOriClass());
                 int startIndex = index + LENGTH_ID + dataRule.getStartIndex();
                 int size = dataRule.getSize();
                 String dataKey = dataRule.getKey();
@@ -112,10 +114,10 @@ public class GDPayloadUtils {
                     //浮点型
                     byte[] value = ArrayUtils.subarray(payloadBytes0, startIndex, startIndex + size);
                     //非字符型
-                    if (dataRule.getTargetClass() != String.class) {
+                    if (targetClass != String.class) {
                         Object factor = dataRule.getFactor();
-                        data.put(dataKey, getFromBytes(value, dataRule.getOriClass(), dataRule.getTargetClass(), factor));
-                    } else if (dataRule.getTargetClass() == String.class) {
+                        data.put(dataKey, getFromBytes(value, oriClass, targetClass, factor));
+                    } else if (targetClass == String.class) {
                         String result = HexUtils.toHexString(value);
                         String suffix = dataRule.getSuffix();
                         String prefix = dataRule.getPrefix();
@@ -136,6 +138,21 @@ public class GDPayloadUtils {
             }
         }
         return data;
+    }
+
+    private static Class getClass(int classId) {
+        switch (classId) {
+            case 0:
+                return Boolean.class;
+            case 1:
+                return Integer.class;
+            case 2:
+                return Float.class;
+            case 3:
+                return String.class;
+            default:
+                return Boolean.class;
+        }
     }
 
     private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Object factor) {

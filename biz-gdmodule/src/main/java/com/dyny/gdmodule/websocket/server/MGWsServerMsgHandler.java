@@ -69,8 +69,8 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
                 2,
                 null,
                 0.01f,
-                Float.class,
-                Integer.class,
+                2,
+                1,
                 null,
                 null);
         DataRule dataRuleVolB = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
@@ -79,8 +79,8 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
                 2,
                 null,
                 0.01f,
-                Float.class,
-                Integer.class,
+                2,
+                1,
                 null,
                 null);
         DataRule dataRuleVolC = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
@@ -89,8 +89,8 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
                 2,
                 null,
                 0.01f,
-                Float.class,
-                Integer.class,
+                2,
+                1,
                 null,
                 null);
         DataRule dataRuleCurtA = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
@@ -99,8 +99,8 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
                 2,
                 null,
                 0.001f,
-                Float.class,
-                Integer.class,
+                2,
+                1,
                 null,
                 null);
         DataRule dataRuleCityElec = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
@@ -109,8 +109,8 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
                 1,
                 1,
                 0.001f,
-                Boolean.class,
-                null,
+                0,
+                0,
                 null,
                 null);
         List<DataRule> dataRuleListVol = new ArrayList<>();
