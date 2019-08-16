@@ -24,7 +24,7 @@ public class MyBatisPlusGenerator {
         Map<String, String> table = new HashMap<>();
 
         //直接在这里添加表名和前缀即可,key为表名,value为前缀
-        table.put("packet", "");
+        table.put("data_rule", "");
 
         MyBatisPlusGenerator myBatisPlusGenerator = new MyBatisPlusGenerator();
         myBatisPlusGenerator.generateCode(table);

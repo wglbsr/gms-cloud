@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyny.gdmodule.db.dao.DataRuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dyny.gdmodule.db.entity.DataRule">
+        <id column="key" property="key" />
+        <result column="communicate_id" property="communicateId" />
+        <result column="start_index" property="startIndex" />
+        <result column="size" property="size" />
+        <result column="bit_index" property="bitIndex" />
+        <result column="factor" property="factor" />
+        <result column="factor_class" property="factorClass" />
+        <result column="target_class" property="targetClass" />
+        <result column="ori_class" property="oriClass" />
+        <result column="prefix" property="prefix" />
+        <result column="suffix" property="suffix" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        key, communicate_id, start_index, size, bit_index, factor, factor_class, target_class, ori_class, prefix, suffix
+    </sql>
+
+</mapper>

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import java.util.Map;
  * @Version 1.0.0
  */
 public class GDPayloadUtils {
+
+
     /**
      * @return byte[]
      * @Author wanggl(lane)
@@ -88,6 +91,7 @@ public class GDPayloadUtils {
 
     public static Map<String, Object> getVal(byte[] payloadBytes0, Map<Integer, List<DataRule>> dataRulesMap) {
 //        Map<Integer, List<DataRule>> dataRulesMap = new HashMap<>();
+        Float test = 0.01f;
         if (dataRulesMap == null || dataRulesMap.isEmpty()) {
             logger.info("没有规则来获取数据!");
             return null;
@@ -104,20 +108,20 @@ public class GDPayloadUtils {
                 return null;
             }
             for (DataRule dataRule : dataRuleList) {
-                Class targetClass = getClass(dataRule.getTargetClass());
-                Class oriClass = getClass(dataRule.getOriClass());
                 int startIndex = index + LENGTH_ID + dataRule.getStartIndex();
                 int size = dataRule.getSize();
                 String dataKey = dataRule.getKey();
                 //非布尔型
                 if (dataRule.getBitIndex() == null) {
-                    //浮点型
                     byte[] value = ArrayUtils.subarray(payloadBytes0, startIndex, startIndex + size);
                     //非字符型
+                    Class targetClass = getClass(dataRule.getTargetClass());
                     if (targetClass != String.class) {
-                        Object factor = dataRule.getFactor();
-                        data.put(dataKey, getFromBytes(value, oriClass, targetClass, factor));
-                    } else if (targetClass == String.class) {
+                        String factor = dataRule.getFactor();
+                        Class oriClass = getClass(dataRule.getOriClass());
+                        Class factorClass = getClass(dataRule.getFactorClass());
+                        data.put(dataKey, getFromBytes(value, oriClass, targetClass, factorClass, factor));
+                    } else {
                         String result = HexUtils.toHexString(value);
                         String suffix = dataRule.getSuffix();
                         String prefix = dataRule.getPrefix();
@@ -151,32 +155,20 @@ public class GDPayloadUtils {
             case 3:
                 return String.class;
             default:
-                return Boolean.class;
+                return Integer.class;
         }
     }
 
-    private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Object factor) {
-        if (oriClass == Float.class) {
-            float floatVal = ByteBuffer.wrap(valueByte).getFloat();
-            if (factor instanceof Float) {
-                return targetClass.cast(floatVal * (Float) factor);
-            } else if (factor instanceof Integer) {
-                return targetClass.cast(floatVal * (Integer) factor);
-            } else if (factor == null) {
-                return targetClass.cast(floatVal);
-            }
-        } else if (oriClass == Integer.class) {
-            int intVal = (new BigInteger(valueByte)).intValue();
-            if (factor instanceof Float) {
-                return targetClass.cast(intVal * (Float) factor);
-            } else if (factor instanceof Integer) {
-                return targetClass.cast(intVal * (Integer) factor);
-            } else if (factor == null) {
-                return targetClass.cast(intVal);
-            }
+    private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor) {
+        if (factor != null) {
+            return targetClass.cast((oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : (new BigInteger(valueByte)).intValue()) * (factorClass == Float.class ? Float.parseFloat(factor) : Integer.parseInt(factor)));
+
+        } else {
+            return targetClass.cast((oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : (new BigInteger(valueByte)).intValue()));
         }
-        return null;
+
     }
+
 
     public static final int DYNAMIC_MSG_VOL1_ID = 0x1C006501;
     public static final int DYNAMIC_MSG_CURT_ID = 0x1C006502;
@@ -186,7 +178,8 @@ public class GDPayloadUtils {
     public static final int DYNAMIC_MSG_VOL6_ID = 0x1C00651B;
     public static final int DYNAMIC_MSG_VOL7_ID = 0x1C00651A;
     public static final int DYNAMIC_MSG_VOL8_ID = 0x1C00651C;
-    public static final int DYNAMIC_MSG_VOL9_ID = 0x1C00651D;
+    public static final Integer DYNAMIC_SIM_CCID_ID = 0x1C00651D;
+    public static final Integer DYNAMIC_LOCATION = 0xEE000001;
     public static final int DYNAMIC_MSG_VOL10_ID = 0x1C00651E;
 
     public static final int STATISTIC_MSG_VOL1_ID = 0x1C006506;
@@ -198,7 +191,11 @@ public class GDPayloadUtils {
     public static final String KEY_PHASE_B_VOL = "phaseBVoltage";
     public static final String KEY_PHASE_C_VOL = "phaseCVoltage";
     public static final String KEY_FREQ = "freq";
+    public static final String KEY_SIM_CCID = "simCCID";
     public static final String KEY_PHASE_A_CURT = "phaseACurt";
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGITUDE = "longitude";
+
     public static final String KEY_PHASE_B_CURT = "phaseBCurt";
     public static final String KEY_PHASE_C_CURT = "phaseCCurt";
     public static final String KEY_BATTERY_PERCT = "batteryPercent";

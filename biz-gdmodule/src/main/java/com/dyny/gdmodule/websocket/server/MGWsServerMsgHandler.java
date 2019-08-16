@@ -67,65 +67,76 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
                 GDPayloadUtils.KEY_PHASE_A_VOL,
                 0,
                 2,
-                null,
-                0.01f,
+                "0.01",
                 2,
-                1,
-                null,
-                null);
+                2,
+                1);
         DataRule dataRuleVolB = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
                 GDPayloadUtils.KEY_PHASE_B_VOL,
                 2,
                 2,
-                null,
-                0.01f,
+                "0.01",
                 2,
-                1,
-                null,
-                null);
+                2,
+                1);
         DataRule dataRuleVolC = new DataRule(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID,
                 GDPayloadUtils.KEY_PHASE_C_VOL,
                 4,
                 2,
-                null,
-                0.01f,
+                "0.01",
                 2,
-                1,
-                null,
-                null);
+                2,
+                1);
         DataRule dataRuleCurtA = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
                 GDPayloadUtils.KEY_PHASE_A_CURT,
                 0,
                 2,
-                null,
-                0.001f,
+                "0.001",
                 2,
-                1,
-                null,
-                null);
+                2,
+                1);
         DataRule dataRuleCityElec = new DataRule(GDPayloadUtils.DYNAMIC_MSG_CURT_ID,
                 GDPayloadUtils.KEY_CITY_ELEC,
                 7,
-                1,
-                1,
-                0.001f,
+                1
+        );
+
+        DataRule dataRuleCCID = new DataRule(GDPayloadUtils.DYNAMIC_SIM_CCID_ID,
+                GDPayloadUtils.KEY_SIM_CCID,
                 0,
+                8,
+                "8986", null);
+        DataRule dataRuleLatitude = new DataRule(GDPayloadUtils.DYNAMIC_LOCATION,
+                GDPayloadUtils.KEY_LATITUDE,
                 0,
-                null,
-                null);
+                4,
+                null, null, 2, 2, 2);
+        DataRule dataRuleLongitude = new DataRule(GDPayloadUtils.DYNAMIC_LOCATION,
+                GDPayloadUtils.KEY_LONGITUDE,
+                4,
+                4,
+                null, null, 2, 2, 2);
         List<DataRule> dataRuleListVol = new ArrayList<>();
         List<DataRule> dataRuleListCurt = new ArrayList<>();
+        List<DataRule> dataRuleListCCID = new ArrayList<>();
+        List<DataRule> dataRuleListLocation = new ArrayList<>();
         dataRuleListVol.add(dataRuleVolA);
         dataRuleListVol.add(dataRuleVolB);
         dataRuleListVol.add(dataRuleVolC);
         dataRuleListCurt.add(dataRuleCurtA);
-        dataRuleListCurt.add(dataRuleCityElec);
-
+        dataRuleListCCID.add(dataRuleCCID);
+        dataRuleListLocation.add(dataRuleLatitude);
+        dataRuleListLocation.add(dataRuleLongitude);
         Map<Integer, List<DataRule>> dataRulesMap = new HashMap<>();
-        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID, dataRuleListVol);
-        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_CURT_ID, dataRuleListCurt);
+//        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_VOL1_ID, dataRuleListVol);
+//        dataRulesMap.put(GDPayloadUtils.DYNAMIC_MSG_CURT_ID, dataRuleListCurt);
+//        dataRulesMap.put(GDPayloadUtils.DYNAMIC_SIM_CCID_ID, dataRuleListCCID);
+        dataRulesMap.put(GDPayloadUtils.DYNAMIC_LOCATION, dataRuleListLocation);
 
         Map<String, Object> result = GDPayloadUtils.getVal(bytes, dataRulesMap);
+        result.forEach((key, data) -> {
+            logger.info("[{}] : [{}]", key, data.toString());
+        });
         return "ws response3!";
     }
 

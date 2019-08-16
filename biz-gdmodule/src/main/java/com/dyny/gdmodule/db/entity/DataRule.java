@@ -1,26 +1,48 @@
-package com.dyny.common.connector.packet;
+package com.dyny.gdmodule.db.entity;
 
-import com.dyny.common.utils.GDPayloadUtils;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
- * @Auther: wglbs
- * @Date: 2019/8/15 20:09
- * @Description:
- * @Version 1.0.0
+ * <p>
+ * 
+ * </p>
+ *
+ * @author wanggl
+ * @since 2019-08-16
  */
 @Data
-public class DataRule {
-    private Integer communicateId;
+@TableName("data_rule")
+public class DataRule extends Model<DataRule> {
+
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "key", type = IdType.INPUT)
     private String key;
+
+    private Integer communicateId;
+
     private Integer startIndex;
+
     private Integer size;
+
     private Integer bitIndex;
+
     private String factor;
+
     private Integer factorClass;
+
     private Integer targetClass;
+
     private Integer oriClass;
+
     private String prefix;
+
     private String suffix;
 
     /**
@@ -113,10 +135,8 @@ public class DataRule {
         this.bitIndex = bitIndex;
     }
 
-
-    public static void main(String[] args) {
-
-
+    @Override
+    protected Serializable pkVal() {
+        return this.key;
     }
-
 }
