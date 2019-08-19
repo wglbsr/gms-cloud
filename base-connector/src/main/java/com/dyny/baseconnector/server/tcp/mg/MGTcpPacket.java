@@ -303,4 +303,12 @@ public class MGTcpPacket extends Packet {
         return mgTcpPacket;
     }
 
+    @Override
+    public String toString() {
+
+
+
+        return null;
+    }
+
 }

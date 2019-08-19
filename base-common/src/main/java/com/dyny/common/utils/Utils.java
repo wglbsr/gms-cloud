@@ -84,6 +84,14 @@ public class Utils {
         }
 
 
+        public static int bytes2Int2(byte[] b) {
+            int intValue = 0;
+            for (int i = 0; i < b.length; i++) {
+                intValue += (b[i] & 0xFF) << (8 * (i));
+            }
+            return intValue;
+        }
+
         public static java.lang.String bytesToString(byte[] bytes) {
 
 

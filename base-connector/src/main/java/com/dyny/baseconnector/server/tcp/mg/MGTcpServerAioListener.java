@@ -1,5 +1,6 @@
 package com.dyny.baseconnector.server.tcp.mg;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dyny.common.utils.Utils;
 import com.google.common.primitives.UnsignedBytes;
 import org.apache.commons.codec.binary.Hex;
@@ -23,7 +24,7 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
 
     @Override
     public void onAfterConnected(ChannelContext channelContext, boolean isConnected, boolean isReconnect) throws Exception {
-        if(isConnected){
+        if (isConnected) {
             channelContext.setBsId("1993");
             logger.info("已经连接上!");
         }
@@ -33,8 +34,9 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
     public void onAfterDecoded(ChannelContext channelContext, Packet packet, int packetSize) throws Exception {
         if (packet != null) {
             MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
-            logger.info("解码完成!长度:{},内容:[{}]", packetSize,  Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
-            MGWSClientStarter.getWsClient().send(mgTcpPacket.getPayloadBytes0());
+            logger.info("解码完成!长度:{},内容:[{}]", packetSize, Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
+            logger.info(JSONObject.toJSONString(MGWSPacket.parsePacket(mgTcpPacket)));
+//            MGWSClientStarter.getWsClient().send(mgTcpPacket.getPayloadBytes0());
         }
     }
 
@@ -48,7 +50,7 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
     public void onAfterSent(ChannelContext channelContext, Packet packet, boolean isSentSuccess) throws Exception {
         if (isSentSuccess) {
             MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
-            logger.info("发送成功![{}]",  Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
+            logger.info("发送成功![{}]", Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
         }
 
     }
