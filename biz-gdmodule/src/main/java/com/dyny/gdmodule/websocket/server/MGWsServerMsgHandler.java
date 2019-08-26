@@ -69,7 +69,7 @@ public class MGWsServerMsgHandler implements IWsMsgHandler {
         Map<Integer, List<DataRule>> dataRulesMap = dataRuleService.getAllDataRule();
         Map<String, Object> result = PayloadUtils.getVal(bytes, dataRulesMap);
         result.forEach((key, data) -> {
-            logger.info("[{}] : [{}]", key, data.toString());
+            logger.info("[{}] : [{}]({})", key, data.toString(), data.getClass().toString());
         });
         return "ws response3!";
     }

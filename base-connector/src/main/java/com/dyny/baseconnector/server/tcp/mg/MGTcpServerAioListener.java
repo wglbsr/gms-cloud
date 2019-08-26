@@ -36,7 +36,7 @@ public class MGTcpServerAioListener implements ServerAioListener, ClientAioListe
             MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
             logger.info("解码完成!长度:{},内容:[{}]", packetSize, Utils.Byte.bytesToString(mgTcpPacket.getFullPacket()));
             logger.info(JSONObject.toJSONString(MGWSPacket.parsePacket(mgTcpPacket)));
-//            MGWSClientStarter.getWsClient().send(mgTcpPacket.getPayloadBytes0());
+            MGWSClientStarter.getWsClient().send(mgTcpPacket.getPayloadBytes0());
         }
     }
 

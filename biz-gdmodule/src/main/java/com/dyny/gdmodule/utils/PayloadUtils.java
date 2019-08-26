@@ -105,7 +105,10 @@ public class PayloadUtils {
         return data;
     }
 
-    private static Class getClass(int classId) {
+    private static Class getClass(Integer classId) {
+        if (classId == null) {
+            return null;
+        }
         switch (classId) {
             case 0:
                 return Boolean.class;
@@ -115,13 +118,15 @@ public class PayloadUtils {
                 return Float.class;
             case 3:
                 return String.class;
+//            case 4:
+//                return BigDecimal.class;
             default:
                 return Integer.class;
         }
     }
 
     private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor) {
-        if (factor != null) {
+        if (factor != null && factorClass != null) {
             return targetClass.cast((oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : (new BigInteger(valueByte)).intValue()) * (factorClass == Float.class ? Float.parseFloat(factor) : Integer.parseInt(factor)));
 
         } else {
