@@ -26,6 +26,11 @@ import java.util.Map;
 public class MGTcpPacket extends Packet {
     private static Logger logger = LoggerFactory.getLogger(MGTcpPacket.class);
 
+    public static final byte TYPE_HEARTBEAT = 0x11;
+    public static final byte TYPE_DYNAMIC = 0x13;
+    public static final byte TYPE_PROS_SETTING = 0x14;
+    public static final byte TYPE_STATISTIC = 0x15;
+    public static final byte TYPE_TIME = 0x16;
 
     //1.头部
 
@@ -83,15 +88,32 @@ public class MGTcpPacket extends Packet {
         this.setDataUnitList();
     }
 
-    public MGTcpPacket(int radix, String typeByte1, String propertyByte1, List<String> prodSerialNum6, List<String> payloadByteList, List<String> frameSerialNum2) {
 
-
-        new MGTcpPacket(Byte.valueOf(typeByte1, radix),
-                Byte.valueOf(propertyByte1, radix),
-                list2ByteArray(prodSerialNum6, radix),
-                list2ByteArray(payloadByteList, radix),
-                list2ByteArray(frameSerialNum2, radix));
-
+    public MGTcpPacket(byte typeByte1, byte propertyByte1, byte[] prodSerialBytes6, List<Byte> payloadList, byte[] frameSerial2) {
+        this.setTypeByte1(typeByte1);
+        this.setPropertyByte1(propertyByte1);
+        this.setProdSerialBytes6(prodSerialBytes6);
+        this.setFrameSerial2(frameSerial2);
+        byte[] payload = new byte[payloadList.size()];
+        for (int i = 0; i < payloadList.size(); i++) {
+            payload[i] = payloadList.get(i);
+        }
+        this.setPayloadBytes0(payload);
+        //设置fullPacket
+        ByteBuffer bb = ByteBuffer.allocate(this.payloadBytes0.length + 16);
+        bb.put(MGTcpPacket.headerByte1);
+        bb.put(this.typeByte1);
+        bb.put(this.propertyByte1);
+        bb.put(this.lengthBytes2);
+        bb.put(this.prodSerialBytes6);
+        bb.put(this.frameSerial2);
+        bb.put(this.payloadBytes0);
+        this.setBeforeCrcBytes(bb.array());
+        this.setCrcCheck2();
+        bb.put(this.crcCheck2);
+        bb.put(MGTcpPacket.tailByte1);
+        this.setFullPacket(bb.array());
+        this.setDataUnitList();
     }
 
     private byte[] list2ByteArray(List<String> stringArray, int radix) {
@@ -113,6 +135,13 @@ public class MGTcpPacket extends Packet {
         byte[] sizeByte2 = {sizeByte4[2], sizeByte4[3]};
         this.setLengthBytes2(sizeByte2);
     }
+
+//    public void setPayloadBytes0(Byte[] payloadBytes0) {
+//        this.payloadBytes0 = ByteUtils.clone(payloadBytes0);
+//        byte[] sizeByte4 = Utils.Byte.int2bytes(payloadBytes0.length);
+//        byte[] sizeByte2 = {sizeByte4[2], sizeByte4[3]};
+//        this.setLengthBytes2(sizeByte2);
+//    }
 
     private void setCrcCheck2() {
         byte[] crcBytes = Crc16Util.getCrc16(this.beforeCrcBytes);
@@ -305,7 +334,6 @@ public class MGTcpPacket extends Packet {
 
     @Override
     public String toString() {
-
 
 
         return null;

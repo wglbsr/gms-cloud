@@ -11,6 +11,8 @@ import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -83,6 +85,13 @@ public class Utils {
             return i0 | i1 | i2 | i3;
         }
 
+        public static short bytesToShort(byte[] bytes) {
+            return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        }
+
+        public static byte[] shortToBytes(short value) {
+            return ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(value).array();
+        }
 
         public static int bytes2Int2(byte[] b) {
             int intValue = 0;
