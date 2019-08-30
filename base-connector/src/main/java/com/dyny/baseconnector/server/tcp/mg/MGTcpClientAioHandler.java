@@ -1,7 +1,6 @@
 package com.dyny.baseconnector.server.tcp.mg;
 
 import com.dyny.common.utils.Utils;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.intf.ClientAioHandler;
@@ -11,7 +10,6 @@ import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
 
-import javax.validation.Payload;
 import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 
@@ -63,28 +61,32 @@ public class MGTcpClientAioHandler implements ClientAioHandler {
         MGTcpPacket mgTcpPacket = (MGTcpPacket) packet;
         byte type = mgTcpPacket.getTypeByte1();
         switch (type) {
-            //        0x11	心跳帧
+            //        0x11	心跳帧,暂时无需回复
             case MGTcpPacket.TYPE_HEARTBEAT:
 
 
-                //        0x13	动态型数据帧
+                //        0x13	动态型数据帧,暂时无需回复
             case MGTcpPacket.TYPE_DYNAMIC:
 
 
-                //        0x14	参数设置帧
+                //        0x14	参数设置帧,暂时无需回复
             case MGTcpPacket.TYPE_PROS_SETTING:
 
 
                 //        0x15	统计型数据帧
             case MGTcpPacket.TYPE_STATISTIC:
-
-
+                byte[] empty = {};
+                MGTcpPacket response15 = new MGTcpPacket(mgTcpPacket.getTypeByte1(), (byte) 0x00,
+                        mgTcpPacket.getProdSerialBytes6(),  mgTcpPacket.getFrameSerial2());
+                Tio.send(channelContext, response15);
+                break;
                 //        0x16	时间帧
             case MGTcpPacket.TYPE_TIME:
                 //回复时间
-                MGTcpPacket response = new MGTcpPacket(mgTcpPacket.getTypeByte1(), (byte) 0x00,
+                MGTcpPacket response16 = new MGTcpPacket(mgTcpPacket.getTypeByte1(), (byte) 0x00,
                         mgTcpPacket.getProdSerialBytes6(), getTimeRes(), mgTcpPacket.getFrameSerial2());
-                Tio.send(channelContext, response);
+                Tio.send(channelContext, response16);
+                break;
             default:
                 break;
 

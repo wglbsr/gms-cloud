@@ -89,6 +89,37 @@ public class MGTcpPacket extends Packet {
     }
 
 
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 空payload
+     * @Date 9:41 2019-08-30
+     * @Param [typeByte1, propertyByte1, prodSerialBytes6, frameSerial2]
+     * @return
+     **/
+    public MGTcpPacket(byte typeByte1, byte propertyByte1, byte[] prodSerialBytes6, byte[] frameSerial2) {
+        this.setTypeByte1(typeByte1);
+        this.setPropertyByte1(propertyByte1);
+        this.setProdSerialBytes6(prodSerialBytes6);
+        this.setFrameSerial2(frameSerial2);
+        byte[] payloadBytes0 = {};
+        this.setPayloadBytes0(payloadBytes0);
+        //设置fullPacket
+        ByteBuffer bb = ByteBuffer.allocate(this.payloadBytes0.length + 16);
+        bb.put(MGTcpPacket.headerByte1);
+        bb.put(this.typeByte1);
+        bb.put(this.propertyByte1);
+        bb.put(this.lengthBytes2);
+        bb.put(this.prodSerialBytes6);
+        bb.put(this.frameSerial2);
+        bb.put(this.payloadBytes0);
+        this.setBeforeCrcBytes(bb.array());
+        this.setCrcCheck2();
+        bb.put(this.crcCheck2);
+        bb.put(MGTcpPacket.tailByte1);
+        this.setFullPacket(bb.array());
+        this.setDataUnitList();
+    }
+
     public MGTcpPacket(byte typeByte1, byte propertyByte1, byte[] prodSerialBytes6, List<Byte> payloadList, byte[] frameSerial2) {
         this.setTypeByte1(typeByte1);
         this.setPropertyByte1(propertyByte1);
