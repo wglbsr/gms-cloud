@@ -8,7 +8,6 @@ import org.apache.tomcat.util.buf.HexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
@@ -120,21 +119,19 @@ public class PayloadUtils {
                 return Float.class;
             case 3:
                 return String.class;
-//            case 4:
-//                return BigDecimal.class;
             default:
                 return Integer.class;
         }
     }
 
-//    private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor) {
-//        if (factor != null && factorClass != null) {
-//            return targetClass.cast((oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : (new BigInteger(valueByte)).intValue()) * (factorClass == Float.class ? Float.parseFloat(factor) : Integer.parseInt(factor)));
-//        } else {
-//            return targetClass.cast((oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : (new BigInteger(valueByte)).intValue()));
-//        }
-//    }
 
+    /**
+     * @Author wanggl(lane)
+     * @Description //TODO 根据设定类型获取值,冗余代码较多,弱类型将减少很多代码
+     * @Date 15:56 2019-09-02
+     * @Param [valueByte, oriClass, targetClass, factorClass, factor, calcType]
+     * @return T
+     **/
     private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor,int calcType) {
         if (factor != null && factorClass != null) {
             Object result;
@@ -224,5 +221,4 @@ public class PayloadUtils {
             }
         }
     }
-
 }
