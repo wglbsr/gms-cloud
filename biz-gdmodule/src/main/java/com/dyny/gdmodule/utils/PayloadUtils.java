@@ -71,18 +71,18 @@ public class PayloadUtils {
                 int startIndex = index + LENGTH_ID + dataRule.getStartIndex();
                 int size = dataRule.getSize();
                 String dataKey = dataRule.getDataKey();
-                logger.info("{}",dataKey);
+                logger.info("{}", dataKey);
                 //非布尔型
                 if (dataRule.getBitIndex() == null) {
                     byte[] value = ArrayUtils.subarray(payloadBytes0, startIndex, startIndex + size);
                     //非字符型
                     Class targetClass = getClass(dataRule.getTargetClass());
-                    int calcType =dataRule.getFactorCalcType();
+                    int calcType = dataRule.getFactorCalcType();
                     if (targetClass != String.class) {
                         String factor = dataRule.getFactor();
                         Class oriClass = getClass(dataRule.getOriClass());
                         Class factorClass = getClass(dataRule.getFactorClass());
-                        data.put(dataKey, getFromBytes(value, oriClass, targetClass, factorClass, factor,calcType));
+                        data.put(dataKey, getFromBytes(value, oriClass, targetClass, factorClass, factor, calcType));
                     } else {
                         String result = HexUtils.toHexString(value);
                         String suffix = dataRule.getSuffix();
@@ -126,87 +126,87 @@ public class PayloadUtils {
 
 
     /**
+     * @return T
      * @Author wanggl(lane)
      * @Description //TODO 根据设定类型获取值,冗余代码较多,弱类型将减少很多代码
      * @Date 15:56 2019-09-02
      * @Param [valueByte, oriClass, targetClass, factorClass, factor, calcType]
-     * @return T
      **/
-    private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor,int calcType) {
+    private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor, int calcType) {
         if (factor != null && factorClass != null) {
             Object result;
-            switch (calcType){
+            switch (calcType) {
                 case 1:
-                    if(oriClass == Float.class){
-                        if(factorClass == Float.class) {
+                    if (oriClass == Float.class) {
+                        if (factorClass == Float.class) {
                             result = ByteBuffer.wrap(valueByte).getFloat() + Float.parseFloat(factor);
-                        }else{
-                            result = ByteBuffer.wrap(valueByte).getFloat() +  Integer.parseInt(factor);
+                        } else {
+                            result = ByteBuffer.wrap(valueByte).getFloat() + Integer.parseInt(factor);
                         }
-                    }else{
-                        if(factorClass == Float.class) {
+                    } else {
+                        if (factorClass == Float.class) {
                             result = Utils.Byte.bytes2int(valueByte) + Float.parseFloat(factor);
-                        }else{
+                        } else {
                             result = Utils.Byte.bytes2int(valueByte) + Integer.parseInt(factor);
                         }
                     }
                     break;
                 case 2:
-                    if(oriClass == Float.class){
-                        if(factorClass == Float.class) {
+                    if (oriClass == Float.class) {
+                        if (factorClass == Float.class) {
                             result = ByteBuffer.wrap(valueByte).getFloat() - Float.parseFloat(factor);
-                        }else{
-                            result = ByteBuffer.wrap(valueByte).getFloat() -  Integer.parseInt(factor);
+                        } else {
+                            result = ByteBuffer.wrap(valueByte).getFloat() - Integer.parseInt(factor);
                         }
-                    }else{
-                        if(factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) -+ Float.parseFloat(factor);
-                        }else{
+                    } else {
+                        if (factorClass == Float.class) {
+                            result = Utils.Byte.bytes2int(valueByte) - +Float.parseFloat(factor);
+                        } else {
                             result = Utils.Byte.bytes2int(valueByte) - Integer.parseInt(factor);
                         }
                     }
                     break;
                 case 3:
-                    if(oriClass == Float.class){
-                        if(factorClass == Float.class) {
+                    if (oriClass == Float.class) {
+                        if (factorClass == Float.class) {
                             result = ByteBuffer.wrap(valueByte).getFloat() * Float.parseFloat(factor);
-                        }else{
-                            result = ByteBuffer.wrap(valueByte).getFloat() *  Integer.parseInt(factor);
+                        } else {
+                            result = ByteBuffer.wrap(valueByte).getFloat() * Integer.parseInt(factor);
                         }
-                    }else{
-                        if(factorClass == Float.class) {
+                    } else {
+                        if (factorClass == Float.class) {
                             result = Utils.Byte.bytes2int(valueByte) * Float.parseFloat(factor);
-                        }else{
+                        } else {
                             result = Utils.Byte.bytes2int(valueByte) * Integer.parseInt(factor);
                         }
                     }
                     break;
                 case 4:
-                    if(oriClass == Float.class){
-                        if(factorClass == Float.class) {
+                    if (oriClass == Float.class) {
+                        if (factorClass == Float.class) {
                             result = ByteBuffer.wrap(valueByte).getFloat() / Float.parseFloat(factor);
-                        }else{
-                            result = ByteBuffer.wrap(valueByte).getFloat() /  Integer.parseInt(factor);
+                        } else {
+                            result = ByteBuffer.wrap(valueByte).getFloat() / Integer.parseInt(factor);
                         }
-                    }else{
-                        if(factorClass == Float.class) {
+                    } else {
+                        if (factorClass == Float.class) {
                             result = Utils.Byte.bytes2int(valueByte) / Float.parseFloat(factor);
-                        }else{
+                        } else {
                             result = Utils.Byte.bytes2int(valueByte) / Integer.parseInt(factor);
                         }
                     }
                     break;
                 default:
-                    if(oriClass == Float.class){
-                        if(factorClass == Float.class) {
+                    if (oriClass == Float.class) {
+                        if (factorClass == Float.class) {
                             result = ByteBuffer.wrap(valueByte).getFloat() * Float.parseFloat(factor);
-                        }else{
-                            result = ByteBuffer.wrap(valueByte).getFloat() *  Integer.parseInt(factor);
+                        } else {
+                            result = ByteBuffer.wrap(valueByte).getFloat() * Integer.parseInt(factor);
                         }
-                    }else{
-                        if(factorClass == Float.class) {
+                    } else {
+                        if (factorClass == Float.class) {
                             result = Utils.Byte.bytes2int(valueByte) * Float.parseFloat(factor);
-                        }else{
+                        } else {
                             result = Utils.Byte.bytes2int(valueByte) * Integer.parseInt(factor);
                         }
                     }
@@ -214,9 +214,9 @@ public class PayloadUtils {
             }
             return targetClass.cast(result);
         } else {
-            if(oriClass == Float.class){
+            if (oriClass == Float.class) {
                 return targetClass.cast(ByteBuffer.wrap(valueByte).getFloat());
-            }else{
+            } else {
                 return targetClass.cast(Utils.Byte.bytes2int(valueByte));
             }
         }
