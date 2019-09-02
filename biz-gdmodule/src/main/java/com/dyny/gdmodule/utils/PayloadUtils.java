@@ -128,7 +128,7 @@ public class PayloadUtils {
     /**
      * @return T
      * @Author wanggl(lane)
-     * @Description //TODO 根据设定类型获取值,冗余代码较多,弱类型将减少很多代码
+     * @Description //TODO 根据设定类型获取值,冗余代码较多,后续再优化
      * @Date 15:56 2019-09-02
      * @Param [valueByte, oriClass, targetClass, factorClass, factor, calcType]
      **/
