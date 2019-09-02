@@ -55,8 +55,8 @@ public class MyBatisPlusGenerator {
         PackageConfig pkConfig = new PackageConfig();
         pkConfig.setParent("com.dyny.gdmodule")
                 .setMapper("db.dao")//dao
-                .setService("service")//servcie
-                .setServiceImpl("service.impl")//
+//                .setService("service")//servcie
+//                .setServiceImpl("service.impl")//
                 .setController("controller")//controller
                 .setXml("db.xml")
                 .setEntity("db.entity");//dao.xml

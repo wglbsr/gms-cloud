@@ -77,11 +77,15 @@ public class Utils {
             return result;
         }
 
-        public static int bytes2int(byte[] bytes) {
+        public static Integer bytes2int(byte[] bytes) {
+            if(bytes==null){
+                return 0;
+            }
+            int size = bytes.length;
             int i0 = bytes[0];
-            int i1 = (bytes[1] & 0xFF) << 8;
-            int i2 = (bytes[2] & 0xFF) << 16;
-            int i3 = (bytes[3] & 0xFF) << 24;
+            int i1 = size>1? ((bytes[1] & 0xFF) << 8):0;
+            int i2 =size>2? ((bytes[2] & 0xFF) << 16):0;
+            int i3 =size>3? ((bytes[3] & 0xFF) << 24):0;
             return i0 | i1 | i2 | i3;
         }
 

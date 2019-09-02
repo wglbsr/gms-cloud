@@ -2,7 +2,6 @@ package com.dyny.gdmodule.db.dao;
 
 import com.dyny.gdmodule.db.entity.DataRule;
 import com.dyny.common.db.CommonMapper;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -10,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author wanggl
- * @since 2019-08-16
+ * @since 2019-09-02
  */
 public interface DataRuleMapper extends CommonMapper<DataRule> {
 

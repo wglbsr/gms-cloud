@@ -15,11 +15,16 @@
         <result column="ori_class" property="oriClass" />
         <result column="prefix" property="prefix" />
         <result column="suffix" property="suffix" />
+        <result column="create_time" property="createTime" />
+        <result column="status" property="status" />
+        <result column="type" property="type" />
+        <result column="factor_calc_type" property="factorCalcType" />
+        <result column="remark" property="remark" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        key, communicate_id, start_index, size, bit_index, factor, factor_class, target_class, ori_class, prefix, suffix
+        data_key, communicate_id, start_index, size, bit_index, factor, factor_class, target_class, ori_class, prefix, suffix, create_time, status, type, factor_calc_type, remark
     </sql>
 
 </mapper>
