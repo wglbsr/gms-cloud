@@ -8,6 +8,9 @@ import org.apache.tomcat.util.buf.HexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
@@ -128,98 +131,59 @@ public class PayloadUtils {
     /**
      * @return T
      * @Author wanggl(lane)
-     * @Description //TODO 根据设定类型获取值,冗余代码较多,后续再优化........使用三目运算符户出现两个整型相加变成浮点的问题,不知是否是写法的问题
-     *
+     * @Description //TODO 根据设定类型获取值,........使用三目运算符户出现两个整型相加变成浮点的问题,不知是否是写法的问题
      * @Date 15:56 2019-09-02
      * @Param [valueByte, oriClass, targetClass, factorClass, factor, calcType]
+     * @Version 1.2 使用js引擎简化了代码,使用弱类型的特性
      **/
     private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor, int calcType) {
+        Object resultObject;
         if (factor != null && factorClass != null) {
-            Object result;
-            switch (calcType) {
-                case 1:
-                    if (oriClass == Float.class) {
-                        if (factorClass == Float.class) {
-                            result = ByteBuffer.wrap(valueByte).getFloat() + Float.parseFloat(factor);
-                        } else {
-                            result = ByteBuffer.wrap(valueByte).getFloat() + Integer.parseInt(factor);
-                        }
+            ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
+            String factorStr = String.valueOf(factorClass == Float.class ? Float.parseFloat(factor) : Integer.parseInt(factor));
+            String valueStr = String.valueOf(oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : Utils.Byte.bytes2int(valueByte));
+            String operatorStr = getOperator(calcType);
+            try {
+                resultObject = scriptEngine.eval(valueStr + operatorStr + factorStr);
+                if (resultObject instanceof Double) {
+                    Double resultDouble = (Double) (resultObject);
+                    if (targetClass == Integer.class) {
+                        resultObject = resultDouble.intValue();
                     } else {
-                        if (factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) + Float.parseFloat(factor);
-                        } else {
-                            result = Utils.Byte.bytes2int(valueByte) + Integer.parseInt(factor);
-                        }
+                        resultObject = resultDouble.floatValue();
                     }
-                    break;
-                case 2:
-                    if (oriClass == Float.class) {
-                        if (factorClass == Float.class) {
-                            result = ByteBuffer.wrap(valueByte).getFloat() - Float.parseFloat(factor);
-                        } else {
-                            result = ByteBuffer.wrap(valueByte).getFloat() - Integer.parseInt(factor);
-                        }
-                    } else {
-                        if (factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) - Float.parseFloat(factor);
-                        } else {
-                            result = Utils.Byte.bytes2int(valueByte) - Integer.parseInt(factor);
-                        }
-                    }
-                    break;
-                case 3:
-                    if (oriClass == Float.class) {
-                        if (factorClass == Float.class) {
-                            result = ByteBuffer.wrap(valueByte).getFloat() * Float.parseFloat(factor);
-                        } else {
-                            result = ByteBuffer.wrap(valueByte).getFloat() * Integer.parseInt(factor);
-                        }
-                    } else {
-                        if (factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) * Float.parseFloat(factor);
-                        } else {
-                            result = Utils.Byte.bytes2int(valueByte) * Integer.parseInt(factor);
-                        }
-                    }
-                    break;
-                case 4:
-                    if (oriClass == Float.class) {
-                        if (factorClass == Float.class) {
-                            result = ByteBuffer.wrap(valueByte).getFloat() / Float.parseFloat(factor);
-                        } else {
-                            result = ByteBuffer.wrap(valueByte).getFloat() / Integer.parseInt(factor);
-                        }
-                    } else {
-                        if (factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) / Float.parseFloat(factor);
-                        } else {
-                            result = Utils.Byte.bytes2int(valueByte) / Integer.parseInt(factor);
-                        }
-                    }
-                    break;
-                default:
-                    if (oriClass == Float.class) {
-                        if (factorClass == Float.class) {
-                            result = ByteBuffer.wrap(valueByte).getFloat() * Float.parseFloat(factor);
-                        } else {
-                            result = ByteBuffer.wrap(valueByte).getFloat() * Integer.parseInt(factor);
-                        }
-                    } else {
-                        if (factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) * Float.parseFloat(factor);
-                        } else {
-                            result = Utils.Byte.bytes2int(valueByte) * Integer.parseInt(factor);
-                        }
-                    }
-                    break;
+                }
+            } catch (ScriptException e) {
+                e.printStackTrace();
+                resultObject = -1;
             }
-            return targetClass.cast(result);
         } else {
             if (oriClass == Float.class) {
-                return targetClass.cast(ByteBuffer.wrap(valueByte).getFloat());
+                resultObject = (ByteBuffer.wrap(valueByte).getFloat());
             } else {
-                return targetClass.cast(Utils.Byte.bytes2int(valueByte));
+                resultObject = targetClass.cast(Utils.Byte.bytes2int(valueByte));
             }
         }
+        return targetClass.cast(resultObject);
+    }
+
+
+    private static String getOperator(int operatorType) {
+        String operatorStr = "*";
+        switch (operatorType) {
+            case 1:
+                operatorStr = "+";
+                break;
+            case 2:
+                operatorStr = "-";
+                break;
+            case 3:
+                operatorStr = "*";
+                break;
+            case 4:
+                operatorStr = "/";
+                break;
+        }
+        return operatorStr;
     }
 }
