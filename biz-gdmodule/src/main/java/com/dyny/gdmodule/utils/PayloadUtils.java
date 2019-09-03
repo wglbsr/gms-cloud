@@ -128,7 +128,8 @@ public class PayloadUtils {
     /**
      * @return T
      * @Author wanggl(lane)
-     * @Description //TODO 根据设定类型获取值,冗余代码较多,后续再优化
+     * @Description //TODO 根据设定类型获取值,冗余代码较多,后续再优化........使用三目运算符户出现两个整型相加变成浮点的问题,不知是否是写法的问题
+     *
      * @Date 15:56 2019-09-02
      * @Param [valueByte, oriClass, targetClass, factorClass, factor, calcType]
      **/
@@ -160,7 +161,7 @@ public class PayloadUtils {
                         }
                     } else {
                         if (factorClass == Float.class) {
-                            result = Utils.Byte.bytes2int(valueByte) - +Float.parseFloat(factor);
+                            result = Utils.Byte.bytes2int(valueByte) - Float.parseFloat(factor);
                         } else {
                             result = Utils.Byte.bytes2int(valueByte) - Integer.parseInt(factor);
                         }
