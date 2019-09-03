@@ -1,5 +1,6 @@
 package com.dyny.gdmodule.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dyny.gdmodule.db.entity.DataRule;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author wanggl
@@ -16,4 +17,16 @@ import java.util.Map;
  */
 public interface DataRuleService extends IService<DataRule> {
     Map<Integer, List<DataRule>> getAllDataRule();
+
+    DataRule getOne(String key);
+
+    List<DataRule> get(List<String> ke);
+
+    IPage<DataRule> getByCondition(String keyword, Map<String, Object> otherCons, int pageNum, int pageSize);
+
+    boolean delete(String key);
+
+    boolean delete(List<String> key);
+
+
 }

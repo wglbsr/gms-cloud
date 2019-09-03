@@ -1,9 +1,13 @@
 package com.dyny.gdmodule.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dyny.gdmodule.db.entity.DataRule;
 import com.dyny.gdmodule.db.dao.DataRuleMapper;
 import com.dyny.gdmodule.service.DataRuleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,7 +41,58 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
                 dataRuleMap.put(communicateId, tempList);
             }
         });
-
         return dataRuleMap;
+    }
+
+    @Override
+    public DataRule getOne(String key) {
+        QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
+        dataRuleQueryWrapper.eq("key", key);
+        return getOne(dataRuleQueryWrapper);
+    }
+
+    @Override
+    public List<DataRule> get(List<String> key) {
+        QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
+        dataRuleQueryWrapper.in("data_key", key);
+        return list(dataRuleQueryWrapper);
+    }
+
+    /**
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.dyny.gdmodule.db.entity.DataRule>
+     * @Author wanggl(lane)
+     * @Description //TODO JDK8语法
+     * @Date 14:26 2019-09-03
+     * @Param [keyword, otherCons, pageNum, pageSize]
+     **/
+    @Override
+    public IPage<DataRule> getByCondition(String keyword, Map<String, Object> otherCons, int pageNum, int pageSize) {
+        QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
+        if (otherCons != null) {
+            otherCons.forEach(dataRuleQueryWrapper::eq);
+        }
+        if (StringUtils.isNotEmpty(keyword)) {
+            dataRuleQueryWrapper.and(f -> f.like("data_key", keyword)
+                    .or().like("remark", keyword)
+                    .or().like("communicate_id", keyword)
+                    .or().like("prefix", keyword)
+                    .or().like("factor", keyword)
+                    .or().like("suffix", keyword));
+        }
+            return page(new Page<>(pageNum, pageSize), dataRuleQueryWrapper);
+    }
+
+    @Override
+    public boolean delete(String key) {
+        QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
+        dataRuleQueryWrapper.eq("data_rule", key);
+        return remove(dataRuleQueryWrapper);
+    }
+
+    @Override
+    public boolean delete(List<String> key) {
+        QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
+        dataRuleQueryWrapper.in("data_rule", key);
+        return remove(dataRuleQueryWrapper);
     }
 }

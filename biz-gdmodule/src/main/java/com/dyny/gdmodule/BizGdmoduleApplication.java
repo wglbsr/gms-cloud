@@ -15,7 +15,7 @@ public class BizGdmoduleApplication {
     public static void main(String[] args) throws IOException {
 
         SpringApplication.run(BizGdmoduleApplication.class, args);
-        MGWsServerStarter.start();
+//        MGWsServerStarter.start();
 
     }
 
