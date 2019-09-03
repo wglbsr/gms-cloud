@@ -131,7 +131,7 @@ public class PayloadUtils {
     /**
      * @return T
      * @Author wanggl(lane)
-     * @Description //TODO 根据设定类型获取值,........使用三目运算符户出现两个整型相加变成浮点的问题,不知是否是写法的问题
+     * @Description //TODO 根据设定类型获取值,........出现两个整型相加变成浮点的问题,不知是否是写法的问题
      * @Date 15:56 2019-09-02
      * @Param [valueByte, oriClass, targetClass, factorClass, factor, calcType]
      * @Version 1.2 使用js引擎简化了代码,使用弱类型的特性
