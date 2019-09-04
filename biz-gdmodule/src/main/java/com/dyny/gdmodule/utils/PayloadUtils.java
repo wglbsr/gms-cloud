@@ -110,7 +110,7 @@ public class PayloadUtils {
     }
 
     private static Class getClass(Integer classId) {
-        if (classId == null) {
+        if (classId == null || classId < 0) {
             return null;
         }
         switch (classId) {
@@ -169,6 +169,9 @@ public class PayloadUtils {
 
 
     private static String getOperator(int operatorType) {
+        if (operatorType < 0) {
+            return "";
+        }
         String operatorStr = "*";
         switch (operatorType) {
             case 1:

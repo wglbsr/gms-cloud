@@ -20,7 +20,7 @@ public interface DataRuleService extends IService<DataRule> {
 
     DataRule getOne(String key);
 
-    List<DataRule> get(List<String> ke);
+    List<DataRule> get(List<String> key);
 
     IPage<DataRule> getByCondition(String keyword, Map<String, Object> otherCons, int pageNum, int pageSize);
 
@@ -28,5 +28,7 @@ public interface DataRuleService extends IService<DataRule> {
 
     boolean delete(List<String> key);
 
+    boolean create(DataRule dataRule);
 
+    boolean update(DataRule dataRule);
 }

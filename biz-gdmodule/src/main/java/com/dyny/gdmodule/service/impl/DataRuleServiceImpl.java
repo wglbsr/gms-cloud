@@ -79,7 +79,7 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
                     .or().like("factor", keyword)
                     .or().like("suffix", keyword));
         }
-            return page(new Page<>(pageNum, pageSize), dataRuleQueryWrapper);
+        return page(new Page<>(pageNum, pageSize), dataRuleQueryWrapper);
     }
 
     @Override
@@ -94,5 +94,45 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
         QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
         dataRuleQueryWrapper.in("data_rule", key);
         return remove(dataRuleQueryWrapper);
+    }
+
+    @Override
+    public boolean create(DataRule dataRule) {
+        return save(dataRule);
+    }
+
+    @Override
+    public boolean update(DataRule dataRule) {
+        Integer bitIndex = dataRule.getBitIndex();
+        String factor = dataRule.getFactor();
+        Integer targetClass = dataRule.getTargetClass();
+        //布尔型
+        if (bitIndex >= 0) {
+            dataRule.setSize(1);
+            dataRule.setOriClass(0);
+            //因数无效
+            dataRule.setFactorClass(-1);
+            dataRule.setFactorClass(0);
+            dataRule.setFactor(null);
+            dataRule.setFactorCalcType(-1);
+            //前缀后缀无效
+            dataRule.setPrefix(null);
+            dataRule.setSuffix(null);
+        }
+        //非字符型没有前缀后缀
+        if (targetClass != 3) {
+            dataRule.setPrefix(null);
+            dataRule.setSuffix(null);
+        } else {//字符型因数无效
+            dataRule.setFactorClass(-1);
+            dataRule.setFactorClass(0);
+            dataRule.setFactor(null);
+            dataRule.setFactorCalcType(-1);
+        }
+
+        if (StringUtils.isEmpty(factor)) {
+            dataRule.setFactorClass(-1);
+        }
+        return updateById(dataRule);
     }
 }

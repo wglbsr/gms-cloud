@@ -8,6 +8,7 @@ import com.dyny.gdmodule.service.DataRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,14 +43,20 @@ public class DataRuleController extends BaseControllerT<DataRule> {
         return getSuccessResult(dataRuleService.delete(key));
     }
 
+    @DeleteMapping("/")
+    public String delete(@RequestParam("dataKeys[]") List<String> keys) {
+        return getSuccessResult(dataRuleService.delete(keys));
+    }
+
+
     @PostMapping("/create")
     public String create(@RequestBody DataRule dataRule) {
-        return getSuccessResult(dataRuleService.save(dataRule));
+        return getSuccessResult(dataRuleService.create(dataRule));
     }
 
     @PutMapping("/update")
     public String update(@RequestBody DataRule dataRule) {
-        return getSuccessResult(dataRuleService.updateById(dataRule));
+        return getSuccessResult(dataRuleService.update(dataRule));
     }
 
 
