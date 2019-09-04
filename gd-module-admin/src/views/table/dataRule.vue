@@ -199,13 +199,13 @@
     import {getList, getOne, deleteByKeys, create, update} from '@/api/dataRule'
     import OperatorTag from "../coms/OperatorTag";
     import ClassTag from "../coms/ClassTag";
-    import {classOptions2, operatorOptions2,booleanIndexOption} from "../../data/options";
+    import {classOptions2, operatorOptions2, booleanIndexOption} from "../../data/options";
 
     export default {
         components: {ClassTag, OperatorTag},
         data() {
             return {
-                booleanIndexOption:booleanIndexOption,
+                booleanIndexOption: booleanIndexOption,
                 classOptions: classOptions2,
                 operatorOptions: operatorOptions2,
                 editMode: false,
@@ -247,7 +247,12 @@
                 if (this.editMode) {
                     update(this.dataRuleForm).then(res => {
                         if (res.result) {
+                            this.$message({
+                                type: 'success',
+                                message: '操作成功!'
+                            });
                             this.fetchData();
+                            this.editOrAddDialogVisible = false;
                         }
                     }).catch(error => {
 
@@ -255,7 +260,12 @@
                 } else {
                     create(this.dataRuleForm).then(res => {
                         if (res.result) {
+                            this.$message({
+                                type: 'success',
+                                message: '操作成功!'
+                            });
                             this.fetchData();
+                            this.editOrAddDialogVisible = false;
                         }
                     }).catch(error => {
 
@@ -280,7 +290,20 @@
                     this.rows.forEach((val, index) => {
                         keys.push(val.dataKey);
                     });
-                    deleteByKeys(keys);
+                    deleteByKeys(keys).then(res => {
+                        if (res.result) {
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                            this.fetchData();
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: '删除失败!'
+                            });
+                        }
+                    });
                 }).catch(() => {
                     this.$message({
                         type: 'info',

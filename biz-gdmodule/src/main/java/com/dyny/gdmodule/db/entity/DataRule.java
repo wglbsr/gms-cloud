@@ -26,7 +26,7 @@ public class DataRule extends Model<DataRule> {
     /**
      * 数据保存用的key,唯一
      */
-    @TableId(value = "data_key", type = IdType.AUTO)
+    @TableId(value = "data_key", type = IdType.INPUT)
     private String dataKey;
 
     /**

@@ -138,7 +138,7 @@ public class PayloadUtils {
      **/
     private static <T> T getFromBytes(byte[] valueByte, Class<T> oriClass, Class<T> targetClass, Class<T> factorClass, String factor, int calcType) {
         Object resultObject;
-        if (factor != null && factorClass != null) {
+        if (factor != null && factorClass != null && calcType >= 0) {
             ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
             String factorStr = String.valueOf(factorClass == Float.class ? Float.parseFloat(factor) : Integer.parseInt(factor));
             String valueStr = String.valueOf(oriClass == Float.class ? ByteBuffer.wrap(valueByte).getFloat() : Utils.Byte.bytes2int(valueByte));
@@ -170,7 +170,7 @@ public class PayloadUtils {
 
     private static String getOperator(int operatorType) {
         if (operatorType < 0) {
-            return "";
+            return null;
         }
         String operatorStr = "*";
         switch (operatorType) {

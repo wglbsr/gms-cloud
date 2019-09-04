@@ -85,14 +85,14 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
     @Override
     public boolean delete(String key) {
         QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
-        dataRuleQueryWrapper.eq("data_rule", key);
+        dataRuleQueryWrapper.eq("data_key", key);
         return remove(dataRuleQueryWrapper);
     }
 
     @Override
     public boolean delete(List<String> key) {
         QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
-        dataRuleQueryWrapper.in("data_rule", key);
+        dataRuleQueryWrapper.in("data_key", key);
         return remove(dataRuleQueryWrapper);
     }
 
