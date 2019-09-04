@@ -3,12 +3,14 @@
 </template>
 
 <script>
+    import {classOptions} from "../../data/options";
+
     export default {
         name: "ClassTag",
         props: ['classType'],
         data() {
             return {
-                classTypeList: {0: "布尔型", 1: "整型", 2: "浮点型", 3: "字符型"},
+                classTypeList: classOptions,
                 tagTypeList: {0: "success", 1: "warning", 2: "info", 3: "danger"},
             }
         },

@@ -3,12 +3,14 @@
 </template>
 
 <script>
-    export default {
+  import {operatorOptions} from "../../data/options";
+
+  export default {
         name: "OperatorTag",
         props: ['factorCalcType'],
         data() {
             return {
-                operatorTypeList: {1: "加(+)", 2: "减(-)", 3: "乘(*)", 4: "除(/)"},
+                operatorTypeList: operatorOptions,
                 tagTypeList: {1: "warning", 2: "info", 3: "danger", 4: "success"},
 
             }

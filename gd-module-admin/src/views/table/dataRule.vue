@@ -5,12 +5,14 @@
       <el-button type="primary" size="mini" icon="el-icon-search" v-on:click="fetchData">搜索</el-button>
 
       <el-button-group style="float: right">
-        <el-button type="primary" size="mini" icon="el-icon-plus">添加规则</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-plus" v-on:click="editOrAddDialogVisible=true">添加规则
+        </el-button>
         <el-button type="warning" size="mini" icon="el-icon-edit">编辑规则</el-button>
         <el-button type="danger" size="mini" icon="el-icon-delete">删除规则</el-button>
       </el-button-group>
     </div>
     <el-table
+      stripe
       size="mini"
       v-loading="listLoading"
       :data="list"
@@ -106,6 +108,83 @@
         :total="totalNum">
       </el-pagination>
     </div>
+
+    <el-dialog :visible="editOrAddDialogVisible">
+      <el-form ref="form" :model="dataRuleForm" label-width="80px" size="mini">
+        <el-form-item label="(key)键">
+          <el-input v-model="dataRuleForm.dataKey"></el-input>
+        </el-form-item>
+        <el-form-item label="通讯ID(10进制)">
+          <el-input v-model="dataRuleForm.communicateId"></el-input>
+        </el-form-item>
+        <!--        <el-form-item label="活动区域">-->
+        <!--          <el-select v-model="dataRuleForm.region" placeholder="请选择活动区域">-->
+        <!--            <el-option label="区域一" value="shanghai"></el-option>-->
+        <!--            <el-option label="区域二" value="beijing"></el-option>-->
+        <!--          </el-select>-->
+        <!--        </el-form-item>-->
+        <!--          <el-checkbox-group v-model="dataRuleForm.factor">-->
+        <!--            <el-checkbox-button label="美食/餐厅线上活动" name="type"></el-checkbox-button>-->
+        <!--            <el-checkbox-button label="地推活动" name="type"></el-checkbox-button>-->
+        <!--            <el-checkbox-button label="线下主题活动" name="type"></el-checkbox-button>-->
+        <!--          </el-checkbox-group>-->
+        <el-form-item label="开始下标">
+          <el-input v-model="dataRuleForm.startIndex"></el-input>
+        </el-form-item>
+        <el-form-item label="布尔下标">
+          <el-input v-model="dataRuleForm.bitIndex" v-on:change="bitIndexChange"></el-input>
+        </el-form-item>
+        <el-form-item label="长度" v-if="!bitRelVisible">
+          <el-input v-model="dataRuleForm.size"></el-input>
+        </el-form-item>
+
+        <el-form-item label="因数" v-if="!bitRelVisible">
+          <el-input v-model="dataRuleForm.factor" v-on:change="factorChange"></el-input>
+        </el-form-item>
+        <el-form-item label="计算方式" v-if="factorRelVisible">
+          <el-radio-group v-model="dataRuleForm.factorCalcType" size="mini">
+            <el-radio v-for="(item,index) in operatorOptions"
+                      :key="index"
+                      :label="item"
+                      :value="index"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="因数类型" v-if="factorRelVisible">
+          <el-radio-group v-model="dataRuleForm.factorClass" size="mini">
+            <el-radio v-for="(item,index) in classOptions"
+                      :key="index"
+                      :label="item"
+                      :value="index"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="获取类型" v-if="!bitRelVisible">
+          <el-radio-group v-model="dataRuleForm.oriClass" size="mini">
+            <el-radio v-for="(item,index) in classOptions"
+                      :key="index"
+                      :label="item"
+                      :value="index"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="结果类型" v-if="!bitRelVisible">
+          <el-radio-group v-model="dataRuleForm.targetClass" size="mini">
+            <el-radio v-for="(item,index) in classOptions"
+                      :key="index"
+                      :label="item"
+                      :value="index"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="前缀"  v-if="!bitRelVisible">
+          <el-input v-model="dataRuleForm.prefix"></el-input>
+        </el-form-item>
+        <el-form-item label="后缀"  v-if="!bitRelVisible">
+          <el-input v-model="dataRuleForm.suffix"></el-input>
+        </el-form-item>
+        <el-form-item size="large">
+          <el-button size="mini" type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button size="mini">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -113,6 +192,7 @@
     import {getList} from '@/api/dataRule'
     import OperatorTag from "../coms/OperatorTag";
     import ClassTag from "../coms/ClassTag";
+    import {classOptions, operatorOptions} from "../../data/options";
 
     export default {
         components: {ClassTag, OperatorTag},
@@ -129,7 +209,14 @@
         comments: {OperatorTag, ClassTag},
         data() {
             return {
+                classOptions: classOptions,
+                operatorOptions: operatorOptions,
+                editMode: false,
+                dataRuleForm: {},
+                editOrAddDialogVisible: false,
                 keyword: "",
+                bitRelVisible: false,
+                factorRelVisible: false,
                 list: null,
                 pageNum: 1,
                 pageSize: 20,
@@ -141,6 +228,15 @@
             this.fetchData()
         },
         methods: {
+            bitIndexChange(val) {
+                this.bitRelVisible = (val >= 0);
+            },
+            factorChange(val) {
+                this.factorRelVisible = !!val;
+            },
+            onSubmit() {
+                this.fetchData();
+            },
             handleSizeChange(pageSize) {
                 this.pageSize = pageSize;
                 this.fetchData();
