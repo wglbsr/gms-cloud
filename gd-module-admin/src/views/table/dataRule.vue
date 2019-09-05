@@ -120,26 +120,26 @@
           <el-input v-model="dataRuleForm.dataKey"></el-input>
         </el-form-item>
         <el-form-item label="通讯ID(10进制)">
-          <el-input v-model="dataRuleForm.communicateId"></el-input>
+          <el-input v-model.number="dataRuleForm.communicateId"></el-input>
         </el-form-item>
         <el-form-item label="开始下标">
-          <el-input v-model="dataRuleForm.startIndex"></el-input>
+          <el-input v-model.number="dataRuleForm.startIndex"></el-input>
         </el-form-item>
         <el-form-item label="布尔下标">
-          <el-select v-model="dataRuleForm.bitIndex" size="mini">
+          <el-select v-model.number="dataRuleForm.bitIndex" @change="bitIndexChange" size="mini">
             <el-option v-for="item in booleanIndexOption"
                        :key="item.key"
                        :label="item.label"
                        :value="item.key"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="长度">
-          <el-input v-model="dataRuleForm.size"></el-input>
+        <el-form-item label="长度" v-if="!bitRelVisible">
+          <el-input v-model.number="dataRuleForm.size"></el-input>
         </el-form-item>
-        <el-form-item label="因数">
-          <el-input v-model="dataRuleForm.factor" v-on:change="factorChange"></el-input>
+        <el-form-item label="因数" v-if="!bitRelVisible">
+          <el-input v-model.number="dataRuleForm.factor" v-on:change="factorChange"></el-input>
         </el-form-item>
-        <el-form-item label="计算方式">
+        <el-form-item label="计算方式" v-if="!(bitRelVisible|| !factorRelVisible)">
           <el-select v-model="dataRuleForm.factorCalcType" size="mini">
             <el-option v-for="item in operatorOptions"
                        :key="item.key"
@@ -147,7 +147,7 @@
                        :value="item.key"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="因数类型">
+        <el-form-item label="因数类型" v-if="!bitRelVisible">
           <el-select v-model="dataRuleForm.factorClass" size="mini">
             <el-option v-for="item in classOptions"
                        :key="item.key"
@@ -155,7 +155,7 @@
                        :value="item.key"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="获取类型">
+        <el-form-item label="获取类型" v-if="!bitRelVisible">
           <el-select v-model="dataRuleForm.oriClass" size="mini">
             <el-option v-for="item in classOptions"
                        :key="item.key"
@@ -163,18 +163,18 @@
                        :value="item.key"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="结果类型">
-          <el-select v-model="dataRuleForm.targetClass" size="mini">
+        <el-form-item label="结果类型" v-if="!bitRelVisible">
+          <el-select v-model="dataRuleForm.targetClass" size="mini" @change="targetClassChange">
             <el-option v-for="item in classOptions"
                        :key="item.key"
                        :label="item.label"
                        :value="item.key"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="前缀">
+        <el-form-item label="前缀" v-if="!(bitRelVisible || targetClassRelVisible)">
           <el-input v-model="dataRuleForm.prefix"></el-input>
         </el-form-item>
-        <el-form-item label="后缀">
+        <el-form-item label="后缀" v-if="!(bitRelVisible || targetClassRelVisible)">
           <el-input v-model="dataRuleForm.suffix"></el-input>
         </el-form-item>
 
@@ -214,6 +214,7 @@
                 keyword: "",
                 bitRelVisible: false,
                 factorRelVisible: false,
+                targetClassRelVisible: false,
                 list: null,
                 pageNum: 1,
                 pageSize: 20,
@@ -226,6 +227,9 @@
             this.fetchData()
         },
         methods: {
+            targetClassChange(val) {
+                this.targetClassRelVisible = (val != 3);
+            },
             clickRow(row) {
                 this.dataRuleForm = row;
                 this.editMode = true;
@@ -244,6 +248,8 @@
                 this.factorRelVisible = !!val;
             },
             onSubmit() {
+
+
                 if (this.editMode) {
                     update(this.dataRuleForm).then(res => {
                         if (res.result) {

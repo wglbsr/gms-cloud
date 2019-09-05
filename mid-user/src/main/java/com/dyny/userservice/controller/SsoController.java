@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @Auther: lane
@@ -54,9 +55,9 @@ public class SsoController extends BaseController {
     public String loginPage(@RequestParam("url") String url, ModelMap modelMap) {
         if (checkUrl(url) && !"testurl".equals(url)) {
             modelMap.put("redirectUrl", url);
-            return "index";
+            return "index.html";
         }
-        return "403";
+        return "403.html";
     }
 
 
@@ -85,8 +86,6 @@ public class SsoController extends BaseController {
     public String logout() {
         return "403";
     }
-
-
 
 
     private boolean checkUrl(String url) {

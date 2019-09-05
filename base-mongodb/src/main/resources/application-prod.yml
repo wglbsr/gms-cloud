@@ -3,7 +3,7 @@ spring:
     nacos:
       discovery:
         #是用阿里云的局域网地址更佳
-        server-addr: 47.107.72.98:7990
+        server-addr: 127.0.0.1:7990
   data:
     mongodb:
       host: 127.0.0.1

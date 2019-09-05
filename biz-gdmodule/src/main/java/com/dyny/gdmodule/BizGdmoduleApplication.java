@@ -1,6 +1,5 @@
 package com.dyny.gdmodule;
 
-import com.dyny.gdmodule.websocket.server.MGWsServerStarter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

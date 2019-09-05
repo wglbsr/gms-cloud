@@ -47,7 +47,7 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
     @Override
     public DataRule getOne(String key) {
         QueryWrapper<DataRule> dataRuleQueryWrapper = new QueryWrapper<>();
-        dataRuleQueryWrapper.eq("key", key);
+        dataRuleQueryWrapper.eq("data_key", key);
         return getOne(dataRuleQueryWrapper);
     }
 
@@ -114,7 +114,7 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
         Integer targetClass = dataRule.getTargetClass();
 
         //布尔型
-        if (bitIndex >= 0) {
+        if (bitIndex != null && bitIndex >= 0) {
             dataRule.setSize(1);
             dataRule.setOriClass(0);
             //因数无效
@@ -128,7 +128,7 @@ public class DataRuleServiceImpl extends ServiceImpl<DataRuleMapper, DataRule> i
         }
 
         //非字符型没有前缀后缀
-        if (targetClass != 3) {
+        if (targetClass != null && targetClass != 3) {
             dataRule.setPrefix(null);
             dataRule.setSuffix(null);
         } else {//字符型因数无效

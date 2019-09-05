@@ -1,5 +1,6 @@
 spring:
+
   cloud:
     nacos:
       discovery:
-        server-addr: 47.107.72.98:7990
+        server-addr: 127.0.0.1:7990
