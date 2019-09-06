@@ -1,4 +1,4 @@
-package com.dynyh.gatewaydemo;
+package com.dyny.springadmin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GatewayDemoApplicationTests {
+public class SpringAdminApplicationTests {
 
     @Test
     public void contextLoads() {

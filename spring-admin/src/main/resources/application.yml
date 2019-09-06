@@ -1,16 +1,16 @@
 server:
-  port: 8620
+  port: 8020
 spring:
   profiles:
     active: @package.environment@
   main:
     allow-bean-definition-overriding: true
   application:
-    name: biz-gdmodule
+    name: base-spring-admin
 
 #actuator 服务监控与管理
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: \*

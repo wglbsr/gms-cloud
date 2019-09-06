@@ -1,19 +1,28 @@
 server:
   port: 8010 #8181
 spring:
+  boot:
+    admin:
+      client:
+        url: http://127.0.0.1:8020
   profiles:
     active: @package.environment@
   main:
     allow-bean-definition-overriding: true
   application:
-    name: mid-user
+    name: base-api-gateway
   cloud:
-    gateway:
-      routes:
-        - id: route_service_one
-          uri: lb://service-one # uri以lb://开头（lb代表从注册中心获取服务），后面接的就是你需要转发到的服务名称
-          predicates:
-            - Path=/**
+#    gateway:
+#      routes:
+#        - id: route_service_one
+#          uri: lb://base-redis # uri以lb://开头（lb代表从注册中心获取服务），后面接的就是你需要转发到的服务名称
+#          predicates:
+#            - Path=/**
     nacos:
       discovery:
         server-addr: 127.0.0.1:7990
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
